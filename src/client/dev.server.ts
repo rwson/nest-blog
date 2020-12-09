@@ -37,7 +37,7 @@ app.prepare().then(() => {
     handle(req, res);
   });
 
-  server.listen(3001, (): void => {
-    console.log('> Ready on http://localhost:3001');
+  server.listen(3002, (): void => {
+    console.log('> Ready on http://localhost:3002');
   });
 });

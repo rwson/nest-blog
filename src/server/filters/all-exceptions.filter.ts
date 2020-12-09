@@ -11,15 +11,13 @@ export class AllExceptionsFilter implements ExceptionFilter {
         const ctx = host.switchToHttp();
         const response = ctx.getResponse();
 
-        console.log(mongoose);
-
-        // if (exception instanceof mongoose.Error.ValidationError) {
-        //     logger.warn(exception.message);
-        //     return response.status(HttpStatus.BAD_REQUEST).json({
-        //         statusCode: HttpStatus.BAD_REQUEST,
-        //         message: exception.message,
-        //     });
-        // }
+        if (exception instanceof mongoose.Error) {
+            logger.warn(exception.message);
+            return response.status(HttpStatus.BAD_REQUEST).json({
+                statusCode: HttpStatus.BAD_REQUEST,
+                message: exception.message,
+            });
+        }
 
         let status = HttpStatus.INTERNAL_SERVER_ERROR;
         if (exception instanceof HttpException) {

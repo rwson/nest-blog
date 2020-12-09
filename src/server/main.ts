@@ -17,8 +17,8 @@ async function bootstrap() {
   app.enableCors();
 
   app.use(log4js.connectLogger(requestInfoLogger, { level: 'info' }));
-  // app.useGlobalFilters(new AllExceptionsFilter());
+  app.useGlobalFilters(new AllExceptionsFilter());
 
-  await app.listen(3003);
+  await app.listen(3001);
 }
 bootstrap();

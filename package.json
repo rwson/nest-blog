@@ -13,7 +13,7 @@
     "start:dev": "cross-env NODE_ENV=development nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
-    "dev:web": "cross-env NODE_ENV=development ts-node -P tsconfig.build.json client/dev.server.ts",
+    "dev:web": "cross-env NODE_ENV=development ts-node -P tsconfig.build.json src/client/dev.server.ts",
     "lint": "eslint \"{src,apps,libs}/**/*.ts\" --fix"
   },
   "dependencies": {
