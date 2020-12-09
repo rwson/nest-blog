@@ -14,25 +14,31 @@ export const CommentModel = model<CommentDocument>('comment', CommentSchema, 'co
 export const FileModel = model<FileDocument>('file', FileSchema, 'file');
 export const UserModel = model<UserDocument>('user', UserSchema, 'user');
 
+export const ArticleModelToken = `${ArticleModel.modelName}${MONGODB.token}`;
+export const CategoryModelToken = `${CategoryModel.modelName}${MONGODB.token}`;
+export const CommentModelToken = `${CommentModel.modelName}${MONGODB.token}`;
+export const FileModelToken = `${FileModel.modelName}${MONGODB.token}`;
+export const UserModelToken = `${UserModel.modelName}${MONGODB.token}`;
+
 export const ArticleModelProvider = {
   useValue: ArticleModel,
-  provide: `${ArticleModel.modelName}${MONGODB.token}`
+  provide: ArticleModelToken
 };
 export const CategoryModelProvider = {
   useValue: CategoryModel,
-  provide: `${CategoryModel.modelName}${MONGODB.token}`
+  provide: CategoryModelToken
 };
 export const CommentModelProvider = {
   useValue: CommentModel,
-  provide: `${CommentModel.modelName}${MONGODB.token}`
+  provide: CommentModelToken
 };
 export const FileModelProvider = {
   useValue: FileModel,
-  provide: `${FileModel.modelName}${MONGODB.token}`
+  provide: FileModelToken
 };
 export const UserModelProvider = {
   useValue: UserModel,
-  provide: `${UserModel.modelName}${MONGODB.token}`
+  provide: UserModelToken
 };
 
 export type ArticleInterface = typeof ArticleModel;

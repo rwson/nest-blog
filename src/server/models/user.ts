@@ -30,7 +30,7 @@ const CommentSchema = new Schema(
     password: {
       type: Schema.Types.String,
       required: true
-    },
+    }
   },
   {
     timestamps: true

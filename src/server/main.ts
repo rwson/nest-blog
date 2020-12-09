@@ -4,6 +4,7 @@ import * as log4js from 'log4js';
 
 import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './filters/all-exceptions.filter';
+import { ApiValidationPipe } from './pipe/validator';
 import { requestInfoLogger } from './utils/logger';
 
 import { PATHS } from '@/server/config';
@@ -18,6 +19,7 @@ async function bootstrap() {
 
   app.use(log4js.connectLogger(requestInfoLogger, { level: 'info' }));
   app.useGlobalFilters(new AllExceptionsFilter());
+  app.useGlobalPipes(new ApiValidationPipe());
 
   await app.listen(3001);
 }

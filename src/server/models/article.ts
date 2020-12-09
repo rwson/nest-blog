@@ -68,6 +68,4 @@ export interface ArticleDocument extends BaseDocument {
   readonly comments: Array<string>;
 }
 
-// ArticleSchema.plugin(paginate);
-
 export default ArticleSchema;

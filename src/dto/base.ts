@@ -1,5 +1,4 @@
-export interface BaseDto<T> {
+export class BaseDto {
   code: number;
-  msg: string;
-  data?: T;
+  message: string;
 }
