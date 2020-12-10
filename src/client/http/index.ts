@@ -14,7 +14,7 @@ type HttpResponse<T> = {
   data: T;
 };
 
-instance.interceptors.response.use((res: AxiosResponse<HttpResponse>): HttpResponse => {
+instance.interceptors.response.use((res) => {
   if (res.data.code !== 1) {
     message.error(res.data.message);
   }
