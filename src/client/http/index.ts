@@ -39,24 +39,23 @@ class Http {
   }
 
   async post<T>(url: string, data: any): Promise<HttpResponse<T>> {
-    return instance.get(url, {
-      data,
-      headers: autoHeader()
+    return instance.post(url, data, {
+      headers: {
+        ...autoHeader()
+      }
     });
   }
 
   async put<T>(url: string, data: any): Promise<HttpResponse<T>> {
-    return instance.put(url, {
-      data,
-      headers: autoHeader()
+    return instance.put(url, data, {
+      headers: {
+        ...autoHeader()
+      }
     });
   }
 
   async delete<T>(url: string, data: any): Promise<HttpResponse<T>> {
-    return instance.delete(url, {
-      data,
-      headers: autoHeader()
-    });
+    return instance.delete(url, data);
   }
 
 }

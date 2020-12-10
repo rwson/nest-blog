@@ -4,5 +4,167 @@
       "id": "./node_modules/next/dist/client/dev/noop.js",
       "file": "static/chunks/0.js"
     }
+  ],
+  "@/client/admin/pages/console/index": [
+    {
+      "id": "./node_modules/@babel/runtime/helpers/esm/applyDecoratedDescriptor.js",
+      "file": "static/chunks/1.js"
+    },
+    {
+      "id": "./node_modules/@babel/runtime/helpers/esm/arrayLikeToArray.js",
+      "file": "static/chunks/1.js"
+    },
+    {
+      "id": "./node_modules/@babel/runtime/helpers/esm/arrayWithHoles.js",
+      "file": "static/chunks/1.js"
+    },
+    {
+      "id": "./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js",
+      "file": "static/chunks/1.js"
+    },
+    {
+      "id": "./node_modules/@babel/runtime/helpers/esm/classCallCheck.js",
+      "file": "static/chunks/1.js"
+    },
+    {
+      "id": "./node_modules/@babel/runtime/helpers/esm/createClass.js",
+      "file": "static/chunks/1.js"
+    },
+    {
+      "id": "./node_modules/@babel/runtime/helpers/esm/defineProperty.js",
+      "file": "static/chunks/1.js"
+    },
+    {
+      "id": "./node_modules/@babel/runtime/helpers/esm/initializerDefineProperty.js",
+      "file": "static/chunks/1.js"
+    },
+    {
+      "id": "./node_modules/@babel/runtime/helpers/esm/initializerWarningHelper.js",
+      "file": "static/chunks/1.js"
+    },
+    {
+      "id": "./node_modules/@babel/runtime/helpers/esm/iterableToArrayLimit.js",
+      "file": "static/chunks/1.js"
+    },
+    {
+      "id": "./node_modules/@babel/runtime/helpers/esm/nonIterableRest.js",
+      "file": "static/chunks/1.js"
+    },
+    {
+      "id": "./node_modules/@babel/runtime/helpers/esm/slicedToArray.js",
+      "file": "static/chunks/1.js"
+    },
+    {
+      "id": "./node_modules/@babel/runtime/helpers/esm/unsupportedIterableToArray.js",
+      "file": "static/chunks/1.js"
+    },
+    {
+      "id": "./node_modules/@babel/runtime/node_modules/regenerator-runtime/runtime.js",
+      "file": "static/chunks/1.js"
+    },
+    {
+      "id": "./node_modules/@babel/runtime/regenerator/index.js",
+      "file": "static/chunks/1.js"
+    },
+    {
+      "id": "./node_modules/mobx-react-lite/es/ObserverComponent.js",
+      "file": "static/chunks/1.js"
+    },
+    {
+      "id": "./node_modules/mobx-react-lite/es/index.js",
+      "file": "static/chunks/1.js"
+    },
+    {
+      "id": "./node_modules/mobx-react-lite/es/observer.js",
+      "file": "static/chunks/1.js"
+    },
+    {
+      "id": "./node_modules/mobx-react-lite/es/staticRendering.js",
+      "file": "static/chunks/1.js"
+    },
+    {
+      "id": "./node_modules/mobx-react-lite/es/useAsObservableSource.js",
+      "file": "static/chunks/1.js"
+    },
+    {
+      "id": "./node_modules/mobx-react-lite/es/useLocalObservable.js",
+      "file": "static/chunks/1.js"
+    },
+    {
+      "id": "./node_modules/mobx-react-lite/es/useLocalStore.js",
+      "file": "static/chunks/1.js"
+    },
+    {
+      "id": "./node_modules/mobx-react-lite/es/useObserver.js",
+      "file": "static/chunks/1.js"
+    },
+    {
+      "id": "./node_modules/mobx-react-lite/es/utils/FinalizationRegistryWrapper.js",
+      "file": "static/chunks/1.js"
+    },
+    {
+      "id": "./node_modules/mobx-react-lite/es/utils/assertEnvironment.js",
+      "file": "static/chunks/1.js"
+    },
+    {
+      "id": "./node_modules/mobx-react-lite/es/utils/createReactionCleanupTrackingUsingFinalizationRegister.js",
+      "file": "static/chunks/1.js"
+    },
+    {
+      "id": "./node_modules/mobx-react-lite/es/utils/createTimerBasedReactionCleanupTracking.js",
+      "file": "static/chunks/1.js"
+    },
+    {
+      "id": "./node_modules/mobx-react-lite/es/utils/observerBatching.js",
+      "file": "static/chunks/1.js"
+    },
+    {
+      "id": "./node_modules/mobx-react-lite/es/utils/printDebugValue.js",
+      "file": "static/chunks/1.js"
+    },
+    {
+      "id": "./node_modules/mobx-react-lite/es/utils/reactBatchedUpdates.js",
+      "file": "static/chunks/1.js"
+    },
+    {
+      "id": "./node_modules/mobx-react-lite/es/utils/reactionCleanupTracking.js",
+      "file": "static/chunks/1.js"
+    },
+    {
+      "id": "./node_modules/mobx-react-lite/es/utils/reactionCleanupTrackingCommon.js",
+      "file": "static/chunks/1.js"
+    },
+    {
+      "id": "./node_modules/mobx-react-lite/es/utils/utils.js",
+      "file": "static/chunks/1.js"
+    },
+    {
+      "id": "./node_modules/mobx-react/dist/mobxreact.esm.js",
+      "file": "static/chunks/1.js"
+    },
+    {
+      "id": "./node_modules/mobx/dist/mobx.esm.js",
+      "file": "static/chunks/1.js"
+    },
+    {
+      "id": "./src/client/admin/pages/console/index.tsx",
+      "file": "static/chunks/1.js"
+    },
+    {
+      "id": "./src/client/admin/pages/console/style.ts",
+      "file": "static/chunks/1.js"
+    },
+    {
+      "id": "./src/client/components/iconfont/index.ts",
+      "file": "static/chunks/1.js"
+    },
+    {
+      "id": "./src/client/components/logo/index.tsx",
+      "file": "static/chunks/1.js"
+    },
+    {
+      "id": "./src/client/store/index.ts",
+      "file": "static/chunks/1.js"
+    }
   ]
 }

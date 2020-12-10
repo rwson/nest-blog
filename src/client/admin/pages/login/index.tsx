@@ -10,6 +10,14 @@ import { user } from '@/client/api';
 
 import { LoginPage, LoginForm, LoginLogo, LoginFormRow, LoginButton, LoginInput } from './style';
 
+type UserLoginResponseType = {
+  readonly token: string;
+  readonly email: string;
+  readonly userName: string;
+  readonly avatar: string;
+  readonly type: string;
+};
+
 type LoginStateTypes = {
   account: string;
   password: string;
@@ -27,6 +35,15 @@ const Login: React.FC = () => {
     password: '',
     loading: false
   });
+
+  const toggleLoading = React.useCallback(() => {
+    setState((state: LoginStateTypes): LoginStateTypes => {
+      return {
+        ...state,
+        loading: !state.loading
+      }
+    });
+  }, [setState]);
 
   const valueChanged = React.useCallback((value: LoginValueChangedTypes) => {
     setState((state: LoginStateTypes): LoginStateTypes => {
@@ -48,8 +65,20 @@ const Login: React.FC = () => {
       return;
     }
 
+    toggleLoading();
 
-  }, [state, setState]);
+    const res = await HttpClient.post<UserLoginResponseType>(user.login, {
+      account: state.account,
+      password: state.password
+    });
+
+    if (res.code === 1) {
+      message.success('登录成功!');
+      Router.push('/admin/console');
+    }
+
+    toggleLoading();
+  }, [state, toggleLoading]);
 
   return (
     <LoginPage>
@@ -77,7 +106,7 @@ const Login: React.FC = () => {
           />
         </LoginFormRow>
         <div className="login-form-btn">
-          <LoginButton type="primary">
+          <LoginButton type="primary" onClick={handleLogin}>
             登录
           </LoginButton>
         </div>

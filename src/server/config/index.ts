@@ -13,6 +13,8 @@ export const BLOG_JWT_KEY = 'blog_jwt_key';
 
 export const BLOG_JWT_EXP = isDev ? 30 * 24 * 60 * 60 * 1000 : 30 * 24 * 60 * 60;
 
+export const BODY_PARSER_MAX = '50mb';
+
 export const PATHS = pathConfig;
 
 export const ERROR_CODE = errorCode;
