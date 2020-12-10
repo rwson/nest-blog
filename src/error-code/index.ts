@@ -1,4 +1,6 @@
+import article from './article';
 import user from './user';
+
 
 export default {
   success: {
@@ -6,5 +8,6 @@ export default {
     message: '成功!'
   },
 
+  ...article,
   ...user
 };

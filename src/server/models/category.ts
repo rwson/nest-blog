@@ -1,8 +1,10 @@
 import { Schema } from 'mongoose';
 
+import formatTimeZone from '@/server/mongoose/format-timezone';
+
 import BaseDocument from './base-document';
 
-const CategorySchema = new Schema(
+const schema = new Schema(
   {
     title: {
       type: Schema.Types.String,
@@ -14,7 +16,11 @@ const CategorySchema = new Schema(
   }
 ).index({ 
   createdAt: -1
-});;
+});
+
+type SchemaType = typeof schema;
+
+const CategorySchema = formatTimeZone<SchemaType>(schema, ['createdAt', 'updatedAt']);
 
 export interface CategoryDocument extends BaseDocument {
   readonly title: string;

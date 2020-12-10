@@ -1,60 +1,67 @@
 import { Schema } from 'mongoose';
 
 import paginate from '@/server/mongoose/paginate';
+import formatTimeZone from '@/server/mongoose/format-timezone';
 
 import BaseDocument from './base-document';
 
-const ArticleSchema = new Schema(
+const schema = new Schema(
   {
     title: {
       type: Schema.Types.String,
-      required: true
+      required: true,
     },
     content: {
       type: Schema.Types.String,
-      required: true
+      required: true,
     },
     category: {
       type: Schema.Types.ObjectId,
-      required: true
+      ref: 'category',
+      required: true,
     },
     isDraft: {
       type: Schema.Types.Boolean,
       required: false,
-      default: false
+      default: false,
     },
     isDeleted: {
       type: Schema.Types.Boolean,
       required: false,
-      default: false
+      default: false,
     },
     commentCount: {
       type: Number,
       required: false,
-      default: 0
+      default: 0,
     },
     viewsCount: {
       type: Number,
       required: false,
-      default: 0
+      default: 0,
     },
     tags: {
       type: [Schema.Types.ObjectId],
       required: false,
-      default: []
+      ref: 'tag',
+      default: [],
     },
     comments: {
       type: [Schema.Types.ObjectId],
       required: false,
-      default: []
-    }
+      default: [],
+    },
   },
   {
-    timestamps: true
-  }
-).index({ 
-  createdAt: -1
+    timestamps: true,
+  },
+).index({
+  createdAt: -1,
 });
+
+type SchemaType = typeof schema;
+
+const ArticleSchema = formatTimeZone<SchemaType>(schema, ['createdAt', 'updatedAt']);
 
 export interface ArticleDocument extends BaseDocument {
   readonly title: string;

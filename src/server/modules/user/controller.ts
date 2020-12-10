@@ -1,5 +1,4 @@
 import { Controller, UseGuards, Get, Post, Put, Body, Headers } from '@nestjs/common';
-
 import { AuthGuard } from '@nestjs/passport';
 
 import { UserLoginDto, CreateUserDto } from '@/dto/user/request';
@@ -23,13 +22,7 @@ export class UserController {
 
   @Get('/check-login')
   @UseGuards(AuthGuard())
-  async checkLogin(@Headers('authorization') authorization: string) {
-    return authorization;
-  }
-
-  @Get()
-  getHello(): string {
-    console.log(1111111);
-    return this.userService.getHello();
+  async checkLogin(@Headers('authorization') authorization: string): Promise<UserLoginResponse> {
+    return this.userService.checkLogin(authorization);
   }
 }

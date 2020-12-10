@@ -1,10 +1,17 @@
 import { Module } from '@nestjs/common';
+
+import { CategoryModelProvider } from '@/server/models';
+
+import { AuthService, JwtStrategy, injectModules } from '@/server/auth';
+
 import { CategoryController } from './controller';
 import { CategoryService } from './service';
 
 @Module({
-  imports: [],
+  imports: [
+    ...injectModules
+  ],
   controllers: [CategoryController],
-  providers: [CategoryService],
+  providers: [CategoryModelProvider, CategoryService, AuthService, JwtStrategy]
 })
 export class CategoryModule {}

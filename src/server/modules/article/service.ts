@@ -1,8 +1,32 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
+
+import { markdown } from 'markdown';
+
+import { FileDto } from '@/dto/base';
+import { ParseMarkdownData, ParseMarkdownResponse } from '@/dto/article/response';
+
+import errorCode from '@/error-code';
 
 @Injectable()
 export class ArticleService {
-  getHello(): string {
-    return 'Hello World!3333344';
+
+  async parseMarkdown(file: FileDto | undefined): Promise<ParseMarkdownResponse> {
+    if (file) {
+      const content: string = file.buffer.toString();
+      const data: ParseMarkdownData = new ParseMarkdownData();
+
+      let html: string = markdown.toHTML(content);
+
+      html = html.replace(/\<hr\/\>/g, '');
+
+      data.html = html;
+
+      return {
+        data,
+        ...errorCode.success
+      };
+    }
+
+    throw new BadRequestException(errorCode.parseMarkdownNotEmpty);
   }
 }

@@ -29,5 +29,11 @@ export default {
   createUserEmailNotEmpty: {
     code: 200006,
     message: '创建用户-邮箱不能为空!'
+  },
+
+  //  校验登录
+  checkLoginUserNotExist: {
+    code: 200007,
+    message: '确认登录-用户不存在!'
   }
 };

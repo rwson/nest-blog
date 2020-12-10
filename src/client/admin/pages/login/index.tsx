@@ -4,6 +4,10 @@ import { Icon, message } from 'antd';
 
 import LoadingSpin from '@/client/admin/components/loading.dark';
 
+import HttpClient from '@/client/http';
+
+import { user } from '@/client/api';
+
 import { LoginPage, LoginForm, LoginLogo, LoginFormRow, LoginButton, LoginInput } from './style';
 
 type LoginStateTypes = {

@@ -1,8 +1,10 @@
 import { Schema } from 'mongoose';
 
+import formatTimeZone from '@/server/mongoose/format-timezone';
+
 import BaseDocument from './base-document';
 
-const CommentSchema = new Schema(
+const schema = new Schema(
   {
     nickName: {
       type: Schema.Types.String,
@@ -51,6 +53,10 @@ const CommentSchema = new Schema(
 ).index({ 
   createdAt: -1
 });
+
+type SchemaType = typeof schema;
+
+const CommentSchema = formatTimeZone<SchemaType>(schema, ['createdAt', 'updatedAt']);
 
 export interface CommentDocument extends BaseDocument {
   readonly nickName: string;

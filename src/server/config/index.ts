@@ -11,7 +11,7 @@ export const MONGODB = {
 
 export const BLOG_JWT_KEY = 'blog_jwt_key';
 
-export const BLOG_JWT_EXP = isDev ? Number.MIN_SAFE_INTEGER : 30 * 24 * 60 * 60;
+export const BLOG_JWT_EXP = isDev ? 30 * 24 * 60 * 60 * 1000 : 30 * 24 * 60 * 60;
 
 export const PATHS = pathConfig;
 

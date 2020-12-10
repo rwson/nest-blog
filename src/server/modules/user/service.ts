@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, BadRequestException } from '@nestjs/common';
 
 import { AuthService } from '@/server/auth';
 
@@ -29,7 +29,7 @@ export class UserService {
     if (user !== null) {
       const token: string = this.authService.signIn(userDoc.id, userDoc.account, userDoc.type);
 
-      const data = new UserLoginData();
+      const data: UserLoginData = new UserLoginData();
 
       data.email = userDoc.email;
       data.userName = userDoc.userName;
@@ -43,7 +43,7 @@ export class UserService {
       };
     }
 
-    return errorCode.loginUserNotExist;
+    throw new BadRequestException(errorCode.loginUserNotExist);
   }
 
   async createUser(user: CreateUserDto): Promise<CreateUserResponse> {
@@ -63,7 +63,28 @@ export class UserService {
     return errorCode.success;
   }
 
-  getHello(): string {
-    return 'Hello World22222!';
+  async checkLogin(authorization: string): Promise<UserLoginResponse> {
+    const user = this.authService.parse(authorization);
+    const id: string = user.id ?? '';
+    const userDoc: UserDocument | null = await UserModel.findById(id, ['userName', 'account', 'email', 'type']);
+
+    if (user !== null) {
+      const token: string = this.authService.signIn(userDoc.id, userDoc.account, userDoc.type);
+
+      const data: UserLoginData = new UserLoginData();
+
+      data.email = userDoc.email;
+      data.userName = userDoc.userName;
+      data.avatar = userDoc.avatar;
+      data.type = userDoc.type;
+      data.token = token;
+
+      return {
+        ...errorCode.success,
+        data
+      };
+    }
+
+    throw new BadRequestException(errorCode.checkLoginUserNotExist);
   }
 }

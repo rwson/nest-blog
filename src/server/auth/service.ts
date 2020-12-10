@@ -4,10 +4,10 @@ import { Injectable } from '@nestjs/common';
 import { BLOG_JWT_KEY, BLOG_JWT_EXP } from '@/server/config';
 
 type AdminTokenParsed = {
-  id: string;
-  account: string;
-  role: string;
-  random: string;
+  readonly id?: string;
+  readonly account?: string;
+  readonly role?: string;
+  readonly random?: string;
 }
 
 @Injectable()
@@ -20,6 +20,7 @@ export class AuthService {
     role: string,
   ): string {
     const random: string = Math.random().toString(16).slice(2);
+
     const token: string = this.jwtService.sign(
       {
         id,
@@ -36,7 +37,7 @@ export class AuthService {
     return res;
   }
 
-  parse(token: string): AdminTokenParsed | any {
+  parse(token: string): AdminTokenParsed {
     try {
       token = token.replace(/^Bearer/, '').trim();
       return this.jwtService.verify(token, {
