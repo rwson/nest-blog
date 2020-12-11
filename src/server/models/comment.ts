@@ -1,6 +1,8 @@
 import { Schema } from 'mongoose';
 
-import formatTimeZone from '@/server/mongoose/format-timezone';
+import * as dayjs from 'dayjs';
+
+import formatId from '@/server/mongoose/format-id';
 
 import BaseDocument from './base-document';
 
@@ -45,10 +47,22 @@ const schema = new Schema(
       type: Schema.Types.Number,
       enum: [1, 0],
       default: 0    
+    },
+    createdAt: {
+      type: Schema.Types.String,
+      set() {
+        return dayjs().format('YYYY-MM-DD HH:mm:ss');
+      }
+    },
+    updatedAt: {
+      type: Schema.Types.String,
+      set() {
+        return dayjs().format('YYYY-MM-DD HH:mm:ss');
+      }
     }
   },
   {
-    timestamps: true
+    versionKey: false
   }
 ).index({ 
   createdAt: -1
@@ -56,7 +70,7 @@ const schema = new Schema(
 
 type SchemaType = typeof schema;
 
-const CommentSchema = formatTimeZone<SchemaType>(schema, ['createdAt', 'updatedAt']);
+const CommentSchema = formatId<SchemaType>(schema);
 
 export interface CommentDocument extends BaseDocument {
   readonly nickName: string;

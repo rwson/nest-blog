@@ -42,11 +42,10 @@ class CustomApp extends App {
     const { Component, pageProps }: any = this.props;
 
     return (
-      <Provider dataStore={this.state.store}>
+      <Provider store={this.state.store}>
         <Head>
           <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         </Head>
-        <div className="CustomApp"></div>
         <Component {...pageProps} />
       </Provider>
     );

@@ -1,6 +1,6 @@
 import article from './article';
+import tag from './tag';
 import user from './user';
-
 
 export default {
   success: {
@@ -9,5 +9,6 @@ export default {
   },
 
   ...article,
+  ...tag,
   ...user
 };

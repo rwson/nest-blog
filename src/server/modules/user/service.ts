@@ -49,7 +49,7 @@ export class UserService {
   async createUser(user: CreateUserDto): Promise<CreateUserResponse> {
     const password: string = crypto.SHA1(user.password).toString();
 
-    const userInst = new UserModel({
+    const userInst: UserDocument = new UserModel({
       type: 'admin',
       avatar: '',
       userName: user.userName,
