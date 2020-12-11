@@ -1214,6 +1214,11 @@
     "@types/bson" "*"
     "@types/node" "*"
 
+"@types/mongoose-paginate@^5.0.8":
+  version "5.0.8"
+  resolved "https://registry.npm.taobao.org/@types/mongoose-paginate/download/@types/mongoose-paginate-5.0.8.tgz#6b925c3ccf1c45bfb116830c77471cc1ba045308"
+  integrity sha1-a5JcPM8cRb+xFoMMd0ccwboEUwg=
+
 "@types/mongoose@^5.7.32":
   version "5.10.2"
   resolved "https://registry.npm.taobao.org/@types/mongoose/download/@types/mongoose-5.10.2.tgz#761d73b78caaa2c4c745ab4fcca4cb976e3fad1e"
@@ -2275,6 +2280,11 @@ bl@^4.0.3:
     buffer "^5.5.0"
     inherits "^2.0.4"
     readable-stream "^3.4.0"
+
+bluebird@3.0.5:
+  version "3.0.5"
+  resolved "https://registry.npm.taobao.org/bluebird/download/bluebird-3.0.5.tgz#2ff9d07c9b3edb29d6d280fe07528365e7ecd392"
+  integrity sha1-L/nQfJs+2ynW0oD+B1KDZefs05I=
 
 bluebird@3.5.1:
   version "3.5.1"
@@ -6478,6 +6488,13 @@ mongoose-legacy-pluralize@1.0.2:
   version "1.0.2"
   resolved "https://registry.npm.taobao.org/mongoose-legacy-pluralize/download/mongoose-legacy-pluralize-1.0.2.tgz#3ba9f91fa507b5186d399fb40854bff18fb563e4"
   integrity sha1-O6n5H6UHtRhtOZ+0CFS/8Y+1Y+Q=
+
+mongoose-paginate@^5.0.3:
+  version "5.0.3"
+  resolved "https://registry.npm.taobao.org/mongoose-paginate/download/mongoose-paginate-5.0.3.tgz#d7ae49ed5bf64f1f7af7620ea865b67058c55371"
+  integrity sha1-165J7Vv2Tx9692IOqGW2cFjFU3E=
+  dependencies:
+    bluebird "3.0.5"
 
 mongoose@5.10:
   version "5.10.19"

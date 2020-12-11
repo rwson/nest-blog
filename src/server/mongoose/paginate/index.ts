@@ -18,7 +18,7 @@ export type ModelPaginate<T extends mongoose.Document> = {
 } &
   Paginate<T>;
 
-export default (schema: mongoose.Schema) => {
+export default (schema: mongoose.Schema): mongoose.Schema => {
   async function paginate(
     query: any,
     field: any,
@@ -47,4 +47,6 @@ export default (schema: mongoose.Schema) => {
     return { items, totalCount } as { items: any[]; totalCount: number };
   }
   schema.statics.paginate = paginate;
+
+  return schema;
 };

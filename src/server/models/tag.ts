@@ -1,6 +1,10 @@
 import { Schema } from 'mongoose';
 
+import mongoosePaginate from 'mongoose-paginate';
+
 import * as dayjs from 'dayjs';
+
+import paginate from '@/server/mongoose/paginate';
 
 import formatId from '@/server/mongoose/format-id';
 
@@ -40,9 +44,11 @@ const schema = new Schema(
   createdAt: -1
 });
 
-type SchemaType = typeof schema;
+schema.plugin(mongoosePaginate);
 
 const TagSchema = formatId<SchemaType>(schema);
+
+type SchemaType = typeof schema;
 
 export interface TagDocument extends BaseDocument {
   readonly title: string;

@@ -52,6 +52,9 @@ export class TagService {
   }
 
   async list() {
+
+    console.log((TagModel as any).paginate)
+
     const res: Array<TagDocument> = await TagModel.find().populate({
       path: 'creator',
       select: 'userName'

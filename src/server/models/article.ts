@@ -79,6 +79,7 @@ const schema = new Schema(
   createdAt: -1,
 });
 
+
 type SchemaType = typeof schema;
 
 const ArticleSchema = formatId<SchemaType>(schema);

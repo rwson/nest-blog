@@ -9,16 +9,16 @@ import BaseDocument from './base-document';
 const schema = new Schema(
   {
     name: {
-      type: String,
+      type: Schema.Types.String,
       required: true,
     },
     type: {
-      type: String,
+      type: Schema.Types.String,
       enum: ['image', 'video', 'audio', 'document', 'other'],
       required: true,
     },
     size: {
-      type: Number,
+      type: Schema.Types.Number,
       required: true,
     },
     url: {
