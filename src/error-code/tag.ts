@@ -21,18 +21,5 @@ export default {
   updateTagIdNotEmpty: {
     code: 400005,
     message: '更新标签-id不能为空!'
-  },
-
-  // createArticleTitleNotEmpty: {
-  //   code: 300002,
-  //   message: '发布文章-标题不能为空!'
-  // },
-  // createArticleTitleNotEmpty: {
-  //   code: 300002,
-  //   message: '发布文章-标题不能为空!'
-  // },
-  // createArticleTitleNotEmpty: {
-  //   code: 300002,
-  //   message: '发布文章-标题不能为空!'
-  // }
+  }
 };

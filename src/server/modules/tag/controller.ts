@@ -1,10 +1,9 @@
-import { Controller, Get, Post, Put, Body, Delete, UseGuards, Headers } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { Controller, Get, Post, Put, Body, Delete, UseGuards, Query, Param, Headers } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
 import { CreateTagDto, UpdateTagDto } from '@/dto/tag/request';
+import { QueryTagListResponse, QueryTagDetailResponse } from '@/dto/tag/response';
 import { BaseDto } from '@/dto/base';
-import { ParseMarkdownResponse } from '@/dto/article/response';
 
 import { TagService } from './service';
 
@@ -23,24 +22,27 @@ export class TagController {
 
   @Post('/update-tag')
   @UseGuards(AuthGuard())
-  async updateTag(@Body() tag: UpdateTagDto) {
+  async updateTag(@Body() tag: UpdateTagDto): Promise<BaseDto> {
     return this.tagService.updateTag(tag);
   }
 
   @Delete('/delete-tag/:id')
   @UseGuards(AuthGuard())
-  async deleteTag() {
-    
+  async deleteTag(@Param('id') id: string): Promise<BaseDto> {
+    return this.tagService.deleteTag(id);
   }
 
   @Get('/detail/:id')
-  async detail() {
-    
+  async detail(@Param('id') id: string): Promise<QueryTagDetailResponse> {
+    return this.tagService.detail(id);
   }
 
   @Get('/list')
-  async list() {
-    return this.tagService.list();
+  async list(
+    @Query('page') page: string = '1',
+    @Query('pageSize') pageSize: string = '10'
+  ): Promise<QueryTagListResponse> {
+    return this.tagService.list(page, pageSize);
   }
 
 }

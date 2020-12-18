@@ -1,7 +1,7 @@
 export default {
   //  登录
   loginAccountNotEmpty: {
-    code: 200001,
+    code: 600001,
     message: '用户登录-账号不能为空!'
   },
   loginPasswordNotEmpty: {

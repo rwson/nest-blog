@@ -3,6 +3,11 @@ export class BaseDto {
   message: string;
 }
 
+export class PageResponseDto {
+  totalPages: number;
+  currentPage: number;
+}
+
 export class FileDto {
   fieldname: string;
   originalname: string;

@@ -3,13 +3,15 @@ import {
 } from 'class-validator';
 
 export class CreateArticleDto {
-  @IsNotEmpty({
-    message: 'loginAccountNotEmpty'
-  })
-  account: string;
+  
+  title: string;
 
-  @IsNotEmpty({
-    message: 'loginPasswordNotEmpty'
-  })
-  password: string;
+  content: string;
+
+  category: string;
+
+  isDraft: boolean;
+
+  tags: Array<string>;
+
 }

@@ -1,7 +1,5 @@
 import { Schema } from 'mongoose';
 
-import mongoosePaginate from 'mongoose-paginate';
-
 import * as dayjs from 'dayjs';
 
 import paginate from '@/server/mongoose/paginate';
@@ -26,25 +24,23 @@ const schema = new Schema(
     },
     createdAt: {
       type: Schema.Types.String,
-      set() {
-        return dayjs().format('YYYY-MM-DD HH:mm:ss');
-      }
+      default: dayjs().format('YYYY-MM-DD HH:mm:ss')
     },
     updatedAt: {
       type: Schema.Types.String,
-      set() {
-        return dayjs().format('YYYY-MM-DD HH:mm:ss');
-      }
+      default: dayjs().format('YYYY-MM-DD HH:mm:ss')
     }
   },
   {
-    versionKey: false
+    versionKey: false,
+    timestamps: { 
+      createdAt: 'createdAt',
+      updatedAt: 'updatedAt'
+    }
   }
 ).index({ 
   createdAt: -1
 });
-
-schema.plugin(mongoosePaginate);
 
 const TagSchema = formatId<SchemaType>(schema);
 

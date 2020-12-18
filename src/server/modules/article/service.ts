@@ -14,10 +14,7 @@ export class ArticleService {
     if (file) {
       const content: string = file.buffer.toString();
       const data: ParseMarkdownData = new ParseMarkdownData();
-
-      let html: string = markdown.toHTML(content);
-
-      html = html.replace(/\<hr\/\>/g, '');
+      const html: string = markdown.toHTML(content);
 
       data.html = html;
 
@@ -29,4 +26,6 @@ export class ArticleService {
 
     throw new BadRequestException(errorCode.parseMarkdownNotEmpty);
   }
+
+  
 }

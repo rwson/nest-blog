@@ -1,4 +1,5 @@
 import article from './article';
+import category from './category';
 import tag from './tag';
 import user from './user';
 
@@ -9,6 +10,7 @@ export default {
   },
 
   ...article,
+  ...category,
   ...tag,
   ...user
 };

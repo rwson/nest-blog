@@ -18,19 +18,19 @@ const schema = new Schema(
     },
     createdAt: {
       type: Schema.Types.String,
-      set() {
-        return dayjs().format('YYYY-MM-DD HH:mm:ss');
-      }
+      default: dayjs().format('YYYY-MM-DD HH:mm:ss')
     },
     updatedAt: {
       type: Schema.Types.String,
-      set() {
-        return dayjs().format('YYYY-MM-DD HH:mm:ss');
-      }
+      default: dayjs().format('YYYY-MM-DD HH:mm:ss')
     }
   },
   {
-    versionKey: false
+    versionKey: false,
+    timestamps: { 
+      createdAt: 'createdAt',
+      updatedAt: 'updatedAt'
+    }
   }
 ).index({ 
   createdAt: -1

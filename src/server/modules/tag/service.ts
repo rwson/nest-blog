@@ -1,13 +1,15 @@
 import { Injectable, Inject, BadRequestException } from '@nestjs/common';
 
+import { subtract, multiply, divide } from 'ramda';
+
 import { AuthService } from '@/server/auth';
 
 import { TagModelToken, TagModel, TagInterface } from '@/server/models';
 import { TagDocument } from '@/server/models/tag';
 
 import { CreateTagDto, UpdateTagDto } from '@/dto/tag/request';
+import { QueryTagListResponse, QueryTagDetailResponse, TagListItem } from '@/dto/tag/response';
 import { BaseDto } from '@/dto/base';
-import { ParseMarkdownData, ParseMarkdownResponse } from '@/dto/article/response';
 
 import errorCode from '@/error-code';
 
@@ -15,21 +17,17 @@ import errorCode from '@/error-code';
 export class TagService {
   constructor(
     @Inject(TagModelToken) private readonly tagModel: TagInterface,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
   ) {}
 
-
-  async createTag(
-    authorization: string,
-    tag: CreateTagDto
-  ): Promise<BaseDto> {
+  async createTag(authorization: string, tag: CreateTagDto): Promise<BaseDto> {
     const user = this.authService.parse(authorization);
     const id: string = user.id ?? '';
 
     const tagInst: TagDocument = new TagModel({
       color: tag.color,
       title: tag.title,
-      creator: id
+      creator: id,
     });
 
     await tagInst.save();
@@ -37,30 +35,60 @@ export class TagService {
     return errorCode.success;
   }
 
+  async updateTag(tag: UpdateTagDto): Promise<BaseDto> {
+    const id: string = await tag.id;
 
-  async updateTag(
-    tag: UpdateTagDto
-  ) {
+    delete tag.id;
+
+    await this.tagModel.findByIdAndUpdate(id, tag);
+
+    return errorCode.success;
   }
 
-  async deleteTag() {
-    
+  async deleteTag(id: string): Promise<BaseDto> {
+    await this.tagModel.findByIdAndRemove(id);
+
+    return errorCode.success;
   }
 
-  async detail() {
-    
+  async detail(id: string): Promise<QueryTagDetailResponse> {
+    const tag: TagDocument = await this.tagModel.findById(id);
+    const data: TagListItem = tag.toJSON() as TagListItem;
+
+    return {
+      ...errorCode.success,
+      data
+    };
   }
 
-  async list() {
+  async list(page: string, pageSize: string): Promise<QueryTagListResponse> {
+    const pageNum: number = Number(page);
+    const limit: number = Number(pageSize);
+    const skip: number = multiply(subtract(pageNum, 1), limit);
 
-    console.log((TagModel as any).paginate)
+    const count: number = await this.tagModel.count({});
 
-    const res: Array<TagDocument> = await TagModel.find().populate({
-      path: 'creator',
-      select: 'userName'
+    const totalPages: number = Math.ceil(divide(count, limit));
+
+    const res: Array<TagDocument> = await this.tagModel.find({})
+      .skip(skip)
+      .limit(limit)
+      .populate({
+        path: 'creator',
+        select: 'userName -_id',
+      });
+
+    const data: Array<TagListItem> = res.map((tag: TagDocument): TagListItem => {
+      return tag.toJSON() as TagListItem;
     });
 
-    return res;
+    return {
+      ...errorCode.success,
+      data: {
+        totalPages,
+        currentPage: pageNum,
+        data
+      }
+    };
   }
-  
 }

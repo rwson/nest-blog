@@ -1,4 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
+
+import { PATHS } from '@/server/config';
 
 @Injectable()
 export class FileService {

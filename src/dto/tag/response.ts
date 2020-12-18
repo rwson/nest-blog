@@ -1,9 +1,25 @@
-import { BaseDto } from '../base';
+import { BaseDto, PageResponseDto } from '../base';
 
-export class ParseMarkdownData {
-  html: string;
+export class TagCreatorItem {
+  userName: string;  
 }
 
-export class ParseMarkdownResponse extends BaseDto {
-  data?: ParseMarkdownData;
+export class TagListItem {
+  title: string;
+  color: string;
+  createdAt: string;
+  updatedAt: string;
+  creator: TagCreatorItem;
+}
+
+export class QueryTagListData extends PageResponseDto {
+  data: Array<TagListItem>;
+}
+
+export class QueryTagListResponse extends BaseDto {
+  data: QueryTagListData;
+}
+
+export class QueryTagDetailResponse extends BaseDto {
+  data: TagListItem;
 }
