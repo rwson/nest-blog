@@ -18,8 +18,8 @@ export default {
     code: 400004,
     message: '更新标签-颜色不能为空!'
   },
-  updateTagIdNotEmpty: {
+  updateTagIdError: {
     code: 400005,
-    message: '更新标签-id不能为空!'
+    message: '更新标签-id不合法!'
   }
 };

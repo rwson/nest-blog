@@ -1,5 +1,6 @@
 import {
-  IsNotEmpty
+  IsNotEmpty,
+  IsMongoId
 } from 'class-validator';
 
 export class CreateCategoryDto {
@@ -10,8 +11,8 @@ export class CreateCategoryDto {
 }
 
 export class UpdateCategoryDto {
-  @IsNotEmpty({
-    message: 'updateCategoryIdNotEmpty'
+  @IsMongoId({
+    message: 'updateCategoryIdError'
   })
   id: string;
 

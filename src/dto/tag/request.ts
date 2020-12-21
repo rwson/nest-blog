@@ -1,5 +1,6 @@
 import {
-  IsNotEmpty
+  IsNotEmpty,
+  IsMongoId
 } from 'class-validator';
 
 export class CreateTagDto {
@@ -15,8 +16,8 @@ export class CreateTagDto {
 }
 
 export class UpdateTagDto {
-  @IsNotEmpty({
-    message: 'updateTagIdNotEmpty'
+  @IsMongoId({
+    message: 'updateTagIdError'
   })
   id: string;
 

@@ -10,8 +10,8 @@ export default {
     code: 500002,
     message: '更新分类-标题不能为空!'
   },
-  updateCategoryIdNotEmpty: {
+  updateCategoryIdError: {
     code: 500003,
-    message: '更新分类-id不能为空!'
+    message: '更新分类-id不合法!'
   }
 };

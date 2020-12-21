@@ -4,8 +4,10 @@ import {
 
 export class CreateArticleDto {
   
+  @IsNotEmpty('createArticleTitleNotEmpty')
   title: string;
 
+  @IsNotEmpty('createArticleContentNotEmpty')
   content: string;
 
   category: string;

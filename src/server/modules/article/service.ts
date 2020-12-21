@@ -1,8 +1,9 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable, Inject, BadRequestException } from '@nestjs/common';
 
 import { markdown } from 'markdown';
 
 import { FileDto } from '@/dto/base';
+import { CreateArticleDto } from '@/dto/article/request';
 import { ParseMarkdownData, ParseMarkdownResponse } from '@/dto/article/response';
 
 import errorCode from '@/error-code';
@@ -26,6 +27,8 @@ export class ArticleService {
 
     throw new BadRequestException(errorCode.parseMarkdownNotEmpty);
   }
+
+  async createArticle(authorization: string, article: CreateArticleDto) {}
 
   
 }

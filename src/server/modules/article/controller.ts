@@ -2,8 +2,12 @@ import { Controller, Get, Post, Put, Body, UseGuards, Headers, UploadedFile, Use
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from '@nestjs/passport';
 
-import { FileDto } from '@/dto/base';
+import { ArticleModelToken, ArticleModel, ArticleInterface } from '@/server/models';
+import { ArticleDocument } from '@/server/models/article';
+
+import { CreateArticleDto } from '@/dto/article/request';
 import { ParseMarkdownResponse } from '@/dto/article/response';
+import { FileDto } from '@/dto/base';
 
 import { ArticleService } from './service';
 
@@ -19,8 +23,8 @@ export class ArticleController {
 
   @Put('/create-article')
   @UseGuards(AuthGuard())
-  async createArticle() {
-    
+  async createArticle(@Headers('authorization') authorization: string, @Body() article: CreateArticleDto) {
+    return this.articleService.createArticle(authorization, article);
   }
 
 }
