@@ -3,7 +3,7 @@ import { AuthGuard } from '@nestjs/passport';
 
 import { CreateCategoryDto, UpdateCategoryDto } from '@/dto/category/request';
 import { QueryCategoryDetailResponse, QueryCategoryListResponse } from '@/dto/category/response';
-import { BaseDto } from '@/dto/base';
+import { BaseResponse } from '@/dto/base';
 
 import { CategoryService } from './service';
 
@@ -16,19 +16,19 @@ export class CategoryController {
   async createCategory(
     @Headers('authorization') authorization: string,
     @Body() category: CreateCategoryDto
-  ): Promise<BaseDto> {
+  ): Promise<BaseResponse> {
     return this.categoryService.createCategory(authorization, category);
   }
 
   @Post('/update-category')
   @UseGuards(AuthGuard())
-  async updateCategory(@Body() category: UpdateCategoryDto): Promise<BaseDto> {
+  async updateCategory(@Body() category: UpdateCategoryDto): Promise<BaseResponse> {
     return this.categoryService.updateCategory(category);
   }
 
   @Delete('/delete-category/:id')
   @UseGuards(AuthGuard())
-  async deleteCategory(@Param('id') id: string): Promise<BaseDto> {
+  async deleteCategory(@Param('id') id: string): Promise<BaseResponse> {
     return this.categoryService.deleteCategory(id);
   }
 

@@ -21,7 +21,7 @@ const schema = new Schema(
     category: {
       type: Schema.Types.ObjectId,
       ref: 'category',
-      required: true,
+      required: false,
     },
     isDraft: {
       type: Schema.Types.Boolean,
@@ -43,42 +43,42 @@ const schema = new Schema(
       required: false,
       default: 0,
     },
-    tags: {
-      type: [Schema.Types.ObjectId],
-      required: false,
-      ref: 'tag',
-      default: [],
-    },
-    comments: {
-      type: [Schema.Types.ObjectId],
-      ref: 'comment',
-      required: false,
-      default: [],
-    },
+    tags: [
+      {
+        type: Schema.Types.ObjectId,
+        required: false,
+        ref: 'tag',
+      },
+    ],
+    comments: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'comment',
+      },
+    ],
     creator: {
       type: Schema.Types.ObjectId,
-      ref: 'user'
+      ref: 'user',
     },
     createdAt: {
       type: Schema.Types.String,
-      default: dayjs().format('YYYY-MM-DD HH:mm:ss')
+      default: dayjs().format('YYYY-MM-DD HH:mm:ss'),
     },
     updatedAt: {
       type: Schema.Types.String,
-      default: dayjs().format('YYYY-MM-DD HH:mm:ss')
-    }
+      default: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+    },
   },
   {
     versionKey: false,
     timestamps: {
       createdAt: 'createdAt',
-      updatedAt: 'updatedAt'
-    }
-  }
+      updatedAt: 'updatedAt',
+    },
+  },
 ).index({
   createdAt: -1,
 });
-
 
 type SchemaType = typeof schema;
 

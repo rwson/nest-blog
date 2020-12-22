@@ -1,4 +1,4 @@
-export class BaseDto {
+export class BaseResponse {
   code: number;
   message: string;
 }

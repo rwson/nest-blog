@@ -1,4 +1,4 @@
-import { BaseDto } from '../base';
+import { BaseResponse } from '../base';
 
 export class UserLoginData {
   token: string;
@@ -8,8 +8,8 @@ export class UserLoginData {
   type: string;
 }
 
-export class UserLoginResponse extends BaseDto {
+export class UserLoginResponse extends BaseResponse {
   data?: UserLoginData;
 }
 
-export class CreateUserResponse extends BaseDto {}
+export class CreateUserResponse extends BaseResponse {}

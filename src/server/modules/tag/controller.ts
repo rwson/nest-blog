@@ -3,7 +3,7 @@ import { AuthGuard } from '@nestjs/passport';
 
 import { CreateTagDto, UpdateTagDto } from '@/dto/tag/request';
 import { QueryTagListResponse, QueryTagDetailResponse } from '@/dto/tag/response';
-import { BaseDto } from '@/dto/base';
+import { BaseResponse } from '@/dto/base';
 
 import { TagService } from './service';
 
@@ -16,19 +16,19 @@ export class TagController {
   async createTag(
     @Headers('authorization') authorization: string,
     @Body() tag: CreateTagDto
-  ): Promise<BaseDto> {
+  ): Promise<BaseResponse> {
     return this.tagService.createTag(authorization, tag);
   }
 
   @Post('/update-tag')
   @UseGuards(AuthGuard())
-  async updateTag(@Body() tag: UpdateTagDto): Promise<BaseDto> {
+  async updateTag(@Body() tag: UpdateTagDto): Promise<BaseResponse> {
     return this.tagService.updateTag(tag);
   }
 
   @Delete('/delete-tag/:id')
   @UseGuards(AuthGuard())
-  async deleteTag(@Param('id') id: string): Promise<BaseDto> {
+  async deleteTag(@Param('id') id: string): Promise<BaseResponse> {
     return this.tagService.deleteTag(id);
   }
 

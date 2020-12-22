@@ -31,12 +31,14 @@ const Connection = {
       });
     }
 
-    return mongoose.connect(MONGODB.uri, {
+    const client = mongoose.connect(MONGODB.uri, {
       useCreateIndex: true,
       useNewUrlParser: true,
       useFindAndModify: false,
-      useUnifiedTopology: true,
+      useUnifiedTopology: true
     });
+
+    return client;
   },
 };
 

@@ -1,4 +1,4 @@
-import { BaseDto, PageResponseDto } from '../base';
+import { BaseResponse, PageResponseDto } from '../base';
 
 export class CategoryCreatorItem {
   userName: string;  
@@ -15,10 +15,10 @@ export class QueryCategoryListData extends PageResponseDto {
   data: Array<CategoryListItem>;
 }
 
-export class QueryCategoryListResponse extends BaseDto {
+export class QueryCategoryListResponse extends BaseResponse {
   data: QueryCategoryListData;
 }
 
-export class QueryCategoryDetailResponse extends BaseDto {
+export class QueryCategoryDetailResponse extends BaseResponse {
   data: CategoryListItem;
 }

@@ -9,7 +9,7 @@ import { CategoryDocument } from '@/server/models/category';
 
 import { CreateCategoryDto, UpdateCategoryDto } from '@/dto/category/request';
 import { QueryCategoryDetailResponse, CategoryListItem, QueryCategoryListResponse } from '@/dto/category/response';
-import { BaseDto } from '@/dto/base';
+import { BaseResponse } from '@/dto/base';
 
 import errorCode from '@/error-code';
 
@@ -20,7 +20,7 @@ export class CategoryService {
     private readonly authService: AuthService,
   ) {}
 
-  async createCategory(authorization: string, category: CreateCategoryDto): Promise<BaseDto> {
+  async createCategory(authorization: string, category: CreateCategoryDto): Promise<BaseResponse> {
     const user = this.authService.parse(authorization);
     const id: string = user.id ?? '';
 
@@ -34,7 +34,7 @@ export class CategoryService {
     return errorCode.success;
   }
 
-  async updateCategory(category: UpdateCategoryDto): Promise<BaseDto> {
+  async updateCategory(category: UpdateCategoryDto): Promise<BaseResponse> {
     const id: string = category.id;
 
     delete category.id;

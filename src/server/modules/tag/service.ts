@@ -9,7 +9,7 @@ import { TagDocument } from '@/server/models/tag';
 
 import { CreateTagDto, UpdateTagDto } from '@/dto/tag/request';
 import { QueryTagListResponse, QueryTagDetailResponse, TagListItem } from '@/dto/tag/response';
-import { BaseDto } from '@/dto/base';
+import { BaseResponse } from '@/dto/base';
 
 import errorCode from '@/error-code';
 
@@ -20,7 +20,7 @@ export class TagService {
     private readonly authService: AuthService,
   ) {}
 
-  async createTag(authorization: string, tag: CreateTagDto): Promise<BaseDto> {
+  async createTag(authorization: string, tag: CreateTagDto): Promise<BaseResponse> {
     const user = this.authService.parse(authorization);
     const id: string = user.id ?? '';
 
@@ -35,7 +35,7 @@ export class TagService {
     return errorCode.success;
   }
 
-  async updateTag(tag: UpdateTagDto): Promise<BaseDto> {
+  async updateTag(tag: UpdateTagDto): Promise<BaseResponse> {
     const id: string = await tag.id;
 
     delete tag.id;
@@ -45,7 +45,7 @@ export class TagService {
     return errorCode.success;
   }
 
-  async deleteTag(id: string): Promise<BaseDto> {
+  async deleteTag(id: string): Promise<BaseResponse> {
     await this.tagModel.findByIdAndRemove(id);
 
     return errorCode.success;

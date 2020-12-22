@@ -3,6 +3,7 @@ import { Schema } from 'mongoose';
 import * as dayjs from 'dayjs';
 
 import formatId from '@/server/mongoose/format-id';
+import autoPopulateSubs from '@/server/mongoose/auto-populate-subs';
 
 import BaseDocument from './base-document';
 
@@ -24,29 +25,22 @@ const schema = new Schema(
       type: Schema.Types.String,
       required: true
     },
-    reply: {
-      type: Schema.Types.ObjectId,
-      ref: 'comment',
-      default: null
-    },
+    reply: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'comment'
+      }
+    ],
     article: {
       type: Schema.Types.ObjectId,
       ref: 'article',
       required: true
     },
-    location: {
-      type: String,
-      default: ''
-    },
-    pass: {
-      type: Schema.Types.Boolean,
-      default: true
-    },
     // 管理员身份为1，0为游客
     identity: {
       type: Schema.Types.Number,
       enum: [1, 0],
-      default: 0    
+      default: 0
     },
     createdAt: {
       type: Schema.Types.String,
@@ -70,7 +64,7 @@ const schema = new Schema(
 
 type SchemaType = typeof schema;
 
-const CommentSchema = formatId<SchemaType>(schema);
+const CommentSchema = autoPopulateSubs<SchemaType>(formatId<SchemaType>(schema), ['find', 'findOne'], 'reply', 'id nickName email website article content reply createdAt');
 
 export interface CommentDocument extends BaseDocument {
   readonly nickName: string;

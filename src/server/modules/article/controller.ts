@@ -1,13 +1,10 @@
-import { Controller, Get, Post, Put, Body, UseGuards, Headers, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Post, Put, Body, UseGuards, Headers, Param, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from '@nestjs/passport';
 
-import { ArticleModelToken, ArticleModel, ArticleInterface } from '@/server/models';
-import { ArticleDocument } from '@/server/models/article';
-
 import { CreateArticleDto } from '@/dto/article/request';
-import { ParseMarkdownResponse } from '@/dto/article/response';
-import { FileDto } from '@/dto/base';
+import { ParseMarkdownResponse, ArticleDetailResponse } from '@/dto/article/response';
+import { FileDto, BaseResponse } from '@/dto/base';
 
 import { ArticleService } from './service';
 
@@ -23,8 +20,24 @@ export class ArticleController {
 
   @Put('/create-article')
   @UseGuards(AuthGuard())
-  async createArticle(@Headers('authorization') authorization: string, @Body() article: CreateArticleDto) {
+  async createArticle(@Headers('authorization') authorization: string, @Body() article: CreateArticleDto): Promise<BaseResponse> {
     return this.articleService.createArticle(authorization, article);
+  }
+
+  @Post('/update-article')
+  @UseGuards(AuthGuard())
+  async updateArticle(@Body() article: CreateArticleDto) {
+  }
+
+  @Get('/detail/:id')
+  @UseGuards(AuthGuard())
+  async detail(@Param('id') id: string): Promise<ArticleDetailResponse> {
+    return this.articleService.detail(id);
+  }
+
+  @Get('/view/:id')
+  async viewDetail(@Param('id') id: string): Promise<ArticleDetailResponse> {
+    return this.articleService.viewDetail(id);
   }
 
 }

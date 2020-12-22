@@ -35,5 +35,11 @@ export default {
   checkLoginUserNotExist: {
     code: 200007,
     message: '确认登录-用户不存在!'
+  },
+
+  //  用户未登录
+  unauthorized: {
+    code: 200008,
+    message: '请先登录!'
   }
 };
