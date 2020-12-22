@@ -4,12 +4,15 @@ import * as mongoose from 'mongoose';
 
 import * as Transaction from 'mongoose-transactions';
 
+import { subtract, multiply, divide } from 'ramda';
+
 import { AuthService } from '@/server/auth';
 
 import { CommentModelToken, CommentModel, ArticleModel, CommentInterface } from '@/server/models';
 import { CommentDocument } from '@/server/models/comment';
 
 import { PostCommentDto, ReplyCommentDto } from '@/dto/comment/request';
+import { CommentItem, CommentListResponse } from '@/dto/comment/response';
 import { BaseResponse } from '@/dto/base';
 
 import errorCode from '@/error-code';
@@ -39,7 +42,8 @@ export class CommentService {
         website: comment.website,
         content: comment.content,
         article: comment.article,
-        identity: comment.identity
+        identity: comment.identity,
+        isReply: false
       });
 
       await transaction.update(articleName, comment.article, {
@@ -70,7 +74,8 @@ export class CommentService {
         website: comment.website,
         content: comment.content,
         article: comment.article,
-        identity: comment.identity
+        identity: comment.identity,
+        isReply: true
       });
 
       await transaction.update(commentName, comment.comment, {
@@ -92,6 +97,45 @@ export class CommentService {
       transaction.rollback();
       throw new InternalServerErrorException(e);
     }
+  }
+
+  async list(page: string, pageSize: string) {
+    const pageNum: number = Number(page);
+    const limit: number = Number(pageSize);
+    const skip: number = multiply(subtract(pageNum, 1), limit);
+
+    const count: number = await this.commentModel.count({
+      isReply: false
+    });
+
+    const totalPages: number = Math.ceil(divide(count, limit));
+
+    const res: Array<CommentDocument> = await this.commentModel.find({
+      isReply: false
+    })
+    .skip(skip)
+    .limit(limit)
+    .populate({
+      path: 'reply',
+      select: 'id nickName email content article reply createdAt',
+    })
+    .populate({
+      path: 'article',
+      select: 'title',
+    });
+
+    const data: Array<CommentItem> = res.map((comment: CommentDocument): CommentItem => {
+      return comment.toJSON() as CommentItem;
+    });
+
+    return {
+      ...errorCode.success,
+      data: {
+        totalPages,
+        currentPage: pageNum,
+        data
+      }
+    };
   }
 
   

@@ -25,6 +25,11 @@ const schema = new Schema(
       type: Schema.Types.String,
       required: true
     },
+    isReply: {
+      type: Schema.Types.Boolean,
+      required: false,
+      default: false
+    },
     reply: [
       {
         type: Schema.Types.ObjectId,
