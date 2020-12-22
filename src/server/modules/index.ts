@@ -13,7 +13,7 @@ export default [
   CommentModule,
   FileModule,
   TagModule,
-  UserModule
+  UserModule,
 ];
 
 export const SSRModule = SSR;

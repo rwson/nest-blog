@@ -1,5 +1,3 @@
-const Blog = () => (
-  <div className="blog"></div>
-);
+const Blog = () => <div className="blog"></div>;
 
 export default Blog;

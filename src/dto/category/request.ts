@@ -1,23 +1,20 @@
-import {
-  IsNotEmpty,
-  IsMongoId
-} from 'class-validator';
+import { IsNotEmpty, IsMongoId } from 'class-validator';
 
 export class CreateCategoryDto {
   @IsNotEmpty({
-    message: 'createCategoryTitleNotEmpty'
+    message: 'createCategoryTitleNotEmpty',
   })
   title: string;
 }
 
 export class UpdateCategoryDto {
   @IsMongoId({
-    message: 'updateCategoryIdError'
+    message: 'updateCategoryIdError',
   })
   id: string;
 
   @IsNotEmpty({
-    message: 'updateCategoryTitleNotEmpty'
+    message: 'updateCategoryTitleNotEmpty',
   })
   title: string;
 }

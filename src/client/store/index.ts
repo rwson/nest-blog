@@ -24,10 +24,10 @@ export class Store {
   }
 }
 
-export default new Store;
+export default new Store();
 
 export async function fetchInitialStoreState() {
   return {
-    mobxData: 'test data'
+    mobxData: 'test data',
   };
 }

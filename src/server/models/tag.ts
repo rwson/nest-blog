@@ -12,34 +12,34 @@ const schema = new Schema(
   {
     title: {
       type: Schema.Types.String,
-      required: true
+      required: true,
     },
     color: {
       type: Schema.Types.String,
-      required: true
+      required: true,
     },
     creator: {
       type: Schema.Types.ObjectId,
-      ref: 'user'
+      ref: 'user',
     },
     createdAt: {
       type: Schema.Types.String,
-      default: dayjs().format('YYYY-MM-DD HH:mm:ss')
+      default: dayjs().format('YYYY-MM-DD HH:mm:ss'),
     },
     updatedAt: {
       type: Schema.Types.String,
-      default: dayjs().format('YYYY-MM-DD HH:mm:ss')
-    }
+      default: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+    },
   },
   {
     versionKey: false,
-    timestamps: { 
+    timestamps: {
       createdAt: 'createdAt',
-      updatedAt: 'updatedAt'
-    }
-  }
-).index({ 
-  createdAt: -1
+      updatedAt: 'updatedAt',
+    },
+  },
+).index({
+  createdAt: -1,
 });
 
 const TagSchema = formatId<SchemaType>(schema);

@@ -19,10 +19,12 @@ async function bootstrap() {
 
   app.enableCors();
 
-  app.use(bodyParser.urlencoded({
-    limit: BODY_PARSER_MAX,
-    extended: true
-  }));
+  app.use(
+    bodyParser.urlencoded({
+      limit: BODY_PARSER_MAX,
+      extended: true,
+    }),
+  );
   app.use(log4js.connectLogger(requestInfoLogger, { level: 'info' }));
   app.useGlobalFilters(new AllExceptionsFilter());
   app.useGlobalPipes(new ApiValidationPipe());

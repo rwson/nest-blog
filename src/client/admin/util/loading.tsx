@@ -5,6 +5,6 @@ import LoadingSpin from '@/client/admin/components/loading';
 export const noSSRWithLoadingDynamic = (component) => {
   return dynamic(() => component, {
     ssr: false,
-    loading: () => <LoadingSpin />
+    loading: () => <LoadingSpin />,
   });
 };

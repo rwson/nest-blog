@@ -81,7 +81,6 @@ export class ArticleService {
   }
 
   async updateArticle(): Promise<BaseResponse> {
-    
     return errorCode.success;
   }
 

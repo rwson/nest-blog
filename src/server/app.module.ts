@@ -11,6 +11,6 @@ import Modules from './modules';
     // SSRModule.forRoot()
   ],
   controllers: [],
-  providers: []
+  providers: [],
 })
 export class AppModule {}

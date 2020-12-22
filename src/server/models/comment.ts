@@ -11,65 +11,70 @@ const schema = new Schema(
   {
     nickName: {
       type: Schema.Types.String,
-      required: true
+      required: true,
     },
     email: {
       type: Schema.Types.String,
-      required: true
+      required: true,
     },
     website: {
       type: Schema.Types.String,
-      default: ''
+      default: '',
     },
     content: {
       type: Schema.Types.String,
-      required: true
+      required: true,
     },
     isReply: {
       type: Schema.Types.Boolean,
       required: false,
-      default: false
+      default: false,
     },
     reply: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'comment'
-      }
+        ref: 'comment',
+      },
     ],
     article: {
       type: Schema.Types.ObjectId,
       ref: 'article',
-      required: true
+      required: true,
     },
     // 管理员身份为1，0为游客
     identity: {
       type: Schema.Types.Number,
       enum: [1, 0],
-      default: 0
+      default: 0,
     },
     createdAt: {
       type: Schema.Types.String,
-      default: dayjs().format('YYYY-MM-DD HH:mm:ss')
+      default: dayjs().format('YYYY-MM-DD HH:mm:ss'),
     },
     updatedAt: {
       type: Schema.Types.String,
-      default: dayjs().format('YYYY-MM-DD HH:mm:ss')
-    }
+      default: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+    },
   },
   {
     versionKey: false,
-    timestamps: { 
+    timestamps: {
       createdAt: 'createdAt',
-      updatedAt: 'updatedAt'
-    }
-  }
-).index({ 
-  createdAt: -1
+      updatedAt: 'updatedAt',
+    },
+  },
+).index({
+  createdAt: -1,
 });
 
 type SchemaType = typeof schema;
 
-const CommentSchema = autoPopulateSubs<SchemaType>(formatId<SchemaType>(schema), ['find', 'findOne'], 'reply', 'id nickName email website article content reply createdAt');
+const CommentSchema = autoPopulateSubs<SchemaType>(
+  formatId<SchemaType>(schema),
+  ['find', 'findOne'],
+  'reply',
+  'id nickName email website article content reply createdAt',
+);
 
 export interface CommentDocument extends BaseDocument {
   readonly nickName: string;

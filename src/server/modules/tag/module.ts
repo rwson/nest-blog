@@ -8,10 +8,8 @@ import { TagController } from './controller';
 import { TagService } from './service';
 
 @Module({
-  imports: [
-    ...injectModules
-  ],
+  imports: [...injectModules],
   controllers: [TagController],
-  providers: [TagModelProvider, TagService, AuthService, JwtStrategy]
+  providers: [TagModelProvider, TagService, AuthService, JwtStrategy],
 })
 export class TagModule {}

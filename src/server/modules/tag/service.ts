@@ -8,7 +8,11 @@ import { TagModelToken, TagModel, TagInterface } from '@/server/models';
 import { TagDocument } from '@/server/models/tag';
 
 import { CreateTagDto, UpdateTagDto } from '@/dto/tag/request';
-import { QueryTagListResponse, QueryTagDetailResponse, TagListItem } from '@/dto/tag/response';
+import {
+  QueryTagListResponse,
+  QueryTagDetailResponse,
+  TagListItem,
+} from '@/dto/tag/response';
 import { BaseResponse } from '@/dto/base';
 
 import errorCode from '@/error-code';
@@ -20,7 +24,10 @@ export class TagService {
     private readonly authService: AuthService,
   ) {}
 
-  async createTag(authorization: string, tag: CreateTagDto): Promise<BaseResponse> {
+  async createTag(
+    authorization: string,
+    tag: CreateTagDto,
+  ): Promise<BaseResponse> {
     const user = this.authService.parse(authorization);
     const id: string = user.id ?? '';
 
@@ -57,7 +64,7 @@ export class TagService {
 
     return {
       ...errorCode.success,
-      data
+      data,
     };
   }
 
@@ -70,7 +77,8 @@ export class TagService {
 
     const totalPages: number = Math.ceil(divide(count, limit));
 
-    const res: Array<TagDocument> = await this.tagModel.find({})
+    const res: Array<TagDocument> = await this.tagModel
+      .find({})
       .skip(skip)
       .limit(limit)
       .populate({
@@ -78,17 +86,19 @@ export class TagService {
         select: 'userName -_id',
       });
 
-    const data: Array<TagListItem> = res.map((tag: TagDocument): TagListItem => {
-      return tag.toJSON() as TagListItem;
-    });
+    const data: Array<TagListItem> = res.map(
+      (tag: TagDocument): TagListItem => {
+        return tag.toJSON() as TagListItem;
+      },
+    );
 
     return {
       ...errorCode.success,
       data: {
         totalPages,
         currentPage: pageNum,
-        data
-      }
+        data,
+      },
     };
   }
 }

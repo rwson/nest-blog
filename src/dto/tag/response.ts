@@ -1,7 +1,7 @@
 import { BaseResponse, PageResponseDto } from '../base';
 
 export class TagCreatorItem {
-  userName: string;  
+  userName: string;
 }
 
 export class TagListItem {

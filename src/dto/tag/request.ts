@@ -1,33 +1,30 @@
-import {
-  IsNotEmpty,
-  IsMongoId
-} from 'class-validator';
+import { IsNotEmpty, IsMongoId } from 'class-validator';
 
 export class CreateTagDto {
   @IsNotEmpty({
-    message: 'createTagTitleNotEmpty'
+    message: 'createTagTitleNotEmpty',
   })
   title: string;
 
   @IsNotEmpty({
-    message: 'createTagColorNotEmpty'
+    message: 'createTagColorNotEmpty',
   })
   color: string;
 }
 
 export class UpdateTagDto {
   @IsMongoId({
-    message: 'updateTagIdError'
+    message: 'updateTagIdError',
   })
   id: string;
 
   @IsNotEmpty({
-    message: 'updateTagTitleNotEmpty'
+    message: 'updateTagTitleNotEmpty',
   })
   title: string;
 
   @IsNotEmpty({
-    message: 'updateTagColorNotEmpty'
+    message: 'updateTagColorNotEmpty',
   })
   color: string;
 }

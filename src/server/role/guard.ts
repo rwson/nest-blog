@@ -3,24 +3,24 @@ import {
   CanActivate,
   ExecutionContext,
   Request,
-  ForbiddenException
+  ForbiddenException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 
-import { BLOG_JWT_KEY } from '@/server/config'
+import { BLOG_JWT_KEY } from '@/server/config';
 
 @Injectable()
 export default class RolesGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
-    private readonly jwtService: JwtService
+    private readonly jwtService: JwtService,
   ) {}
 
   canActivate(context: ExecutionContext): boolean {
     const roles: string[] = this.reflector.get<string[]>(
       'roles',
-      context.getHandler()
+      context.getHandler(),
     );
     if (!roles) {
       return true;
@@ -33,7 +33,7 @@ export default class RolesGuard implements CanActivate {
     }
     token = token.replace(/^Bearer/, '').trim();
     const decoed: any = this.jwtService.verify(token, {
-      secret: BLOG_JWT_KEY
+      secret: BLOG_JWT_KEY,
     });
     const hasRole: boolean = roles.includes(decoed.role);
 

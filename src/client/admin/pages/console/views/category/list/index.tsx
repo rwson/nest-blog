@@ -9,10 +9,7 @@ const CategoryList = () => {
 
   return (
     <div>
-      <PageHeaderStyled
-        onBack={history.goBack}
-        title="分类列表"
-      />
+      <PageHeaderStyled onBack={history.goBack} title="分类列表" />
     </div>
   );
 };

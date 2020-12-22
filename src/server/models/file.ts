@@ -22,31 +22,31 @@ const schema = new Schema(
       required: true,
     },
     url: {
-      type: String,
+      type: Schema.Types.String,
       required: true,
     },
     uploader: {
       type: Schema.Types.ObjectId,
-      ref: 'user'
+      ref: 'user',
     },
     createdAt: {
       type: Schema.Types.String,
-      default: dayjs().format('YYYY-MM-DD HH:mm:ss')
+      default: dayjs().format('YYYY-MM-DD HH:mm:ss'),
     },
     updatedAt: {
       type: Schema.Types.String,
-      default: dayjs().format('YYYY-MM-DD HH:mm:ss')
-    }
+      default: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+    },
   },
   {
     versionKey: false,
-    timestamps: { 
+    timestamps: {
       createdAt: 'createdAt',
-      updatedAt: 'updatedAt'
-    }
+      updatedAt: 'updatedAt',
+    },
   },
-).index({ 
-  createdAt: -1
+).index({
+  createdAt: -1,
 });
 
 type SchemaType = typeof schema;

@@ -9,10 +9,7 @@ const ArticleList = () => {
 
   return (
     <div>
-      <PageHeaderStyled
-        onBack={history.goBack}
-        title="文章列表"
-      />
+      <PageHeaderStyled onBack={history.goBack} title="文章列表" />
     </div>
   );
 };

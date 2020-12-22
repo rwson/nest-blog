@@ -5,7 +5,7 @@ import { message } from 'antd';
 import { baseUrl as baseURL } from '@/client/api';
 
 const instance: AxiosInstance = axios.create({
-  baseURL
+  baseURL,
 });
 
 type HttpResponse<T> = {
@@ -25,40 +25,37 @@ instance.interceptors.response.use((res) => {
 const autoHeader = () => {
   const authorization = localStorage.getItem('blog_app_user-token');
   return {
-    authorization
+    authorization,
   };
 };
 
 class Http {
-
   async get<T>(url: string, params: any): Promise<HttpResponse<T>> {
     return instance.get(url, {
       params,
-      headers: autoHeader()
+      headers: autoHeader(),
     });
   }
 
   async post<T>(url: string, data: any): Promise<HttpResponse<T>> {
     return instance.post(url, data, {
       headers: {
-        ...autoHeader()
-      }
+        ...autoHeader(),
+      },
     });
   }
 
   async put<T>(url: string, data: any): Promise<HttpResponse<T>> {
     return instance.put(url, data, {
       headers: {
-        ...autoHeader()
-      }
+        ...autoHeader(),
+      },
     });
   }
 
   async delete<T>(url: string, data: any): Promise<HttpResponse<T>> {
     return instance.delete(url, data);
   }
-
 }
 
-export default new Http;
-
+export default new Http();

@@ -5,7 +5,7 @@ import Roles from './auth';
 
 export const GuardProvider = {
   provide: APP_GUARD,
-  useClass: RolesGuard
-}
+  useClass: RolesGuard,
+};
 
 export { RolesGuard, Roles };

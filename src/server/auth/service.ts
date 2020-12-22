@@ -8,17 +8,13 @@ type AdminTokenParsed = {
   readonly account?: string;
   readonly role?: string;
   readonly random?: string;
-}
+};
 
 @Injectable()
 export class AuthService {
   constructor(private readonly jwtService: JwtService) {}
 
-  signIn(
-    id: string,
-    account: string,
-    role: string,
-  ): string {
+  signIn(id: string, account: string, role: string): string {
     const random: string = Math.random().toString(16).slice(2);
 
     const token: string = this.jwtService.sign(
@@ -26,11 +22,11 @@ export class AuthService {
         id,
         account,
         role,
-        random
+        random,
       },
       {
-        expiresIn: BLOG_JWT_EXP
-      }
+        expiresIn: BLOG_JWT_EXP,
+      },
     );
     const res: string = `Bearer ${token}`;
 
@@ -41,7 +37,7 @@ export class AuthService {
     try {
       token = token.replace(/^Bearer/, '').trim();
       return this.jwtService.verify(token, {
-        secret: BLOG_JWT_KEY
+        secret: BLOG_JWT_KEY,
       });
     } catch (e) {
       return {};

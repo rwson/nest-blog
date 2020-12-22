@@ -8,9 +8,7 @@ import { UserController } from './controller';
 import { UserService } from './service';
 
 @Module({
-  imports: [
-    ...injectModules
-  ],
+  imports: [...injectModules],
   controllers: [UserController],
   providers: [UserService, UserModelProvider, AuthService, JwtStrategy],
 })

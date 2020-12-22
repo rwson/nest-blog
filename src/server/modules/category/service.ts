@@ -4,11 +4,19 @@ import { subtract, multiply, divide } from 'ramda';
 
 import { AuthService } from '@/server/auth';
 
-import { CategoryModelToken, CategoryModel, CategoryInterface } from '@/server/models';
+import {
+  CategoryModelToken,
+  CategoryModel,
+  CategoryInterface,
+} from '@/server/models';
 import { CategoryDocument } from '@/server/models/category';
 
 import { CreateCategoryDto, UpdateCategoryDto } from '@/dto/category/request';
-import { QueryCategoryDetailResponse, CategoryListItem, QueryCategoryListResponse } from '@/dto/category/response';
+import {
+  QueryCategoryDetailResponse,
+  CategoryListItem,
+  QueryCategoryListResponse,
+} from '@/dto/category/response';
 import { BaseResponse } from '@/dto/base';
 
 import errorCode from '@/error-code';
@@ -16,17 +24,21 @@ import errorCode from '@/error-code';
 @Injectable()
 export class CategoryService {
   constructor(
-    @Inject(CategoryModelToken) private readonly categoryModel: CategoryInterface,
+    @Inject(CategoryModelToken)
+    private readonly categoryModel: CategoryInterface,
     private readonly authService: AuthService,
   ) {}
 
-  async createCategory(authorization: string, category: CreateCategoryDto): Promise<BaseResponse> {
+  async createCategory(
+    authorization: string,
+    category: CreateCategoryDto,
+  ): Promise<BaseResponse> {
     const user = this.authService.parse(authorization);
     const id: string = user.id ?? '';
 
     const categoryInst: CategoryDocument = new CategoryModel({
       title: category.title,
-      creator: id
+      creator: id,
     });
 
     await categoryInst.save();
@@ -56,11 +68,14 @@ export class CategoryService {
 
     return {
       ...errorCode.success,
-      data
+      data,
     };
   }
 
-  async list(page: string, pageSize: string): Promise<QueryCategoryListResponse> {
+  async list(
+    page: string,
+    pageSize: string,
+  ): Promise<QueryCategoryListResponse> {
     const pageNum: number = Number(page);
     const limit: number = Number(pageSize);
     const skip: number = multiply(subtract(pageNum, 1), limit);
@@ -69,7 +84,8 @@ export class CategoryService {
 
     const totalPages: number = Math.ceil(divide(count, limit));
 
-    const res: Array<CategoryDocument> = await this.categoryModel.find({})
+    const res: Array<CategoryDocument> = await this.categoryModel
+      .find({})
       .skip(skip)
       .limit(limit)
       .populate({
@@ -77,17 +93,19 @@ export class CategoryService {
         select: 'userName -_id',
       });
 
-    const data: Array<CategoryListItem> = res.map((category: CategoryDocument): CategoryListItem => {
-      return category.toJSON() as CategoryListItem;
-    });
+    const data: Array<CategoryListItem> = res.map(
+      (category: CategoryDocument): CategoryListItem => {
+        return category.toJSON() as CategoryListItem;
+      },
+    );
 
     return {
       ...errorCode.success,
       data: {
         totalPages,
         currentPage: pageNum,
-        data
-      }
+        data,
+      },
     };
   }
 }

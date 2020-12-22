@@ -1,16 +1,13 @@
-import {
-  IsNotEmpty,
-  IsMongoId
-} from 'class-validator';
+import { IsNotEmpty, IsMongoId } from 'class-validator';
 
 export class CreateArticleDto {
   @IsNotEmpty({
-    message: 'createArticleTitleNotEmpty'
+    message: 'createArticleTitleNotEmpty',
   })
   title: string;
 
   @IsNotEmpty({
-    message: 'createArticleContentNotEmpty'
+    message: 'createArticleContentNotEmpty',
   })
   content: string;
 
@@ -23,17 +20,17 @@ export class CreateArticleDto {
 
 export class UpdateArticleDto {
   @IsMongoId({
-    message: ''
+    message: '',
   })
   id: string;
 
   @IsNotEmpty({
-    message: 'createArticleTitleNotEmpty'
+    message: 'createArticleTitleNotEmpty',
   })
   title: string;
 
   @IsNotEmpty({
-    message: 'createArticleContentNotEmpty'
+    message: 'createArticleContentNotEmpty',
   })
   content: string;
 

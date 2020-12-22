@@ -1,65 +1,58 @@
-import {
-  IsNotEmpty,
-  IsMongoId
-} from 'class-validator';
+import { IsNotEmpty, IsMongoId } from 'class-validator';
 
 export class PostCommentDto {
-
   @IsNotEmpty({
-    message: 'postCommentArticleError'
+    message: 'postCommentArticleError',
   })
   nickName: string;
 
   @IsNotEmpty({
-    message: 'postCommentEmailNotEmpty'
+    message: 'postCommentEmailNotEmpty',
   })
   email: string;
 
   @IsNotEmpty({
-    message: 'postCommentContentNotEmpty'
+    message: 'postCommentContentNotEmpty',
   })
   content: string;
 
   @IsMongoId({
-    message: 'postCommentArticleError'
+    message: 'postCommentArticleError',
   })
   article: string;
 
   website: string;
 
   identity: number;
-
 }
 
 export class ReplyCommentDto {
-
   @IsNotEmpty({
-    message: 'replyCommentArticleError'
+    message: 'replyCommentArticleError',
   })
   nickName: string;
 
   @IsNotEmpty({
-    message: 'replyCommentEmailNotEmpty'
+    message: 'replyCommentEmailNotEmpty',
   })
   email: string;
 
   @IsNotEmpty({
-    message: 'replyCommentContentNotEmpty'
+    message: 'replyCommentContentNotEmpty',
   })
   content: string;
 
   @IsMongoId({
-    message: 'replyCommentArticleError'
+    message: 'replyCommentArticleError',
   })
   article: string;
 
   @IsMongoId({
-    message: 'replyCommentArticleError'
+    message: 'replyCommentArticleError',
   })
   comment: string;
 
   website: string;
 
   identity: number;
-
 }

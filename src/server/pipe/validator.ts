@@ -3,7 +3,7 @@ import {
   PipeTransform,
   Injectable,
   HttpStatus,
-  BadRequestException
+  BadRequestException,
 } from '@nestjs/common';
 
 import { plainToClass } from 'class-transformer';
@@ -40,6 +40,6 @@ export class ApiValidationPipe implements PipeTransform {
 
   private toValidate(metatype): boolean {
     const types = [String, Boolean, Number, Array, Object];
-    return !types.find(type => metatype === type);
+    return !types.find((type) => metatype === type);
   }
 }

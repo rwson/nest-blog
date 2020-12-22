@@ -8,9 +8,7 @@ import { CommentController } from './controller';
 import { CommentService } from './service';
 
 @Module({
-  imports: [
-    ...injectModules
-  ],
+  imports: [...injectModules],
   controllers: [CommentController],
   providers: [CommentModelProvider, CommentService, AuthService, JwtStrategy],
 })

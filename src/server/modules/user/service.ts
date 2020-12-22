@@ -8,7 +8,11 @@ import { UserDocument } from '@/server/models/user';
 import * as crypto from 'crypto-js';
 
 import { UserLoginDto, CreateUserDto } from '@/dto/user/request';
-import { UserLoginData, UserLoginResponse, CreateUserResponse } from '@/dto/user/response';
+import {
+  UserLoginData,
+  UserLoginResponse,
+  CreateUserResponse,
+} from '@/dto/user/response';
 
 import errorCode from '@/error-code';
 
@@ -16,18 +20,25 @@ import errorCode from '@/error-code';
 export class UserService {
   constructor(
     @Inject(UserModelToken) private readonly userModel: UserInterface,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
   ) {}
 
   async login(user: UserLoginDto): Promise<UserLoginResponse> {
     const password: string = crypto.SHA1(user.password).toString();
-    const userDoc: UserDocument | null = await UserModel.findOne({
-      account: user.account,
-      password
-    }, ['userName', 'account', 'email', 'type']);
+    const userDoc: UserDocument | null = await UserModel.findOne(
+      {
+        account: user.account,
+        password,
+      },
+      ['userName', 'account', 'email', 'type'],
+    );
 
     if (user !== null) {
-      const token: string = this.authService.signIn(userDoc.id, userDoc.account, userDoc.type);
+      const token: string = this.authService.signIn(
+        userDoc.id,
+        userDoc.account,
+        userDoc.type,
+      );
 
       const data: UserLoginData = new UserLoginData();
 
@@ -39,7 +50,7 @@ export class UserService {
 
       return {
         ...errorCode.success,
-        data
+        data,
       };
     }
 
@@ -55,7 +66,7 @@ export class UserService {
       userName: user.userName,
       email: user.email,
       account: user.account,
-      password
+      password,
     });
 
     await userInst.save();
@@ -66,10 +77,19 @@ export class UserService {
   async checkLogin(authorization: string): Promise<UserLoginResponse> {
     const user = this.authService.parse(authorization);
     const id: string = user.id ?? '';
-    const userDoc: UserDocument | null = await UserModel.findById(id, ['userName', 'account', 'email', 'type']);
+    const userDoc: UserDocument | null = await UserModel.findById(id, [
+      'userName',
+      'account',
+      'email',
+      'type',
+    ]);
 
     if (user !== null) {
-      const token: string = this.authService.signIn(userDoc.id, userDoc.account, userDoc.type);
+      const token: string = this.authService.signIn(
+        userDoc.id,
+        userDoc.account,
+        userDoc.type,
+      );
 
       const data: UserLoginData = new UserLoginData();
 
@@ -81,7 +101,7 @@ export class UserService {
 
       return {
         ...errorCode.success,
-        data
+        data,
       };
     }
 

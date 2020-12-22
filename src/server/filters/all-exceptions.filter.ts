@@ -3,7 +3,7 @@ import {
   Catch,
   ArgumentsHost,
   HttpException,
-  HttpStatus
+  HttpStatus,
 } from '@nestjs/common';
 
 import * as mongoose from 'mongoose';
@@ -29,7 +29,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const request = ctx.getRequest();
     const response = ctx.getResponse();
 
-    console.log(request)
+    console.log(request);
 
     if (exception instanceof mongoose.Error) {
       logger.warn(exception.message);
@@ -46,12 +46,21 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
       const exceptionResponse: ExceptionResponseType = exception.getResponse() as ExceptionResponseType;
       const code: number = exceptionResponse.code ?? status;
-      const message: string = (isString(exceptionResponse) ? exceptionResponse : exceptionResponse.message) as string;
+      const message: string = (isString(exceptionResponse)
+        ? exceptionResponse
+        : exceptionResponse.message) as string;
 
       if (status >= HttpStatus.INTERNAL_SERVER_ERROR) {
         logger.error('internal server request error.', exception);
       } else {
-        logger.error(format('api: %s response code: %d, message: %s', request.path, code, message));
+        logger.error(
+          format(
+            'api: %s response code: %d, message: %s',
+            request.path,
+            code,
+            message,
+          ),
+        );
       }
 
       if (status === HttpStatus.UNAUTHORIZED) {
@@ -60,7 +69,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
       return response.status(status).json({
         code,
-        message
+        message,
       });
     }
 

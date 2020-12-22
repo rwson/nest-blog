@@ -40,8 +40,8 @@ log4js.configure({
     info: { appenders: ['infoFile'], level: 'info' },
     error: { appenders: ['errorFile'], level: 'error' },
     requestInfo: { appenders: ['requestInfoFile'], level: 'info' },
-    default: { appenders: ['console'], level: 'debug' }
-  }
+    default: { appenders: ['console'], level: 'debug' },
+  },
 });
 
 const consoleLogger = log4js.getLogger();

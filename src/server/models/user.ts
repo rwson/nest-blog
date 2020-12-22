@@ -12,47 +12,47 @@ const schema = new Schema(
       type: Schema.Types.String,
       enum: ['admin'],
       default: 'admin',
-      required: true
+      required: true,
     },
     avatar: {
       type: Schema.Types.String,
-      required: false
+      required: false,
     },
     userName: {
       type: Schema.Types.String,
-      required: true
+      required: true,
     },
     email: {
       type: Schema.Types.String,
-      required: true
+      required: true,
     },
     account: {
       type: Schema.Types.String,
-      required: true
+      required: true,
     },
     // 密码
     password: {
       type: Schema.Types.String,
-      required: true
+      required: true,
     },
     createdAt: {
       type: Schema.Types.String,
-      default: dayjs().format('YYYY-MM-DD HH:mm:ss')
+      default: dayjs().format('YYYY-MM-DD HH:mm:ss'),
     },
     updatedAt: {
       type: Schema.Types.String,
-      default: dayjs().format('YYYY-MM-DD HH:mm:ss')
-    }
+      default: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+    },
   },
   {
     versionKey: false,
-    timestamps: { 
+    timestamps: {
       createdAt: 'createdAt',
-      updatedAt: 'updatedAt'
-    }
-  }
-).index({ 
-  createdAt: -1
+      updatedAt: 'updatedAt',
+    },
+  },
+).index({
+  createdAt: -1,
 });
 
 type SchemaType = typeof schema;

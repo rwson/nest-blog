@@ -8,10 +8,8 @@ import { ArticleController } from './controller';
 import { ArticleService } from './service';
 
 @Module({
-  imports: [
-    ...injectModules
-  ],
+  imports: [...injectModules],
   controllers: [ArticleController],
-  providers: [ArticleModelProvider, ArticleService, AuthService, JwtStrategy]
+  providers: [ArticleModelProvider, ArticleService, AuthService, JwtStrategy],
 })
 export class ArticleModule {}

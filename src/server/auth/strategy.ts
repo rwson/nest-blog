@@ -11,8 +11,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(private readonly authService: AuthService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: BLOG_JWT_KEY
-    })
+      secretOrKey: BLOG_JWT_KEY,
+    });
   }
 
   async validate(payload: any, done: Function): Promise<any> {

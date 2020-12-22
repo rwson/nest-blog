@@ -7,11 +7,10 @@ const formatId = <T>(schema: mongoose.Schema<T>): mongoose.Schema<T> => {
         ret.id = ret._id;
         delete ret._id;
       }
-    }
+    },
   });
 
   return schema;
 };
 
 export default formatId;
-

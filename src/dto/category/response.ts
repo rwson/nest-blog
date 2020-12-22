@@ -1,7 +1,7 @@
 import { BaseResponse, PageResponseDto } from '../base';
 
 export class CategoryCreatorItem {
-  userName: string;  
+  userName: string;
 }
 
 export class CategoryListItem {

@@ -3,21 +3,17 @@ import { JwtModule } from '@nestjs/jwt';
 
 import { BLOG_JWT_KEY, BLOG_JWT_EXP } from '@/server/config';
 
-import { AuthService } from './service'
-import { JwtStrategy } from './strategy'
+import { AuthService } from './service';
+import { JwtStrategy } from './strategy';
 
 const injectModules = [
   PassportModule.register({ defaultStrategy: 'jwt' }),
   JwtModule.register({
     secret: BLOG_JWT_KEY,
     signOptions: {
-      expiresIn: BLOG_JWT_EXP
-    }
-  })
+      expiresIn: BLOG_JWT_EXP,
+    },
+  }),
 ];
 
-export { 
-  AuthService,
-  JwtStrategy,
-  injectModules
-};
+export { AuthService, JwtStrategy, injectModules };

@@ -1,37 +1,35 @@
-import {
-  IsNotEmpty
-} from 'class-validator';
+import { IsNotEmpty } from 'class-validator';
 
 export class UserLoginDto {
   @IsNotEmpty({
-    message: 'loginAccountNotEmpty'
+    message: 'loginAccountNotEmpty',
   })
   account: string;
 
   @IsNotEmpty({
-    message: 'loginPasswordNotEmpty'
+    message: 'loginPasswordNotEmpty',
   })
   password: string;
 }
 
 export class CreateUserDto {
   @IsNotEmpty({
-    message: 'createUserAccountNotEmpty'
+    message: 'createUserAccountNotEmpty',
   })
   account: string;
 
   @IsNotEmpty({
-    message: 'createUserPasswordNotEmpty'
+    message: 'createUserPasswordNotEmpty',
   })
   password: string;
 
   @IsNotEmpty({
-    message: 'createUserNameNotEmpty'
+    message: 'createUserNameNotEmpty',
   })
   userName: string;
 
   @IsNotEmpty({
-    message: 'createUserEmailNotEmpty'
+    message: 'createUserEmailNotEmpty',
   })
   email: string;
 }

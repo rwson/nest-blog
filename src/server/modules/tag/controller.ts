@@ -1,8 +1,22 @@
-import { Controller, Get, Post, Put, Body, Delete, UseGuards, Query, Param, Headers } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Body,
+  Delete,
+  UseGuards,
+  Query,
+  Param,
+  Headers,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
 import { CreateTagDto, UpdateTagDto } from '@/dto/tag/request';
-import { QueryTagListResponse, QueryTagDetailResponse } from '@/dto/tag/response';
+import {
+  QueryTagListResponse,
+  QueryTagDetailResponse,
+} from '@/dto/tag/response';
 import { BaseResponse } from '@/dto/base';
 
 import { TagService } from './service';
@@ -15,7 +29,7 @@ export class TagController {
   @UseGuards(AuthGuard())
   async createTag(
     @Headers('authorization') authorization: string,
-    @Body() tag: CreateTagDto
+    @Body() tag: CreateTagDto,
   ): Promise<BaseResponse> {
     return this.tagService.createTag(authorization, tag);
   }
@@ -40,9 +54,8 @@ export class TagController {
   @Get('/list')
   async list(
     @Query('page') page: string = '1',
-    @Query('pageSize') pageSize: string = '10'
+    @Query('pageSize') pageSize: string = '10',
   ): Promise<QueryTagListResponse> {
     return this.tagService.list(page, pageSize);
   }
-
 }

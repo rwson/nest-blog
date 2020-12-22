@@ -6,7 +6,7 @@ const { Header, Sider, Content } = Layout;
 
 export const FullLayout = styled<any>(Layout)({
   width: '100vw',
-  height: '100vh'
+  height: '100vh',
 });
 
 export const HeaderConsole = styled<any>(Header)({
@@ -14,18 +14,18 @@ export const HeaderConsole = styled<any>(Header)({
   height: '80px',
   padding: '0 10px',
   display: 'flex',
-  alignItems: 'center'
+  alignItems: 'center',
 });
 
 export const MainContent = styled<any>(Content)({
   margin: '10px 10px',
   padding: 20,
   background: '#fff',
-  minHeight: 280
+  minHeight: 280,
 });
 
 export const LogoContainer = styled.div({
   width: '100%',
   textAlign: 'center',
-  padding: '20px'
+  padding: '20px',
 });

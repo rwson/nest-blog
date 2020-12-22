@@ -3,5 +3,5 @@ export default {
 
   SERVER_ERROR: 500,
 
-  DB_ERROR: 2000
+  DB_ERROR: 2000,
 };

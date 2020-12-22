@@ -1,7 +1,19 @@
-import { Controller, Get, Post, Put, Body, Delete, UseGuards, Query, Param, Headers } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Body,
+  Delete,
+  UseGuards,
+  Query,
+  Param,
+  Headers,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
 import { PostCommentDto, ReplyCommentDto } from '@/dto/comment/request';
+import { CommentListResponse } from '@/dto/comment/response';
 import { BaseResponse } from '@/dto/base';
 
 import { CommentService } from './service';
@@ -23,8 +35,8 @@ export class CommentController {
   @UseGuards(AuthGuard())
   async list(
     @Query('page') page: string = '1',
-    @Query('pageSize') pageSize: string = '10'
-  ) {
+    @Query('pageSize') pageSize: string = '10',
+  ): Promise<CommentListResponse> {
     return this.commentService.list(page, pageSize);
   }
 }

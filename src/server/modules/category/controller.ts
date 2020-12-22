@@ -1,8 +1,22 @@
-import { Controller, Get, Post, Put, Body, Delete, UseGuards, Query, Param, Headers } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Body,
+  Delete,
+  UseGuards,
+  Query,
+  Param,
+  Headers,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
 import { CreateCategoryDto, UpdateCategoryDto } from '@/dto/category/request';
-import { QueryCategoryDetailResponse, QueryCategoryListResponse } from '@/dto/category/response';
+import {
+  QueryCategoryDetailResponse,
+  QueryCategoryListResponse,
+} from '@/dto/category/response';
 import { BaseResponse } from '@/dto/base';
 
 import { CategoryService } from './service';
@@ -15,14 +29,16 @@ export class CategoryController {
   @UseGuards(AuthGuard())
   async createCategory(
     @Headers('authorization') authorization: string,
-    @Body() category: CreateCategoryDto
+    @Body() category: CreateCategoryDto,
   ): Promise<BaseResponse> {
     return this.categoryService.createCategory(authorization, category);
   }
 
   @Post('/update-category')
   @UseGuards(AuthGuard())
-  async updateCategory(@Body() category: UpdateCategoryDto): Promise<BaseResponse> {
+  async updateCategory(
+    @Body() category: UpdateCategoryDto,
+  ): Promise<BaseResponse> {
     return this.categoryService.updateCategory(category);
   }
 
@@ -40,7 +56,7 @@ export class CategoryController {
   @Get('/list')
   async list(
     @Query('page') page: string = '1',
-    @Query('pageSize') pageSize: string = '10'
+    @Query('pageSize') pageSize: string = '10',
   ): Promise<QueryCategoryListResponse> {
     return this.categoryService.list(page, pageSize);
   }

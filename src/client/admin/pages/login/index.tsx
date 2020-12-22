@@ -8,7 +8,14 @@ import HttpClient from '@/client/http';
 
 import { user } from '@/client/api';
 
-import { LoginPage, LoginForm, LoginLogo, LoginFormRow, LoginButton, LoginInput } from './style';
+import {
+  LoginPage,
+  LoginForm,
+  LoginLogo,
+  LoginFormRow,
+  LoginButton,
+  LoginInput,
+} from './style';
 
 type UserLoginResponseType = {
   readonly token: string;
@@ -33,28 +40,35 @@ const Login: React.FC = () => {
   const [state, setState] = React.useState<LoginStateTypes>({
     account: '',
     password: '',
-    loading: false
+    loading: false,
   });
 
   const toggleLoading = React.useCallback(() => {
-    setState((state: LoginStateTypes): LoginStateTypes => {
-      return {
-        ...state,
-        loading: !state.loading
-      }
-    });
+    setState(
+      (state: LoginStateTypes): LoginStateTypes => {
+        return {
+          ...state,
+          loading: !state.loading,
+        };
+      },
+    );
   }, [setState]);
 
-  const valueChanged = React.useCallback((value: LoginValueChangedTypes) => {
-    setState((state: LoginStateTypes): LoginStateTypes => {
-      return {
-        ...state,
-        ...value
-      };
-    });
-  }, [setState]);
+  const valueChanged = React.useCallback(
+    (value: LoginValueChangedTypes) => {
+      setState(
+        (state: LoginStateTypes): LoginStateTypes => {
+          return {
+            ...state,
+            ...value,
+          };
+        },
+      );
+    },
+    [setState],
+  );
 
-  const handleLogin = React.useCallback(async() => {
+  const handleLogin = React.useCallback(async () => {
     if (!state.account) {
       message.error('请先输入账号!');
       return;
@@ -69,7 +83,7 @@ const Login: React.FC = () => {
 
     const res = await HttpClient.post<UserLoginResponseType>(user.login, {
       account: state.account,
-      password: state.password
+      password: state.password,
     });
 
     if (res.code === 1) {
@@ -89,9 +103,11 @@ const Login: React.FC = () => {
             prefix={<Icon type="user" style={{ color: '#838f9e' }} />}
             placeholder="请输入账号"
             value={state.account}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => valueChanged({
-              account: e.currentTarget.value.trim()
-            })}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              valueChanged({
+                account: e.currentTarget.value.trim(),
+              })
+            }
           />
         </LoginFormRow>
         <LoginFormRow>
@@ -100,9 +116,11 @@ const Login: React.FC = () => {
             prefix={<Icon type="lock" style={{ color: '#838f9e' }} />}
             placeholder="请输入密码"
             value={state.password}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => valueChanged({
-              password: e.currentTarget.value.trim()
-            })}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              valueChanged({
+                password: e.currentTarget.value.trim(),
+              })
+            }
           />
         </LoginFormRow>
         <div className="login-form-btn">
@@ -111,9 +129,7 @@ const Login: React.FC = () => {
           </LoginButton>
         </div>
       </LoginForm>
-      {
-        state.loading && <LoadingSpin />
-      }
+      {state.loading && <LoadingSpin />}
     </LoginPage>
   );
 };

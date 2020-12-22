@@ -8,9 +8,7 @@ import { FileController } from './controller';
 import { FileService } from './service';
 
 @Module({
-  imports: [
-    ...injectModules
-  ],
+  imports: [...injectModules],
   controllers: [FileController],
   providers: [FileModelProvider, FileService, AuthService, JwtStrategy],
 })

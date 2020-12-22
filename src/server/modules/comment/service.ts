@@ -1,4 +1,8 @@
-import { Injectable, Inject, InternalServerErrorException } from '@nestjs/common';
+import {
+  Injectable,
+  Inject,
+  InternalServerErrorException,
+} from '@nestjs/common';
 
 import * as mongoose from 'mongoose';
 
@@ -8,7 +12,12 @@ import { subtract, multiply, divide } from 'ramda';
 
 import { AuthService } from '@/server/auth';
 
-import { CommentModelToken, CommentModel, ArticleModel, CommentInterface } from '@/server/models';
+import {
+  CommentModelToken,
+  CommentModel,
+  ArticleModel,
+  CommentInterface,
+} from '@/server/models';
 import { CommentDocument } from '@/server/models/comment';
 
 import { PostCommentDto, ReplyCommentDto } from '@/dto/comment/request';
@@ -17,12 +26,9 @@ import { BaseResponse } from '@/dto/base';
 
 import errorCode from '@/error-code';
 
-const [
-  commentName,
-  articleName
-] = [
+const [commentName, articleName] = [
   CommentModel.collection.collectionName,
-  ArticleModel.collection.collectionName
+  ArticleModel.collection.collectionName,
 ];
 
 @Injectable()
@@ -36,27 +42,30 @@ export class CommentService {
     const transaction: Transaction = new Transaction();
 
     try {
-      const commentId: mongoose.Types.ObjectId = await transaction.insert(commentName, {
-        nickName: comment.nickName,
-        email: comment.email,
-        website: comment.website,
-        content: comment.content,
-        article: comment.article,
-        identity: comment.identity,
-        isReply: false
-      });
+      const commentId: mongoose.Types.ObjectId = await transaction.insert(
+        commentName,
+        {
+          nickName: comment.nickName,
+          email: comment.email,
+          website: comment.website,
+          content: comment.content,
+          article: comment.article,
+          identity: comment.identity,
+          isReply: false,
+        },
+      );
 
       await transaction.update(articleName, comment.article, {
         $push: {
-          comments: commentId
+          comments: commentId,
         },
         $inc: {
-          commentCount: 1
-        }
+          commentCount: 1,
+        },
       });
-  
+
       await transaction.run();
-  
+
       return errorCode.success;
     } catch (e) {
       transaction.rollback();
@@ -68,30 +77,33 @@ export class CommentService {
     const transaction: Transaction = new Transaction();
 
     try {
-      const commentId: mongoose.Types.ObjectId = await transaction.insert(commentName, {
-        nickName: comment.nickName,
-        email: comment.email,
-        website: comment.website,
-        content: comment.content,
-        article: comment.article,
-        identity: comment.identity,
-        isReply: true
-      });
+      const commentId: mongoose.Types.ObjectId = await transaction.insert(
+        commentName,
+        {
+          nickName: comment.nickName,
+          email: comment.email,
+          website: comment.website,
+          content: comment.content,
+          article: comment.article,
+          identity: comment.identity,
+          isReply: true,
+        },
+      );
 
       await transaction.update(commentName, comment.comment, {
         $set: {
-          reply: commentId
-        }
+          reply: commentId,
+        },
       });
-  
+
       await transaction.update(articleName, comment.article, {
         $inc: {
-          commentCount: 1
-        }
+          commentCount: 1,
+        },
       });
-  
+
       await transaction.run();
-  
+
       return errorCode.success;
     } catch (e) {
       transaction.rollback();
@@ -99,45 +111,45 @@ export class CommentService {
     }
   }
 
-  async list(page: string, pageSize: string) {
+  async list(page: string, pageSize: string): Promise<CommentListResponse> {
     const pageNum: number = Number(page);
     const limit: number = Number(pageSize);
     const skip: number = multiply(subtract(pageNum, 1), limit);
 
     const count: number = await this.commentModel.count({
-      isReply: false
+      isReply: false,
     });
 
     const totalPages: number = Math.ceil(divide(count, limit));
 
-    const res: Array<CommentDocument> = await this.commentModel.find({
-      isReply: false
-    })
-    .skip(skip)
-    .limit(limit)
-    .populate({
-      path: 'reply',
-      select: 'id nickName email content article reply createdAt',
-    })
-    .populate({
-      path: 'article',
-      select: 'title',
-    });
+    const res: Array<CommentDocument> = await this.commentModel
+      .find({
+        isReply: false,
+      })
+      .skip(skip)
+      .limit(limit)
+      .populate({
+        path: 'reply',
+        select: 'id nickName email content article reply createdAt',
+      })
+      .populate({
+        path: 'article',
+        select: 'title',
+      });
 
-    const data: Array<CommentItem> = res.map((comment: CommentDocument): CommentItem => {
-      return comment.toJSON() as CommentItem;
-    });
+    const data: Array<CommentItem> = res.map(
+      (comment: CommentDocument): CommentItem => {
+        return comment.toJSON() as CommentItem;
+      },
+    );
 
     return {
       ...errorCode.success,
       data: {
         totalPages,
         currentPage: pageNum,
-        data
-      }
+        data,
+      },
     };
   }
-
-  
-
 }

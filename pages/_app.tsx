@@ -18,9 +18,8 @@ type AppState = {
 };
 
 class CustomApp extends App {
-
   state = {
-    store: AppStore
+    store: AppStore,
   };
 
   static async getInitialProps(appContext: AppContext): Promise<AppProps> {
@@ -29,7 +28,7 @@ class CustomApp extends App {
 
     return {
       ...appProps,
-      initialStoreState
+      initialStoreState,
     };
   }
 
@@ -44,7 +43,10 @@ class CustomApp extends App {
     return (
       <Provider store={this.state.store}>
         <Head>
-          <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+          <meta
+            name="viewport"
+            content="initial-scale=1.0, width=device-width"
+          />
         </Head>
         <Component {...pageProps} />
       </Provider>

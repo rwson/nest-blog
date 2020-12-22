@@ -1,11 +1,7 @@
 import React from 'react';
 
 const CommentList = () => {
-  return (
-    <div>
-      CommentList
-    </div>
-  );
+  return <div>CommentList</div>;
 };
 
 export default React.memo(CommentList);

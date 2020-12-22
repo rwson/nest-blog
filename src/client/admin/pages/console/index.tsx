@@ -1,5 +1,12 @@
 import React from 'react';
-import { BrowserRouter, HashRouter, Switch, Route, Redirect, useHistory } from 'react-router-dom';
+import {
+  BrowserRouter,
+  HashRouter,
+  Switch,
+  Route,
+  Redirect,
+  useHistory,
+} from 'react-router-dom';
 
 import { Layout, Menu, Icon } from 'antd';
 
@@ -35,12 +42,11 @@ const Console = () => {
       (state: ConsoleStateType): ConsoleStateType => {
         return {
           ...state,
-          collapsed: !state.collapsed
+          collapsed: !state.collapsed,
         };
-      }
+      },
     );
   }, [setState]);
-
 
   return (
     <FullLayout>

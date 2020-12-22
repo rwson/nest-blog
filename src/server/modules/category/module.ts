@@ -8,10 +8,8 @@ import { CategoryController } from './controller';
 import { CategoryService } from './service';
 
 @Module({
-  imports: [
-    ...injectModules
-  ],
+  imports: [...injectModules],
   controllers: [CategoryController],
-  providers: [CategoryModelProvider, CategoryService, AuthService, JwtStrategy]
+  providers: [CategoryModelProvider, CategoryService, AuthService, JwtStrategy],
 })
 export class CategoryModule {}
