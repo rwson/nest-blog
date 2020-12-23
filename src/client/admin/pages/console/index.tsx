@@ -8,7 +8,7 @@ import {
   useHistory,
 } from 'react-router-dom';
 
-import { Layout, Menu} from 'antd';
+import { Layout, Menu } from 'antd';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 
 import AppStore from '@/client/store';
@@ -76,22 +76,11 @@ const Console = () => {
       </Sider>
       <Layout>
         <HeaderConsole>
-          {
-            state.collapsed ?
-            (
-              <MenuUnfoldOutlined
-                className="trigger"
-                onClick={toggle}
-              />
-            )
-            :
-            (
-              <MenuFoldOutlined 
-                className="trigger"
-                onClick={toggle}
-              />
-            )
-          }
+          {state.collapsed ? (
+            <MenuUnfoldOutlined className="trigger" onClick={toggle} />
+          ) : (
+            <MenuFoldOutlined className="trigger" onClick={toggle} />
+          )}
         </HeaderConsole>
         <MainContent>
           <HashRouter>

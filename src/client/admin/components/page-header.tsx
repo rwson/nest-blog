@@ -9,8 +9,8 @@ const Header = styled<any>(PageHeader)({
   margin: '0 0 15px',
   '.ant-page-header-heading-title': {
     fontWeight: 'normal',
-    fontSize: '16px'
-  }
+    fontSize: '16px',
+  },
 });
 
 const PageHeaderStyled = (props) => {

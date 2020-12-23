@@ -24,7 +24,7 @@ export class AuthService {
         random,
       },
       {
-        expiresIn: BLOG_JWT_EXP
+        expiresIn: BLOG_JWT_EXP,
       },
     );
 

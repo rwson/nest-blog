@@ -52,18 +52,13 @@ class CustomApp extends App {
             content="initial-scale=1.0, width=device-width"
           />
         </Head>
-        {
-          isAdmin ?
-          (
-            <Global
-              styles={css({
-                background: 'red'
-              })}
-            />
-          )
-          :
-          null
-        }
+        {isAdmin ? (
+          <Global
+            styles={css({
+              background: 'red',
+            })}
+          />
+        ) : null}
         <Component {...pageProps} />
       </Provider>
     );

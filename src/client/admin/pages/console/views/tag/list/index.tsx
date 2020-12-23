@@ -43,7 +43,7 @@ const columns = [
 
 const TagList: React.FC = () => {
   const history = useHistory();
-  const [ form ] = Form.useForm();
+  const [form] = Form.useForm();
 
   const showAddModal = React.useCallback(() => {
     Modal.confirm({
@@ -55,7 +55,7 @@ const TagList: React.FC = () => {
             <Input />
           </Form.Item>
         </Form>
-      )
+      ),
     });
   }, [form]);
 
@@ -65,7 +65,9 @@ const TagList: React.FC = () => {
         onBack={history.goBack}
         title="标签管理"
         extra={[
-          <Button type="primary" onClick={showAddModal}>新增标签</Button>
+          <Button type="primary" onClick={showAddModal}>
+            新增标签
+          </Button>,
         ]}
       />
       <Table bordered={true} dataSource={dataSource} columns={columns} />
