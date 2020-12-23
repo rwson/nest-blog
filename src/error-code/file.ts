@@ -1,15 +1,13 @@
 export default {
-  //  登录
-  loginAccountNotEmpty: {
+  //  上传文件
+  uploadFileNotEmpty: {
     code: 600001,
-    message: '用户登录-账号不能为空!',
+    message: '文件上传-文件不能为空!',
   },
-  loginPasswordNotEmpty: {
-    code: 200002,
-    message: '用户登录-密码不能为空!',
-  },
-  loginUserNotExist: {
-    code: 200003,
-    message: '用户登录-账号密码不正确或者账号不存在!',
+
+  //  上传文件
+  getFileEmpty: {
+    code: 600002,
+    message: '文件不存在或已经被删除!',
   },
 };

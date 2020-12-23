@@ -1,35 +1,43 @@
 import { join } from 'path';
 
-export const rootPath = process.cwd();
+import * as dayjs from 'dayjs';
+
+export const rootPath: string = process.cwd();
 
 /**
  * 日志文件路径
  */
-export const logPath = join(rootPath, 'logs');
+export const logPath: string = join(rootPath, 'logs');
 
 /**
  * public目录路径
  */
-export const publicPath = join(rootPath, 'public');
+export const publicPath: string = join(rootPath, 'public');
 
 /**
  * assets静态资源路径
  */
-export const assetsPath = join(rootPath, 'public/assets');
+export const assetsPath: string = join(rootPath, 'public/assets');
 
 /**
  * 静态资源路径
  */
-export const staticAssetsPath = join(rootPath, 'public/static');
+export const staticAssetsPath: string = join(rootPath, 'public/static');
 
 /**
  * 上传文件存放目录路径
  */
-export const uploadRootPath = join(publicPath, 'static/upload');
+export const uploadRootPath: string = join(publicPath, 'static/upload');
 
 /**
- *  获取带年份的上传路径如：** /upload/2019/
+ *  获取带日期的上传路径
  */
-export const getUploadPathWithYear = () => {
-  return '/static/upload/' + new Date().getFullYear();
+export const getUploadPathWithDate = (): string => {
+  const date: string = dayjs().format('YYYY-MM-DD');
+  return join(uploadRootPath, date);
+};
+
+export const getVisitPath = (name: string): string => {
+  const date: string = dayjs().format('YYYY-MM-DD');
+  return join(`/upload/${date}`, name);
 };

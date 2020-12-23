@@ -1,5 +1,7 @@
 import React from 'react';
+import { Global, css } from '@emotion/react';
 
+import Router from 'next/router';
 import Head from 'next/head';
 import App, { AppContext, AppInitialProps } from 'next/app';
 
@@ -39,6 +41,8 @@ class CustomApp extends App {
 
   render() {
     const { Component, pageProps }: any = this.props;
+    const { pathname } = Router;
+    const isAdmin: boolean = pathname.startsWith('/admin');
 
     return (
       <Provider store={this.state.store}>
@@ -48,6 +52,18 @@ class CustomApp extends App {
             content="initial-scale=1.0, width=device-width"
           />
         </Head>
+        {
+          isAdmin ?
+          (
+            <Global
+              styles={css({
+                background: 'red'
+              })}
+            />
+          )
+          :
+          null
+        }
         <Component {...pageProps} />
       </Provider>
     );

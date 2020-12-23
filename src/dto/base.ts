@@ -14,4 +14,5 @@ export class FileDto {
   encoding: string;
   mimetype: string;
   buffer: Buffer;
+  size: number;
 }

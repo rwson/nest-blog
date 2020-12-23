@@ -29,8 +29,6 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const request = ctx.getRequest();
     const response = ctx.getResponse();
 
-    console.log(request);
-
     if (exception instanceof mongoose.Error) {
       logger.warn(exception.message);
       return response.status(HttpStatus.BAD_REQUEST).json({

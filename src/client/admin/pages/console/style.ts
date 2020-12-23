@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-import { Layout, Menu, Icon } from 'antd';
+import { Layout, Menu } from 'antd';
 
 const { Header, Sider, Content } = Layout;
 

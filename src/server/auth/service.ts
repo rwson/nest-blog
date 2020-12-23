@@ -16,7 +16,6 @@ export class AuthService {
 
   signIn(id: string, account: string, role: string): string {
     const random: string = Math.random().toString(16).slice(2);
-
     const token: string = this.jwtService.sign(
       {
         id,
@@ -25,9 +24,10 @@ export class AuthService {
         random,
       },
       {
-        expiresIn: BLOG_JWT_EXP,
+        expiresIn: BLOG_JWT_EXP
       },
     );
+
     const res: string = `Bearer ${token}`;
 
     return res;

@@ -12,9 +12,16 @@ const schema = new Schema(
       type: Schema.Types.String,
       required: true,
     },
+    originalname: {
+      type: Schema.Types.String,
+      required: true,
+    },
     type: {
       type: Schema.Types.String,
-      enum: ['image', 'video', 'audio', 'document', 'other'],
+      required: true,
+    },
+    distPath: {
+      type: Schema.Types.String,
       required: true,
     },
     size: {
@@ -22,6 +29,10 @@ const schema = new Schema(
       required: true,
     },
     url: {
+      type: Schema.Types.String,
+      required: true,
+    },
+    md5: {
       type: Schema.Types.String,
       required: true,
     },

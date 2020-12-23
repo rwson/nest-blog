@@ -1,6 +1,8 @@
 import React from 'react';
 import Router from 'next/router';
-import { Icon, message } from 'antd';
+
+import { message } from 'antd';
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
 import LoadingSpin from '@/client/admin/components/loading.dark';
 
@@ -100,7 +102,7 @@ const Login: React.FC = () => {
         <LoginLogo />
         <LoginFormRow>
           <LoginInput
-            prefix={<Icon type="user" style={{ color: '#838f9e' }} />}
+            prefix={<UserOutlined style={{ color: '#838f9e' }} />}
             placeholder="请输入账号"
             value={state.account}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -113,7 +115,7 @@ const Login: React.FC = () => {
         <LoginFormRow>
           <LoginInput
             type="password"
-            prefix={<Icon type="lock" style={{ color: '#838f9e' }} />}
+            prefix={<LockOutlined style={{ color: '#838f9e' }} />}
             placeholder="请输入密码"
             value={state.password}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
