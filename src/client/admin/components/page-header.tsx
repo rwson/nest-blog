@@ -3,10 +3,10 @@ import styled from '@emotion/styled';
 import { PageHeader } from 'antd';
 
 const Header = styled<any>(PageHeader)({
-  border: '1px solid #f2f2f2',
-  borderRadius: '3px',
-  padding: '10px 15px',
-  margin: '0 0 15px',
+  border: '1px solid #f2f2f2!important',
+  borderRadius: '3px!important',
+  padding: '10px 15px!important',
+  margin: '0 0 15px 0!important',
   '.ant-page-header-heading-title': {
     fontWeight: 'normal',
     fontSize: '16px',

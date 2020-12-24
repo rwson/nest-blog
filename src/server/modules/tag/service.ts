@@ -1,10 +1,22 @@
-import { Injectable, Inject, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  Inject,
+  BadRequestException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 
 import { subtract, multiply, divide } from 'ramda';
 
+import * as Transaction from 'mongoose-transactions';
+
 import { AuthService } from '@/server/auth';
 
-import { TagModelToken, TagModel, TagInterface } from '@/server/models';
+import {
+  TagModelToken,
+  TagModel,
+  TagInterface,
+  ArticleModel,
+} from '@/server/models';
 import { TagDocument } from '@/server/models/tag';
 
 import { CreateTagDto, UpdateTagDto } from '@/dto/tag/request';
@@ -16,6 +28,11 @@ import {
 import { BaseResponse } from '@/dto/base';
 
 import errorCode from '@/error-code';
+
+const [tagName, articleName] = [
+  TagModel.collection.collectionName,
+  ArticleModel.collection.collectionName,
+];
 
 @Injectable()
 export class TagService {
@@ -52,12 +69,6 @@ export class TagService {
     return errorCode.success;
   }
 
-  async deleteTag(id: string): Promise<BaseResponse> {
-    await this.tagModel.findByIdAndRemove(id);
-
-    return errorCode.success;
-  }
-
   async detail(id: string): Promise<QueryTagDetailResponse> {
     const tag: TagDocument = await this.tagModel.findById(id);
     const data: TagListItem = tag.toJSON() as TagListItem;
@@ -68,14 +79,46 @@ export class TagService {
     };
   }
 
+  async deleteTag(id: string): Promise<BaseResponse> {
+    const transaction: Transaction = new Transaction();
+
+    try {
+      await transaction.delete(tagName, id);
+
+      await transaction.update(
+        articleName,
+        {
+          tags: {
+            $elemMatch: id,
+          },
+        },
+        {
+          $pull: {
+            tags: id,
+          },
+        },
+        {
+          multi: true,
+        },
+      );
+
+      await transaction.run();
+
+      return errorCode.success;
+    } catch (e) {
+      transaction.rollback();
+      throw new InternalServerErrorException(e);
+    }
+  }
+
   async list(page: string, pageSize: string): Promise<QueryTagListResponse> {
     const pageNum: number = Number(page);
     const limit: number = Number(pageSize);
     const skip: number = multiply(subtract(pageNum, 1), limit);
 
-    const count: number = await this.tagModel.count({});
+    const total: number = await this.tagModel.count({});
 
-    const totalPages: number = Math.ceil(divide(count, limit));
+    const totalPages: number = Math.ceil(divide(total, limit));
 
     const res: Array<TagDocument> = await this.tagModel
       .find({})
@@ -95,6 +138,7 @@ export class TagService {
     return {
       ...errorCode.success,
       data: {
+        total,
         totalPages,
         currentPage: pageNum,
         data,

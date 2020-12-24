@@ -5,6 +5,7 @@ export class CategoryCreatorItem {
 }
 
 export class CategoryListItem {
+  id: string;
   title: string;
   createdAt: string;
   updatedAt: string;

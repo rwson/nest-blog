@@ -1,5 +1,4 @@
 import React from 'react';
-import { Global, css } from '@emotion/react';
 
 import Router from 'next/router';
 import Head from 'next/head';
@@ -19,7 +18,7 @@ type AppState = {
   store: Store;
 };
 
-class CustomApp extends App {
+class BlogApp extends App {
   state = {
     store: AppStore,
   };
@@ -41,9 +40,6 @@ class CustomApp extends App {
 
   render() {
     const { Component, pageProps }: any = this.props;
-    const { pathname } = Router;
-    const isAdmin: boolean = pathname.startsWith('/admin');
-
     return (
       <Provider store={this.state.store}>
         <Head>
@@ -51,18 +47,15 @@ class CustomApp extends App {
             name="viewport"
             content="initial-scale=1.0, width=device-width"
           />
-        </Head>
-        {isAdmin ? (
-          <Global
-            styles={css({
-              background: 'red',
-            })}
+          <link
+            href="https://cdn.bootcdn.net/ajax/libs/antd/4.9.3/antd.min.css"
+            rel="stylesheet"
           />
-        ) : null}
+        </Head>
         <Component {...pageProps} />
       </Provider>
     );
   }
 }
 
-export default CustomApp;
+export default BlogApp;

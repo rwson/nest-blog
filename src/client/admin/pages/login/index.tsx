@@ -4,7 +4,7 @@ import Router from 'next/router';
 import { message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
-import LoadingSpin from '@/client/admin/components/loading.dark';
+import LoadingSpin from '@/client/admin/components/loading-dark';
 
 import HttpClient from '@/client/http';
 

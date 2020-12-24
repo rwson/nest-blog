@@ -80,9 +80,9 @@ export class CategoryService {
     const limit: number = Number(pageSize);
     const skip: number = multiply(subtract(pageNum, 1), limit);
 
-    const count: number = await this.categoryModel.count({});
+    const total: number = await this.categoryModel.count({});
 
-    const totalPages: number = Math.ceil(divide(count, limit));
+    const totalPages: number = Math.ceil(divide(total, limit));
 
     const res: Array<CategoryDocument> = await this.categoryModel
       .find({})
@@ -102,6 +102,7 @@ export class CategoryService {
     return {
       ...errorCode.success,
       data: {
+        total,
         totalPages,
         currentPage: pageNum,
         data,

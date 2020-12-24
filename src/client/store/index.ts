@@ -13,6 +13,14 @@ export class Store {
   @observable
   mobxData: string | undefined;
 
+  @observable
+  loading: boolean = false;
+
+  @action
+  switchLoading(loading: boolean) {
+    this.loading = loading;
+  }
+
   @action
   hydrate(serializedStore: SerializedStore) {
     this.mobxData = serializedStore.mobxData ?? undefined;

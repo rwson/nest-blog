@@ -6,6 +6,7 @@ export class BaseResponse {
 export class PageResponseDto {
   totalPages: number;
   currentPage: number;
+  total: number;
 }
 
 export class FileDto {

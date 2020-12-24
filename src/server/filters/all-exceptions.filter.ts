@@ -31,7 +31,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
     if (exception instanceof mongoose.Error) {
       logger.warn(exception.message);
-      return response.status(HttpStatus.BAD_REQUEST).json({
+      return response.status(HttpStatus.OK).json({
         code: HttpStatus.BAD_REQUEST,
         message: exception.message,
       });
@@ -62,10 +62,10 @@ export class AllExceptionsFilter implements ExceptionFilter {
       }
 
       if (status === HttpStatus.UNAUTHORIZED) {
-        return response.status(status).json(errorCode.unauthorized);
+        return response.status(HttpStatus.OK).json(errorCode.unauthorized);
       }
 
-      return response.status(status).json({
+      return response.status(HttpStatus.OK).json({
         code,
         message,
       });

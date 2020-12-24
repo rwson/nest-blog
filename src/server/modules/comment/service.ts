@@ -116,11 +116,11 @@ export class CommentService {
     const limit: number = Number(pageSize);
     const skip: number = multiply(subtract(pageNum, 1), limit);
 
-    const count: number = await this.commentModel.count({
+    const total: number = await this.commentModel.count({
       isReply: false,
     });
 
-    const totalPages: number = Math.ceil(divide(count, limit));
+    const totalPages: number = Math.ceil(divide(total, limit));
 
     const res: Array<CommentDocument> = await this.commentModel
       .find({
@@ -146,6 +146,7 @@ export class CommentService {
     return {
       ...errorCode.success,
       data: {
+        total,
         totalPages,
         currentPage: pageNum,
         data,

@@ -5,6 +5,7 @@ export class TagCreatorItem {
 }
 
 export class TagListItem {
+  id: string;
   title: string;
   color: string;
   createdAt: string;
