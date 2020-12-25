@@ -16,6 +16,7 @@ import { CreateCategoryDto, UpdateCategoryDto } from '@/dto/category/request';
 import {
   QueryCategoryDetailResponse,
   QueryCategoryListResponse,
+  QueryCategoryListAllResponse
 } from '@/dto/category/response';
 import { BaseResponse } from '@/dto/base';
 
@@ -59,5 +60,10 @@ export class CategoryController {
     @Query('pageSize') pageSize: string = '10',
   ): Promise<QueryCategoryListResponse> {
     return this.categoryService.list(page, pageSize);
+  }
+
+  @Get('/list-all')
+  async listAll(): Promise<QueryCategoryListAllResponse> {
+    return this.categoryService.listAll();
   }
 }

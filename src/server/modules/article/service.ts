@@ -1,5 +1,7 @@
 import { Injectable, Inject, BadRequestException } from '@nestjs/common';
 
+import { subtract, multiply, divide } from 'ramda';
+
 import { Schema } from 'mongoose';
 
 import { markdown } from 'markdown';
@@ -20,6 +22,7 @@ import {
   ParseMarkdownResponse,
   ArticleDetailResponse,
   ArticleDetailData,
+  QueryTagArticleResponse
 } from '@/dto/article/response';
 
 import errorCode from '@/error-code';
@@ -81,6 +84,7 @@ export class ArticleService {
   }
 
   async updateArticle(): Promise<BaseResponse> {
+
     return errorCode.success;
   }
 
@@ -109,6 +113,61 @@ export class ArticleService {
     return {
       ...errorCode.success,
       data,
+    };
+  }
+
+  async list(type: 'rubbish' | 'online' | 'draft', page: string, pageSize: string): Promise<QueryTagArticleResponse> {
+    const pageNum: number = Number(page);
+    const limit: number = Number(pageSize);
+    const skip: number = multiply(subtract(pageNum, 1), limit);
+
+    const condition: {
+      [key: string]: any;
+    } = {};
+
+    if (type === 'rubbish') {
+      condition.isDeleted = true;
+    } else if (type === 'draft') {
+      condition.isDraft = true;
+    }
+
+    const total: number = await this.articleModel.count(condition);
+
+    const totalPages: number = Math.ceil(divide(total, limit));
+
+    const res: Array<ArticleDocument> = await this.articleModel
+    .find(condition)
+    .skip(skip)
+    .limit(limit)
+    .populate({
+      path: 'comments',
+      select: 'id nickName email content category article reply createdAt',
+    })
+    .populate({
+      path: 'category',
+      select: 'title -_id',
+    })
+    .populate({
+      path: 'tags',
+      select: 'title color -_id',
+    })
+    .populate({
+      path: 'creator',
+      select: 'userName -_id',
+    });
+
+    const data: Array<ArticleDetailData> = res.map((article: ArticleDocument): ArticleDetailData => {
+      return article.toJSON() as ArticleDetailData;
+    });
+
+    return {
+      ...errorCode.success,
+      data: {
+        total,
+        totalPages,
+        currentPage: pageNum,
+        data
+      }
     };
   }
 

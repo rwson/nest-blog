@@ -4,6 +4,7 @@ import {
   Post,
   Put,
   Body,
+  Query,
   UseGuards,
   Headers,
   Param,
@@ -17,6 +18,7 @@ import { CreateArticleDto } from '@/dto/article/request';
 import {
   ParseMarkdownResponse,
   ArticleDetailResponse,
+  QueryTagArticleResponse
 } from '@/dto/article/response';
 import { FileDto, BaseResponse } from '@/dto/base';
 
@@ -51,6 +53,12 @@ export class ArticleController {
   @UseGuards(AuthGuard())
   async detail(@Param('id') id: string): Promise<ArticleDetailResponse> {
     return this.articleService.detail(id);
+  }
+
+  @Get('/list/:type')
+  @UseGuards(AuthGuard())
+  async list(@Param('type') type: 'rubbish' | 'online' | 'draft',@Query('page') page: string, @Query('pageSize') pageSize: string): Promise<QueryTagArticleResponse> {
+    return this.articleService.list(type, page, pageSize);
   }
 
   @Get('/view/:id')

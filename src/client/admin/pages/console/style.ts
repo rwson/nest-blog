@@ -12,7 +12,7 @@ export const FullLayout = styled<any>(Layout)({
 export const HeaderConsole = styled<any>(Header)({
   background: '#fff',
   height: '80px',
-  padding: '0 10px',
+  padding: '0 13px',
   display: 'flex',
   alignItems: 'center',
 });

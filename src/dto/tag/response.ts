@@ -24,3 +24,7 @@ export class QueryTagListResponse extends BaseResponse {
 export class QueryTagDetailResponse extends BaseResponse {
   data: TagListItem;
 }
+
+export class QueryTagListAllResponse extends BaseResponse {
+  data: Array<TagListItem>;
+}

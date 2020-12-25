@@ -24,6 +24,7 @@ import {
   QueryTagListResponse,
   QueryTagDetailResponse,
   TagListItem,
+  QueryTagListAllResponse
 } from '@/dto/tag/response';
 import { BaseResponse } from '@/dto/base';
 
@@ -143,6 +144,26 @@ export class TagService {
         currentPage: pageNum,
         data,
       },
+    };
+  }
+
+  async listAll(): Promise<QueryTagListAllResponse> {
+    const res: Array<TagDocument> = await this.tagModel
+    .find({})
+    .populate({
+      path: 'creator',
+      select: 'userName -_id',
+    });
+
+    const data: Array<TagListItem> = res.map(
+      (tag: TagDocument): TagListItem => {
+        return tag.toJSON() as TagListItem;
+      },
+    );
+
+    return {
+      ...errorCode.success,
+      data
     };
   }
 }

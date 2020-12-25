@@ -51,6 +51,10 @@ class BlogApp extends App {
             href="https://cdn.bootcdn.net/ajax/libs/antd/4.9.3/antd.min.css"
             rel="stylesheet"
           />
+          <link
+            href="https://cdn.bootcdn.net/ajax/libs/KaTeX/0.12.0/katex.min.css"
+            rel="stylesheet"
+          />
         </Head>
         <Component {...pageProps} />
       </Provider>

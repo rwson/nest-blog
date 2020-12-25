@@ -7,7 +7,7 @@ import { AuthService } from '@/server/auth';
 import {
   CategoryModelToken,
   CategoryModel,
-  CategoryInterface,
+  CategoryInterface
 } from '@/server/models';
 import { CategoryDocument } from '@/server/models/category';
 
@@ -16,6 +16,7 @@ import {
   QueryCategoryDetailResponse,
   CategoryListItem,
   QueryCategoryListResponse,
+  QueryCategoryListAllResponse
 } from '@/dto/category/response';
 import { BaseResponse } from '@/dto/base';
 
@@ -107,6 +108,26 @@ export class CategoryService {
         currentPage: pageNum,
         data,
       },
+    };
+  }
+
+  async listAll(): Promise<QueryCategoryListAllResponse> {
+    const res: Array<CategoryDocument> = await this.categoryModel
+      .find({})
+      .populate({
+        path: 'creator',
+        select: 'userName -_id',
+      });
+
+    const data: Array<CategoryListItem> = res.map(
+      (category: CategoryDocument): CategoryListItem => {
+        return category.toJSON() as CategoryListItem;
+      },
+    );
+
+    return {
+      ...errorCode.success,
+      data
     };
   }
 }

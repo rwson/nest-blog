@@ -20,6 +20,10 @@ export class QueryCategoryListResponse extends BaseResponse {
   data: QueryCategoryListData;
 }
 
+export class QueryCategoryListAllResponse extends BaseResponse {
+  data: Array<CategoryListItem>;
+}
+
 export class QueryCategoryDetailResponse extends BaseResponse {
   data: CategoryListItem;
 }

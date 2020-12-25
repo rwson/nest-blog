@@ -13,6 +13,11 @@ const FormItem = styled<any>(Form.Item)({
       },
     },
   },
+  '&.fixed-left': {
+    '.ant-form-item-label': {
+      padding: '0 0 0 9px'
+    }
+  }
 });
 
 const FormItemStyled = (props) => {

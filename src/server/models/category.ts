@@ -39,7 +39,6 @@ const schema = new Schema(
 type SchemaType = typeof schema;
 
 const CategorySchema = formatId<SchemaType>(schema);
-
 export interface CategoryDocument extends BaseDocument {
   readonly title: string;
 }

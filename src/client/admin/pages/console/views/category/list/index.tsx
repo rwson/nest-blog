@@ -8,7 +8,11 @@ import { ColumnType, TablePaginationConfig } from 'antd/lib/table';
 import PageHeaderStyled from '@/client/admin/components/page-header';
 import FormItemStyled from '@/client/admin/components/form-item';
 
-import { CategoryListItem, QueryCategoryListData } from '@/dto/category/response';
+import {
+  CategoryListItem,
+  QueryCategoryListData,
+  CategoryCreatorItem
+} from '@/dto/category/response';
 
 import Http from '@/client/http';
 
@@ -39,37 +43,41 @@ const CategoryList: React.FC = () => {
     total: 0,
   });
 
-  const queryCategories = React.useCallback(async (page?: number) => {
-    setState(
-      (state: CategoryListState): CategoryListState => {
-        return {
-          ...state,
-          loading: true,
-        };
-      }
-    );
+  const queryCategories = React.useCallback(
+    async (page?: number) => {
+      setState(
+        (state: CategoryListState): CategoryListState => {
+          return {
+            ...state,
+            loading: true,
+          };
+        },
+      );
 
-    const res = await Http.get<QueryCategoryListData>(category.list, {
-      page: page ?? state.currentPage,
-      pageSize: 10
-    });
-
-    if (res.code === 1) {
-      const data: QueryCategoryListData = res.data;
-
-      setState((state: CategoryListState): CategoryListState => {
-        return {
-          ...state,
-          categories: data.data,
-          currentPage: data.currentPage,
-          totalPages: data.totalPages,
-          total: data.total,
-          loading: false
-        };
+      const res = await Http.get<QueryCategoryListData>(category.list, {
+        page: page ?? state.currentPage,
+        pageSize: 10,
       });
-    }
-  }, [state]);
 
+      if (res.code === 1) {
+        const data: QueryCategoryListData = res.data;
+
+        setState(
+          (state: CategoryListState): CategoryListState => {
+            return {
+              ...state,
+              categories: data.data,
+              currentPage: data.currentPage,
+              totalPages: data.totalPages,
+              total: data.total,
+              loading: false,
+            };
+          },
+        );
+      }
+    },
+    [state],
+  );
 
   const addCategory = React.useCallback(() => {
     form.validateFields(['title']).then(
@@ -93,6 +101,33 @@ const CategoryList: React.FC = () => {
     );
   }, [form, queryCategories]);
 
+  const updateCategory = React.useCallback(
+    (categoryId: string) => {
+      form.validateFields(['title']).then(
+        async (value) => {
+          value.id = categoryId;
+
+          const res = await Http.post(category.update, value);
+
+          if (res.code === 1) {
+            Modal.destroyAll();
+
+            message.destroy();
+            message.success(res.message);
+
+            queryCategories(1);
+          }
+        },
+        (err) => {
+          const { errorFields } = err;
+          message.destroy();
+          message.error(errorFields[0].errors);
+        },
+      );
+    },
+    [form, queryCategories],
+  );
+
   const showAddModal = React.useCallback(() => {
     Modal.confirm({
       title: '新增分类',
@@ -109,7 +144,7 @@ const CategoryList: React.FC = () => {
                 message: '请输入分类名称!',
               },
             ]}
-            initialValue={""}
+            initialValue={''}
           >
             <Input />
           </FormItemStyled>
@@ -117,7 +152,7 @@ const CategoryList: React.FC = () => {
       ),
       okText: '确定',
       cancelText: '取消',
-      onOk: addCategory
+      onOk: addCategory,
     });
   }, [form]);
 
@@ -131,7 +166,7 @@ const CategoryList: React.FC = () => {
         okType: 'danger',
         centered: true,
         onOk: async () => {
-          const res = await Http.delete(tag.delete(row.id));
+          const res = await Http.delete(category.delete(row.id));
 
           if (res.code === 1) {
             message.destroy();
@@ -144,59 +179,36 @@ const CategoryList: React.FC = () => {
     [queryCategories],
   );
 
-  // const showUpdateModal = React.useCallback((row: TagListItem) => {
-  //   Modal.confirm({
-  //     title: '更新标签',
-  //     icon: null,
-  //     centered: true,
-  //     content: (
-  //       <Form form={form}>
-  //         <FormItemStyled
-  //           name="title"
-  //           label="标签名称"
-  //           initialValue={row.title}
-  //           rules={[
-  //             {
-  //               required: true,
-  //               message: '请输入标签名称!',
-  //             },
-  //           ]}
-  //         >
-  //           <Input />
-  //         </FormItemStyled>
-  //         <FormItemStyled
-  //           name="color"
-  //           label="标签颜色"
-  //           initialValue={row.color}
-  //           rules={[
-  //             {
-  //               required: true,
-  //               message: '请选择标签颜色!',
-  //             },
-  //           ]}
-  //         >
-  //           <ColorPicker
-  //             color={row.color}
-  //             placement="topLeft"
-  //             onChange={({ color }) => {
-  //               form.setFields([
-  //                 {
-  //                   name: 'color',
-  //                   value: color,
-  //                 },
-  //               ]);
-  //             }}
-  //           >
-  //             <span className="rc-color-picker-trigger" />
-  //           </ColorPicker>
-  //         </FormItemStyled>
-  //       </Form>
-  //     ),
-  //     okText: '确定',
-  //     cancelText: '取消',
-  //     onOk: () => updateTag(row.id),
-  //   });
-  // }, []);
+  const showUpdateModal = React.useCallback(
+    (row: CategoryListItem) => {
+      Modal.confirm({
+        title: '更新分类',
+        icon: null,
+        centered: true,
+        content: (
+          <Form form={form}>
+            <FormItemStyled
+              name="title"
+              label="分类名称"
+              initialValue={row.title}
+              rules={[
+                {
+                  required: true,
+                  message: '请输入分类名称!',
+                },
+              ]}
+            >
+              <Input />
+            </FormItemStyled>
+          </Form>
+        ),
+        okText: '确定',
+        cancelText: '取消',
+        onOk: () => updateCategory(row.id),
+      });
+    },
+    [updateCategory],
+  );
 
   React.useEffect(() => {
     if (!mounted.current) {
@@ -215,7 +227,8 @@ const CategoryList: React.FC = () => {
       {
         title: '创建人',
         key: 'id',
-        render: (text: string, row: CategoryListItem) => row.creator.userName,
+        dataIndex: 'creator',
+        render: (creator: CategoryCreatorItem) => creator.userName,
       },
       {
         title: '创建时间',
@@ -227,7 +240,7 @@ const CategoryList: React.FC = () => {
         key: 'id',
         render: (text: string, row: CategoryListItem) => (
           <>
-            <Button size="small">
+            <Button size="small" onClick={() => showUpdateModal(row)}>
               更新
             </Button>
             <Divider type="vertical" />
@@ -251,14 +264,15 @@ const CategoryList: React.FC = () => {
 
   return (
     <div>
-      <PageHeaderStyled 
+      <PageHeaderStyled
         onBack={history.goBack}
         title="分类列表"
         extra={[
-          <Button type="primary" onClick={showAddModal} key="add-tag">
+          <Button type="primary" onClick={showAddModal} key="add-category">
             新增分类
-          </Button>
-        ]} />
+          </Button>,
+        ]}
+      />
       <Table
         bordered={true}
         loading={state.loading}

@@ -16,6 +16,7 @@ import { CreateTagDto, UpdateTagDto } from '@/dto/tag/request';
 import {
   QueryTagListResponse,
   QueryTagDetailResponse,
+  QueryTagListAllResponse
 } from '@/dto/tag/response';
 import { BaseResponse } from '@/dto/base';
 
@@ -57,5 +58,10 @@ export class TagController {
     @Query('pageSize') pageSize: string = '10',
   ): Promise<QueryTagListResponse> {
     return this.tagService.list(page, pageSize);
+  }
+
+  @Get('/list-all')
+  async listAll(): Promise<QueryTagListAllResponse> {
+    return this.tagService.listAll();
   }
 }

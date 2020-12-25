@@ -6,22 +6,26 @@ import {
   Route,
   Redirect,
   Link,
+  useHistory
 } from 'react-router-dom';
 
 import { observer, inject } from 'mobx-react';
 
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, ConfigProvider } from 'antd';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
+
+import zhCN from 'antd/lib/locale/zh_CN';
 
 import Logo from '@/client/components/logo';
 import Iconfont from '@/client/components/iconfont';
-import LoadingDark from '@/client/admin/components/loading-dark';
 
 import appStore, { Store } from '@/client/store';
 
 import ArticleList from './views/article/list';
 import ArticlePublish from './views/article/publish';
 import ArticleEdit from './views/article/edit';
+import ArticleDraftList from './views/article/draft-list';
+import ArticleRubbishList from './views/article/rubbish-list';
 import CategoryList from './views/category/list';
 import TagList from './views/tag/list';
 import CommentList from './views/comment/list';
@@ -32,17 +36,19 @@ import 'rc-color-picker/assets/index.css';
 
 type ConsoleStateType = {
   collapsed: boolean;
-};
-
-type ConsoleProps = {
-  store: Store;
+  selectedKeys: Array<string>;
 };
 
 const { Sider, Content } = Layout;
 
-const Console: React.FC<ConsoleProps> = ({ store }: ConsoleProps) => {
+const Console: React.FC = () => {
+  const history = useHistory();
+
+  const mounted = React.useRef<boolean>(false);
+
   const [state, setState] = React.useState<ConsoleStateType>({
     collapsed: false,
+    selectedKeys: [history.location.pathname.split('/')[1]]
   });
 
   const toggle = React.useCallback(() => {
@@ -56,33 +62,52 @@ const Console: React.FC<ConsoleProps> = ({ store }: ConsoleProps) => {
     );
   }, [setState]);
 
+  React.useEffect(() => {
+    if (!mounted.current) {
+      mounted.current = true;
+      history.listen(() => {
+        const { pathname } = history.location;
+        setState((state: ConsoleStateType): ConsoleStateType => {
+          return {
+            ...state,
+            selectedKeys: [pathname.split('/')[1]]
+          };
+        });
+      });
+    }
+  }, [mounted, history]);
+
   return (
-    <FullLayout>
-      <HashRouter>
+    <ConfigProvider locale={zhCN}>
+      <FullLayout>
         <Sider trigger={null} collapsible collapsed={state.collapsed}>
           <LogoContainer>
             <Logo size={state.collapsed ? 30 : 80} />
           </LogoContainer>
-          <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
-            <Menu.Item key="1">
+          <Menu
+            theme="dark"
+            mode="inline"
+            selectedKeys={state.selectedKeys}
+          >
+            <Menu.Item key="tag">
               <Link to="/tag/list">
                 <Iconfont type="tag" />
                 <span>标签管理</span>
               </Link>
             </Menu.Item>
-            <Menu.Item key="2">
+            <Menu.Item key="category">
               <Link to="/category/list">
                 <Iconfont type="category" />
                 <span>分类管理</span>
               </Link>
             </Menu.Item>
-            <Menu.Item key="3">
+            <Menu.Item key="article">
               <Link to="/article/list">
                 <Iconfont type="article" />
                 <span>文章管理</span>
               </Link>
             </Menu.Item>
-            <Menu.Item key="4">
+            <Menu.Item key="comment">
               <Link to="/comment/list">
                 <Iconfont type="comment" />
                 <span>评论管理</span>
@@ -101,6 +126,11 @@ const Console: React.FC<ConsoleProps> = ({ store }: ConsoleProps) => {
           <MainContent>
             <Switch>
               <Route path="/article/list" component={ArticleList} />
+              <Route path="/article/draft-list" component={ArticleDraftList} />
+              <Route
+                path="/article/rubbish-list"
+                component={ArticleRubbishList}
+              />
               <Route path="/article/publish" component={ArticlePublish} />
               <Route path="/article/edit/:id" component={ArticleEdit} />
               <Route path="/tag/list" component={TagList} />
@@ -109,10 +139,15 @@ const Console: React.FC<ConsoleProps> = ({ store }: ConsoleProps) => {
             </Switch>
           </MainContent>
         </Layout>
-        {store.loading && <LoadingDark />}
-      </HashRouter>
-    </FullLayout>
+      </FullLayout>
+    </ConfigProvider>
   );
 };
 
-export default inject('store')(observer(Console));
+const ConsolePage: React.FC = () => (
+  <HashRouter>
+    <Console />
+  </HashRouter>
+);
+
+export default React.memo(ConsolePage);

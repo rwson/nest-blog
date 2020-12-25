@@ -10,7 +10,7 @@ import ColorPicker from 'rc-color-picker';
 import PageHeaderStyled from '@/client/admin/components/page-header';
 import FormItemStyled from '@/client/admin/components/form-item';
 
-import { TagListItem, QueryTagListData } from '@/dto/tag/response';
+import { TagListItem, QueryTagListData, TagCreatorItem } from '@/dto/tag/response';
 
 import Http from '@/client/http';
 
@@ -48,7 +48,7 @@ const TagList: React.FC = () => {
             ...state,
             loading: true,
           };
-        }
+        },
       );
 
       const res = await Http.get<QueryTagListData>(tag.list, {
@@ -140,7 +140,7 @@ const TagList: React.FC = () => {
                 message: '请输入标签名称!',
               },
             ]}
-            initialValue={""}
+            initialValue={''}
           >
             <Input />
           </FormItemStyled>
@@ -278,7 +278,8 @@ const TagList: React.FC = () => {
       {
         title: '创建人',
         key: 'id',
-        render: (text: string, row: TagListItem) => row.creator.userName,
+        dataIndex: 'creator',
+        render: (creator: TagCreatorItem) => creator.userName,
       },
       {
         title: '创建时间',

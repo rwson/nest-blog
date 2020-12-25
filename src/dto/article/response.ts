@@ -1,4 +1,4 @@
-import { BaseResponse } from '../base';
+import { BaseResponse, PageResponseDto } from '../base';
 
 export class ParseMarkdownData {
   html: string;
@@ -7,6 +7,10 @@ export class ParseMarkdownData {
 
 export class ParseMarkdownResponse extends BaseResponse {
   data?: ParseMarkdownData;
+}
+
+export class ArticleDetailCreator {
+  userName: string;
 }
 
 export class ArticleDetailTag {
@@ -36,11 +40,20 @@ export class ArticleDetailData {
   tags: Array<ArticleDetailTag>;
   comment: Array<ArticleDetailComment>;
   category: ArticleDetailCategory;
+  creator: ArticleDetailCreator;
   id: string;
   title: string;
   content: string;
 }
 
+export class QueryTagArticleData extends PageResponseDto {
+  data: Array<ArticleDetailData>;
+}
+
 export class ArticleDetailResponse extends BaseResponse {
   data: ArticleDetailData;
+}
+
+export class QueryTagArticleResponse extends BaseResponse {
+  data: QueryTagArticleData;
 }
