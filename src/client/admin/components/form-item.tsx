@@ -2,7 +2,7 @@ import React from 'react';
 import styled from '@emotion/styled';
 import { Form } from 'antd';
 
-const FormItem = styled<any>(Form.Item)({
+const FormItem = styled<typeof Form.Item>(Form.Item)({
   '&.ant-form-item-has-error': {
     '.ant-input': {
       border: '1px solid #d9d9d9',

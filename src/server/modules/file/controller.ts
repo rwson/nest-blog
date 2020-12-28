@@ -38,7 +38,7 @@ export class FileController {
     return this.fileService.uploadFile(authorization, file);
   }
 
-  @Delete('/delete/:id')
+  @Delete('/delete-file/:id')
   @UseGuards(AuthGuard())
   async deleteFile(@Param('id') id: string): Promise<BaseResponse> {
     return this.fileService.deleteFile(id);

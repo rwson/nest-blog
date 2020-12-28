@@ -2,7 +2,7 @@ import React from 'react';
 import styled from '@emotion/styled';
 import { PageHeader } from 'antd';
 
-const Header = styled<any>(PageHeader)({
+const Header = styled<typeof PageHeader>(PageHeader)({
   border: '1px solid #f2f2f2!important',
   borderRadius: '3px!important',
   padding: '10px 15px!important',

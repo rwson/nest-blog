@@ -9,6 +9,7 @@ import ColorPicker from 'rc-color-picker';
 
 import PageHeaderStyled from '@/client/admin/components/page-header';
 import FormItemStyled from '@/client/admin/components/form-item';
+import TagStyled from '@/client/components/tag';
 
 import { TagListItem, QueryTagListData, TagCreatorItem } from '@/dto/tag/response';
 
@@ -268,12 +269,13 @@ const TagList: React.FC = () => {
         title: '标签名称',
         dataIndex: 'title',
         key: 'id',
-      },
-      {
-        title: '颜色',
-        dataIndex: 'color',
-        key: 'id',
-        render: (color: string) => <span style={{ color }}>{color}</span>,
+        render: (title: string, tag: TagListItem) => {
+          return (
+            <TagStyled color={tag.color}>
+              {title}
+            </TagStyled>
+          );
+        }
       },
       {
         title: '创建人',

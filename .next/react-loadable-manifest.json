@@ -12699,6 +12699,10 @@
       "file": "static/chunks/469.js"
     },
     {
+      "id": "./node_modules/hex-to-rgba/build/index.js",
+      "file": "static/chunks/469.js"
+    },
+    {
       "id": "./node_modules/history/esm/history.js",
       "file": "static/chunks/469.js"
     },
@@ -13455,6 +13459,10 @@
       "file": "static/chunks/469.js"
     },
     {
+      "id": "./src/client/admin/components/rich-img.tsx",
+      "file": "static/chunks/469.js"
+    },
+    {
       "id": "./src/client/admin/pages/console/index.tsx",
       "file": "static/chunks/469.js"
     },
@@ -13512,6 +13520,10 @@
     },
     {
       "id": "./src/client/components/markdown-render/index.tsx",
+      "file": "static/chunks/469.js"
+    },
+    {
+      "id": "./src/client/components/tag/index.tsx",
       "file": "static/chunks/469.js"
     },
     {

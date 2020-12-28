@@ -32,3 +32,10 @@ export const article = {
   detail: (id: string): string => `/article/detail/${id}`,
   delete: (id: string): string => `/article/delete-category/${id}`,
 };
+
+export const file = {
+  upload: '/file/upload',
+  library: '/file/library',
+  detail: (id: string): string => `${baseUrl}/file/get-file/${id}`,
+  delete: (id: string): string => `/file/delete-file/${id}`,
+};

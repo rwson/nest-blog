@@ -5,6 +5,7 @@ export class FileCreator {
 }
 
 export class FileItem {
+  id: string;
   type: string;
   url: string;
   originalname: string;

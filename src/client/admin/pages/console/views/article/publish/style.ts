@@ -7,7 +7,18 @@ export const PageContainer = styled.div({
   padding: '0 10px 0 0'
 });
 
-export const StyledMDEditor = styled<any>(MDEditor)({
+export const StyledMDEditor = styled<typeof MDEditor>(MDEditor)({
   overflow: 'hidden',
   borderRadius: '2px'
+});
+
+export const ImagesContainer = styled.div({
+  '.rich-image': {
+    display: 'inline-block',
+    margin: '0 4px'
+  },
+  '.uploader': {
+    display: 'inline-block',
+    margin: '0 4px'
+  }
 });
