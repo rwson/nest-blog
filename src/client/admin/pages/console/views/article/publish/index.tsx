@@ -4,8 +4,9 @@ import { useHistory } from 'react-router-dom';
 
 import MDEditor from '@uiw/react-md-editor';
 
-import { Modal, Table, Button, Divider, Form, Input, Select } from 'antd';
+import { Modal, Table, Button, Divider, Form, Input, Select, Tag } from 'antd';
 import { ColumnType, TablePaginationConfig } from 'antd/lib/table';
+import { CustomTagProps } from 'antd/lib/select';
 
 import PageHeaderStyled from '@/client/admin/components/page-header';
 import FormItemStyled from '@/client/admin/components/form-item';
@@ -20,7 +21,7 @@ import Http from '@/client/http';
 
 import { article, category, tag } from '@/client/api';
 
-import { StyledMDEditor } from './style';
+import { PageContainer, StyledMDEditor } from './style';
 
 type PublishArticleState = {
   tags: Array<TagListItem>;
@@ -74,7 +75,7 @@ const PublishArticle: React.FC = () => {
   }, [mounted, queryTags, queryCategories]);
 
   return (
-    <div>
+    <PageContainer>
       <PageHeaderStyled
         onBack={history.goBack}
         title="发布文章"
@@ -97,7 +98,7 @@ const PublishArticle: React.FC = () => {
           name="category"
           label="文章分类"
           className="fixed-left"
-          initialValue={''}
+          initialValue={undefined}
         >
           <Select
             placeholder="请选择文章分类"
@@ -108,6 +109,29 @@ const PublishArticle: React.FC = () => {
               state.categories.map((category: CategoryListItem) => {
                 return (
                   <Select.Option key={category.id} value={category.id}>{category.title}</Select.Option>
+                );
+              })
+            }
+          </Select>
+        </FormItemStyled>
+        <FormItemStyled
+          name="tags"
+          label="文章标签"
+          className="fixed-left"
+          initialValue={undefined}
+        >
+          <Select
+            placeholder="请选择文章标签"
+            defaultValue={undefined}
+            allowClear={true}
+            tagRender={(tag: CustomTagProps) => {
+
+            }}
+          >
+            {
+              state.tags.map((tag: TagListItem) => {
+                return (
+                  <Select.Option key={tag.id} value={tag.id}>{tag.title}</Select.Option>
                 );
               })
             }
@@ -141,7 +165,7 @@ const PublishArticle: React.FC = () => {
           />
         </FormItemStyled>
       </Form>
-    </div>
+    </PageContainer>
   );
 };
 
