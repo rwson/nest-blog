@@ -7,7 +7,8 @@ import IconFont from '@/client/components/iconfont';
 type ImageProps = {
   fileId: string;
   src: string;
-  delete?: Function;
+  delete?: (fileId: string) => void;
+  use?: (fileId: string) => void;
 };
 
 const StyledContainer = styled.div({
@@ -52,6 +53,16 @@ const StyledContainer = styled.div({
   }
 });
 
+const PreviewContainer = styled.div({
+  maxHeight: '300px',
+  overflow: 'auto',
+  '.image': {
+    display: 'block',
+    width: '100%',
+    height: 'auto'
+  }
+});
+
 const Image: React.FC<ImageProps> = (props: ImageProps) => {
   const confirmDelete = React.useCallback(() => {
     if (typeof props.delete === 'function') {
@@ -59,11 +70,36 @@ const Image: React.FC<ImageProps> = (props: ImageProps) => {
     }
   }, [props.delete]);
 
+  const confirmUse = React.useCallback(() => {
+    if (typeof props.use === 'function') {
+      props.use(props.fileId);
+    }
+    Modal.destroyAll();
+  }, [props.use]);
+
+  const showPreview = React.useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const { currentTarget } = e;
+    const src: string = currentTarget.dataset.src;
+
+    Modal.confirm({
+      title: '预览图片',
+      icon: null,
+      content: (
+        <PreviewContainer>
+          <img className="image" src={src} />
+        </PreviewContainer>
+      ),
+      cancelText: '取消',
+      okText: '使用',
+      onOk: confirmUse
+    });
+  }, []);
+
   return (
     <StyledContainer className="rich-image">
       <img className="img" src={props.src} />
       <div className="mask">
-        <div className="mask-part">
+        <div className="mask-part" data-src={props.src} onClick={showPreview}>
           <IconFont type="preview" />
         </div>
         <Popconfirm

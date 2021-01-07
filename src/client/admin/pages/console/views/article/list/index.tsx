@@ -2,10 +2,13 @@ import React from 'react';
 
 import { useHistory } from 'react-router-dom';
 
-import { Modal, Table, Button, Divider, Tag } from 'antd';
+import { Modal, Table, Button, Divider, Tag, Spin, Typography, message } from 'antd';
 import { ColumnType, TablePaginationConfig } from 'antd/lib/table';
 
+import MDEditor from '@uiw/react-md-editor';
+
 import PageHeaderStyled from '@/client/admin/components/page-header';
+import UploadButton from '@/client/admin/components/upload';
 
 import { QueryTagArticleData, ArticleDetailData, ArticleDetailTag, ArticleDetailCategory, ArticleDetailCreator } from '@/dto/article/response';
 
@@ -13,12 +16,17 @@ import Http from '@/client/http';
 
 import { article } from '@/client/api';
 
+import { ImportModalContent } from './style';
+
 type ArticleListState = {
   loading: boolean;
   articles: Array<ArticleDetailData>;
   currentPage: number;
   totalPages: number;
   total: number;
+  showModal: boolean;
+  importing: boolean;
+  content: string;
 };
 
 const ArticleList: React.FC = () => {
@@ -34,6 +42,9 @@ const ArticleList: React.FC = () => {
     totalPages: 1,
     currentPage: 1,
     total: 0,
+    showModal: false,
+    importing: false,
+    content: ''
   });
 
   const toUrl = React.useCallback(
@@ -71,6 +82,66 @@ const ArticleList: React.FC = () => {
       });
     }
   }, [state]);
+
+  const fileSelected = React.useCallback((file: File | null) => {
+    if (file) {
+      setState((state: ArticleListState): ArticleListState => {
+        return {
+          ...state,
+          importing: true
+        }
+      });
+
+      const reader: FileReader = new FileReader();
+      reader.onload = (e: ProgressEvent | any) => {
+        setState((state: ArticleListState): ArticleListState => {
+          return {
+            ...state,
+            importing: false,
+            content: e.target.result
+          }
+        });
+      };
+      reader.readAsText(file);
+    }
+  }, []);
+
+  const confirmImport = React.useCallback(() => {
+    Modal.destroyAll();
+
+    sessionStorage.setItem('markdown-content', state.content);
+
+    history.push('/article/publish?type=import');
+  }, [state, history]);
+
+  const toggleImport = React.useCallback(() => {
+    setState((state: ArticleListState): ArticleListState => {
+      return {
+        ...state,
+        showModal: !state.showModal,
+        content: ''
+      }
+    });
+  }, [state]);
+
+  const deleteArticle = React.useCallback((id: string) => {
+    Modal.confirm({
+      title: '删除',
+      content: '确定要删除此篇文章吗? 删除后文章会进入回收站。',
+      cancelText: '取消',
+      okText: '确定',
+      okType: 'danger',
+      onOk: async () => {
+        const res = await Http.delete(article.delete(id, 'soft'));
+
+        if (res.code === 1) {
+          message.success('删除成功!');
+          Modal.destroyAll();
+          queryArticles(1);
+        }
+      }
+    });
+  }, [queryArticles]);
 
   React.useEffect(() => {
     if (!mounted.current) {
@@ -135,8 +206,8 @@ const ArticleList: React.FC = () => {
         render: (creator: ArticleDetailCreator) => creator.userName,
       },
       {
-        title: '创建时间',
-        dataIndex: 'createdAt',
+        title: '发布时间',
+        dataIndex: 'publishDate',
         key: 'id',
       },
       {
@@ -144,11 +215,11 @@ const ArticleList: React.FC = () => {
         key: 'id',
         render: (text: string, row: ArticleDetailData) => (
           <>
-            <Button size="small">
+            <Button size="small" onClick={() => toUrl(`/article/edit/${row.id}`)}>
               修改
             </Button>
             <Divider type="vertical" />
-            <Button danger size="small">
+            <Button danger size="small" onClick={() => deleteArticle(row.id)}>
               删除
             </Button>
           </>
@@ -174,10 +245,17 @@ const ArticleList: React.FC = () => {
         extra={[
           <Button
             type="primary"
+            key="import-article"
+            onClick={toggleImport}
+          >
+            导入
+          </Button>,
+          <Button
+            type="primary"
             key="add-article"
             onClick={() => toUrl('/article/publish')}
           >
-            发布文章
+            发布
           </Button>,
           <Button key="draft" onClick={() => toUrl('/article/draft-list')}>
             草稿箱
@@ -198,6 +276,39 @@ const ArticleList: React.FC = () => {
           y: tableHeight.current,
         }}
       />
+      <Modal
+        title="导入文章"
+        closable={false}
+        visible={state.showModal}
+        onOk={confirmImport}
+        onCancel={toggleImport}
+        okText="导入"
+        cancelText="取消"
+      >
+        <ImportModalContent>
+          {
+            state.importing ?
+            (
+              <Spin tip="正在解析" />
+            )
+            :
+            state.content.length > 0
+            ?
+            (
+              <div className="preview-content">
+                <Typography.Title level={4}>文章预览</Typography.Title>
+                <MDEditor.Markdown
+                  source={state.content}
+                />
+              </div>
+            )
+            :
+            (
+              <UploadButton label="请选择文件" onChange={fileSelected} accept="text/markdown" />
+            )
+          }
+        </ImportModalContent>
+      </Modal>
     </div>
   );
 };

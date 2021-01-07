@@ -9,34 +9,30 @@ export class CreateArticleDto {
   @IsNotEmpty({
     message: 'createArticleContentNotEmpty',
   })
-  content: string;
+  source: string;
 
   category: string;
+
+  publishDate: string;
 
   isDraft: boolean;
 
   tags: string;
 }
 
-export class UpdateArticleDto {
+export class UpdateArticleDto extends CreateArticleDto {
   @IsMongoId({
-    message: '',
+    message: 'updateArticleIdError',
   })
   id: string;
 
   @IsNotEmpty({
-    message: 'createArticleTitleNotEmpty',
+    message: 'updateArticleTitleNotEmpty',
   })
   title: string;
 
   @IsNotEmpty({
-    message: 'createArticleContentNotEmpty',
+    message: 'updateArticleContentNotEmpty',
   })
-  content: string;
-
-  category: string;
-
-  isDraft: boolean;
-
-  tags: string;
+  source: string;
 }

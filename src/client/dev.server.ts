@@ -27,10 +27,6 @@ app.prepare().then(() => {
   //   }),
   // );
 
-  server.get('/blog/articles/:id', (req, res) => {
-    return app.render(req, res, '/blog/article', { id: req.params.id });
-  });
-
   server.get('/', (req, res) => res.redirect('/blog'));
 
   server.all('*', (req, res) => {

@@ -10,6 +10,8 @@ const instance: AxiosInstance = axios.create({
   baseURL,
 });
 
+const isServer: boolean = typeof window === 'undefined';
+
 type HttpResponse<T> = {
   code: number;
   message: string;
@@ -17,7 +19,7 @@ type HttpResponse<T> = {
 };
 
 instance.interceptors.response.use((res) => {
-  if (res.data.code !== 1) {
+  if (res.data.code !== 1 && !isServer) {
     message.destroy();
     message.error(res.data.message);
   }
@@ -26,6 +28,9 @@ instance.interceptors.response.use((res) => {
 });
 
 const autoHeader = () => {
+  if (isServer) {
+    return {};
+  }
   const authorization = localStorage.getItem('blog_app_user-token');
   return {
     authorization,
@@ -54,6 +59,20 @@ class Http {
     const res: HttpResponse<T> = await instance.put(url, data, {
       headers: {
         ...autoHeader(),
+      },
+    });
+    return res;
+  }
+
+  async upload<T>(url: string, data: any = {}): Promise<HttpResponse<T>> {
+    const form = new FormData();
+    Object.keys(data).forEach((key: string) => {
+      form.append(key, data[key]);
+    });
+    const res: HttpResponse<T> = await instance.post(url, form, {
+      headers: {
+        ...autoHeader(),
+        'content-type': 'multipart/form-data;'
       },
     });
     return res;

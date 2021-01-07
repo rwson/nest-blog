@@ -12,13 +12,13 @@ export default {
   },
   createArticleContentNotEmpty: {
     code: 300003,
-    message: '发布文章-标题不能为空!',
+    message: '发布文章-内容不能为空!',
   },
 
   //  更新文章
   updateArticleIdError: {
     code: 300004,
-    message: '更新文章-标题不能为空!',
+    message: '更新文章-文章id合法!',
   },
   updateArticleTitleNotEmpty: {
     code: 300004,
@@ -26,19 +26,6 @@ export default {
   },
   updateArticleContentNotEmpty: {
     code: 300005,
-    message: '更新文章-标题不能为空!',
-  },
-
-  // createArticleTitleNotEmpty: {
-  //   code: 300002,
-  //   message: '发布文章-标题不能为空!'
-  // },
-  // createArticleTitleNotEmpty: {
-  //   code: 300002,
-  //   message: '发布文章-标题不能为空!'
-  // },
-  // createArticleTitleNotEmpty: {
-  //   code: 300002,
-  //   message: '发布文章-标题不能为空!'
-  // }
+    message: '更新文章-内容不能为空!',
+  }
 };

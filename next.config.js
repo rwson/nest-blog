@@ -1,10 +1,11 @@
 /* eslint-disable */
 const path = require('path');
 const withCss = require('@zeit/next-css');
+const withLess = require('@zeit/next-less');
 
 const resolve = (dir) => path.resolve(__dirname, dir);
 
-module.exports = withCss({
+module.exports = withLess(withCss({
     webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
         if (isServer) {
             const antStyles = /antd\/.*?\/style\/css.*?/;
@@ -48,4 +49,4 @@ module.exports = withCss({
         };
         return config;
     },
-});
+}));

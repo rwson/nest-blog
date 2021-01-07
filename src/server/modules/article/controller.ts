@@ -7,6 +7,7 @@ import {
   Query,
   UseGuards,
   Headers,
+  Delete,
   Param,
   UploadedFile,
   UseInterceptors,
@@ -14,9 +15,8 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from '@nestjs/passport';
 
-import { CreateArticleDto } from '@/dto/article/request';
+import { CreateArticleDto, UpdateArticleDto } from '@/dto/article/request';
 import {
-  ParseMarkdownResponse,
   ArticleDetailResponse,
   QueryTagArticleResponse
 } from '@/dto/article/response';
@@ -27,14 +27,6 @@ import { ArticleService } from './service';
 @Controller('/article')
 export class ArticleController {
   constructor(private readonly articleService: ArticleService) {}
-
-  @Post('/parse-markdown')
-  @UseInterceptors(FileInterceptor('file'))
-  async parseMarkdown(
-    @UploadedFile('file') file: FileDto | undefined,
-  ): Promise<ParseMarkdownResponse> {
-    return this.articleService.parseMarkdown(file);
-  }
 
   @Put('/create-article')
   @UseGuards(AuthGuard())
@@ -47,12 +39,26 @@ export class ArticleController {
 
   @Post('/update-article')
   @UseGuards(AuthGuard())
-  async updateArticle(@Body() article: CreateArticleDto) {}
+  async updateArticle(@Body() article: UpdateArticleDto): Promise<BaseResponse> {
+    return this.articleService.updateArticle(article);
+  }
 
   @Get('/detail/:id')
   @UseGuards(AuthGuard())
   async detail(@Param('id') id: string): Promise<ArticleDetailResponse> {
     return this.articleService.detail(id);
+  }
+
+  @Delete('/delete-article/:id')
+  @UseGuards(AuthGuard())
+  async deleteArticle(@Param('id') id: string, @Query('type') type: 'soft' | 'hard'): Promise<BaseResponse> {
+    return this.articleService.deleteArticle(id, type);
+  }
+
+  @Post('/recovery-article/:id')
+  @UseGuards(AuthGuard())
+  async recoveryArticle(@Param('id') id: string): Promise<BaseResponse> {
+    return this.articleService.recoveryArticle(id);
   }
 
   @Get('/list/:type')
@@ -61,7 +67,7 @@ export class ArticleController {
     return this.articleService.list(type, page, pageSize);
   }
 
-  @Get('/view/:id')
+  @Get('/view-detail/:id')
   async viewDetail(@Param('id') id: string): Promise<ArticleDetailResponse> {
     return this.articleService.viewDetail(id);
   }

@@ -1,6 +1,6 @@
 import { Schema } from 'mongoose';
 
-import * as dayjs from 'dayjs';
+import * as moment from 'moment';
 
 import formatId from '@/server/mongoose/format-id';
 
@@ -42,11 +42,11 @@ const schema = new Schema(
     },
     createdAt: {
       type: Schema.Types.String,
-      default: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+      default: moment().format('YYYY-MM-DD HH:mm:ss'),
     },
     updatedAt: {
       type: Schema.Types.String,
-      default: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+      default: moment().format('YYYY-MM-DD HH:mm:ss'),
     },
   },
   {

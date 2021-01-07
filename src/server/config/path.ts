@@ -1,6 +1,6 @@
 import { join } from 'path';
 
-import * as dayjs from 'dayjs';
+import * as moment from 'moment';
 
 export const rootPath: string = process.cwd();
 
@@ -33,11 +33,11 @@ export const uploadRootPath: string = join(publicPath, 'static/upload');
  *  获取带日期的上传路径
  */
 export const getUploadPathWithDate = (): string => {
-  const date: string = dayjs().format('YYYY-MM-DD');
+  const date: string = moment().format('YYYY-MM-DD');
   return join(uploadRootPath, date);
 };
 
 export const getVisitPath = (name: string): string => {
-  const date: string = dayjs().format('YYYY-MM-DD');
+  const date: string = moment().format('YYYY-MM-DD');
   return join(`/upload/${date}`, name);
 };

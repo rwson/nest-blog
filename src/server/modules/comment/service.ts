@@ -8,7 +8,7 @@ import * as mongoose from 'mongoose';
 
 import * as Transaction from 'mongoose-transactions';
 
-import { subtract, multiply, divide } from 'ramda';
+import { subtract, multiply, divide, map } from 'ramda';
 
 import { AuthService } from '@/server/auth';
 
@@ -21,7 +21,7 @@ import {
 import { CommentDocument } from '@/server/models/comment';
 
 import { PostCommentDto, ReplyCommentDto } from '@/dto/comment/request';
-import { CommentItem, CommentListResponse } from '@/dto/comment/response';
+import { CommentItem, CommentWithArticle, CommentListResponse } from '@/dto/comment/response';
 import { BaseResponse } from '@/dto/base';
 
 import errorCode from '@/error-code';
@@ -96,12 +96,6 @@ export class CommentService {
         },
       });
 
-      await transaction.update(articleName, comment.article, {
-        $inc: {
-          commentCount: 1,
-        },
-      });
-
       await transaction.run();
 
       return errorCode.success;
@@ -137,11 +131,29 @@ export class CommentService {
         select: 'title',
       });
 
-    const data: Array<CommentItem> = res.map(
-      (comment: CommentDocument): CommentItem => {
-        return comment.toJSON() as CommentItem;
-      },
-    );
+    const maps: {
+      [key: string]: number;
+    } = {};
+
+    const list: Array<CommentWithArticle> = [];
+
+    res.forEach((comment: CommentDocument) => {
+      const item = comment.toJSON() as CommentItem;
+
+      if (maps[item.article.id] === undefined) {
+        maps[item.article.id] = list.length;
+        list.push({
+          id: item.article.id,
+          title: item.article.title,
+          comments: [
+            item
+          ]
+        });
+      } else {
+        const index = maps[item.article.id];
+        list[index].comments.push(item);
+      }
+    });
 
     return {
       ...errorCode.success,
@@ -149,7 +161,7 @@ export class CommentService {
         total,
         totalPages,
         currentPage: pageNum,
-        data,
+        data: list
       },
     };
   }

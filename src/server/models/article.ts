@@ -1,6 +1,6 @@
 import { Schema } from 'mongoose';
 
-import * as dayjs from 'dayjs';
+import * as moment from 'moment';
 
 import paginate from '@/server/mongoose/paginate';
 
@@ -15,6 +15,10 @@ const schema = new Schema(
       required: true,
     },
     content: {
+      type: Schema.Types.String,
+      required: true,
+    },
+    source: {
       type: Schema.Types.String,
       required: true,
     },
@@ -60,13 +64,17 @@ const schema = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'user',
     },
+    publishDate: {
+      type: Schema.Types.String,
+      default: moment().format('YYYY-MM-DD'),
+    },
     createdAt: {
       type: Schema.Types.String,
-      default: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+      default: moment().format('YYYY-MM-DD HH:mm:ss'),
     },
     updatedAt: {
       type: Schema.Types.String,
-      default: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+      default: moment().format('YYYY-MM-DD HH:mm:ss'),
     },
   },
   {

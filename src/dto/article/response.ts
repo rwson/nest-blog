@@ -5,20 +5,18 @@ export class ParseMarkdownData {
   name: string;
 }
 
-export class ParseMarkdownResponse extends BaseResponse {
-  data?: ParseMarkdownData;
-}
-
 export class ArticleDetailCreator {
   userName: string;
 }
 
 export class ArticleDetailTag {
+  id: string;
   title: string;
   color: string;
 }
 
 export class ArticleDetailCategory {
+  id: string;
   title: string;
 }
 
@@ -29,6 +27,7 @@ export class ArticleDetailComment {
   email: string;
   website: string;
   content: string;
+  source: string;
   reply: Array<ArticleDetailComment>;
 }
 
@@ -44,6 +43,8 @@ export class ArticleDetailData {
   id: string;
   title: string;
   content: string;
+  source: string;
+  publishDate: string;
 }
 
 export class QueryTagArticleData extends PageResponseDto {

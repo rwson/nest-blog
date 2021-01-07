@@ -16,10 +16,9 @@ import {
 import { ArticleDocument } from '@/server/models/article';
 
 import { FileDto, BaseResponse } from '@/dto/base';
-import { CreateArticleDto } from '@/dto/article/request';
+import { CreateArticleDto, UpdateArticleDto } from '@/dto/article/request';
 import {
   ParseMarkdownData,
-  ParseMarkdownResponse,
   ArticleDetailResponse,
   ArticleDetailData,
   QueryTagArticleResponse
@@ -34,48 +33,25 @@ export class ArticleService {
     private readonly authService: AuthService,
   ) {}
 
-  async parseMarkdown(
-    file: FileDto | undefined,
-  ): Promise<ParseMarkdownResponse> {
-    if (file) {
-      const content: string = file.buffer.toString();
-      const data: ParseMarkdownData = new ParseMarkdownData();
-      const html: string = markdown.toHTML(content);
-
-      data.html = html;
-      data.name = file.originalname;
-
-      return {
-        data,
-        ...errorCode.success,
-      };
-    }
-
-    throw new BadRequestException(errorCode.parseMarkdownNotEmpty);
-  }
-
   async createArticle(
     authorization: string,
     article: CreateArticleDto,
   ): Promise<BaseResponse> {
     const user = this.authService.parse(authorization);
     const id: string = user.id ?? '';
-
-    const tags: Array<Schema.Types.ObjectId> = [];
-
-    if (article.tags) {
-      article.tags.split('-').forEach((id: string) => {
-        tags.push(new Schema.Types.ObjectId(id));
-      });
-    }
+    const data: ParseMarkdownData = new ParseMarkdownData();
+    const tags: Array<string> = article.tags.split('-');
+    const content: string = markdown.toHTML(article.source);
 
     const articleInst: ArticleDocument = new ArticleModel({
       creator: id,
       title: article.title,
-      content: article.content,
+      source: article.source,
       category: article.category,
       isDraft: article.isDraft,
+      publishDate: article.publishDate,
       tags,
+      content
     });
 
     await articleInst.save();
@@ -83,7 +59,23 @@ export class ArticleService {
     return errorCode.success;
   }
 
-  async updateArticle(): Promise<BaseResponse> {
+  async updateArticle(article: UpdateArticleDto): Promise<BaseResponse> {
+    const id: string = article.id;
+    const data: ParseMarkdownData = new ParseMarkdownData();
+    const tags: Array<string> = article.tags.split('-');
+    const content: string = markdown.toHTML(article.source);
+
+    delete article.id;
+
+    await this.articleModel.findByIdAndUpdate(id, {
+      title: article.title,
+      source: article.source,
+      category: article.category,
+      isDraft: article.isDraft,
+      publishDate: article.publishDate,
+      tags,
+      content
+    });
 
     return errorCode.success;
   }
@@ -97,11 +89,11 @@ export class ArticleService {
       })
       .populate({
         path: 'category',
-        select: 'title -_id',
+        select: 'title id',
       })
       .populate({
         path: 'tags',
-        select: 'title color -_id',
+        select: 'title color id',
       })
       .populate({
         path: 'creator',
@@ -114,6 +106,26 @@ export class ArticleService {
       ...errorCode.success,
       data,
     };
+  }
+
+  async deleteArticle(id: string, type: 'soft' | 'hard'): Promise<BaseResponse> {
+    if (type === 'soft') {
+      await this.articleModel.findByIdAndUpdate(id, {
+        isDeleted: true
+      });
+    } else {
+      await this.articleModel.findByIdAndRemove(id);
+    }
+
+    return errorCode.success;
+  }
+
+  async recoveryArticle(id: string): Promise<BaseResponse> {
+    await this.articleModel.findByIdAndUpdate(id, {
+      isDeleted: false
+    });
+
+    return errorCode.success;
   }
 
   async list(type: 'rubbish' | 'online' | 'draft', page: string, pageSize: string): Promise<QueryTagArticleResponse> {
@@ -129,6 +141,9 @@ export class ArticleService {
       condition.isDeleted = true;
     } else if (type === 'draft') {
       condition.isDraft = true;
+    } else {
+      condition.isDraft = false;
+      condition.isDeleted = false;
     }
 
     const total: number = await this.articleModel.count(condition);
@@ -180,21 +195,18 @@ export class ArticleService {
 
     const res: ArticleDocument = await this.articleModel
       .findById(id)
+      .select('id commentCount viewsCount tags comments publishDate title category source')
       .populate({
         path: 'comments',
         select: 'id nickName email content article reply createdAt',
       })
       .populate({
         path: 'category',
-        select: 'title -_id',
+        select: 'title',
       })
       .populate({
         path: 'tags',
-        select: 'title color -_id',
-      })
-      .populate({
-        path: 'creator',
-        select: 'userName -_id',
+        select: 'title color',
       });
 
     const data: ArticleDetailData = res.toJSON() as ArticleDetailData;

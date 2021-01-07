@@ -5,6 +5,7 @@ import IconFont from '@/client/components/iconfont';
 
 type UploadProps = {
   accept: string;
+  label?: string;
   uploadSuccess?: Function;
   onChange?: (file?: File) => void;
 };
@@ -15,13 +16,38 @@ const UploadWrapper = styled.div({
   borderRadius: '3px',
   border: '1px solid #ccc',
   position: 'relative',
+  overflow: 'hidden',
+  '.icon-container': {
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    '.upload-icon': {
+      fontSize: '26px',
+      fontWeight: 'bold',
+      padding: '20px 0 0',
+      'svg': {
+        color: '#777'
+      }
+    }
+  },
   '.file-selector': {
     position: 'absolute',
+    width: '100%',
+    height: '100%',
     left: 0,
     top: 0,
+    opacity: 0,
+    zIndex: 9
+  },
+  '.label': {
+    textAlign: 'center',
+    position: 'absolute',
     right: 0,
-    bottom: 0,
-    opacity: 0
+    left: 0,
+    bottom: '8px',
+    fontSize: '12px',
+    color: '#666'
   }
 });
 
@@ -37,8 +63,13 @@ const UploadButton: React.FC<UploadProps> = (props: UploadProps) => {
 
   return (
     <UploadWrapper className="uploader">
-      <IconFont type="upload" />
+      <div className="icon-container">
+        <IconFont className="upload-icon" type="upload" />
+      </div>
+      <span className="label">{props.label || '请选择文件'}</span>
       <input className="file-selector" type="file" accept={props.accept} onChange={inputChanged} />
     </UploadWrapper>
   );
 };
+
+export default React.memo(UploadButton);

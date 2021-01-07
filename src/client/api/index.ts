@@ -29,13 +29,37 @@ export const article = {
   list: (type: 'rubbish' | 'online' | 'draft') => `/article/list/${type}`,
   create: '/article/create-article',
   update: '/article/update-article',
+  recovery: (id: string): string => `/article/recovery-article/${id}`,
   detail: (id: string): string => `/article/detail/${id}`,
-  delete: (id: string): string => `/article/delete-category/${id}`,
+  delete: (id: string, type: 'soft' | 'hard'): string => `/article/delete-article/${id}?type=${type}`,
 };
 
 export const file = {
-  upload: '/file/upload',
+  upload: '/file/upload-file',
   library: '/file/library',
   detail: (id: string): string => `${baseUrl}/file/get-file/${id}`,
   delete: (id: string): string => `/file/delete-file/${id}`,
+};
+
+export const comment = {
+  list: '/comment/list',
+  reply: '/comment/reply-comment',
+};
+
+export const avatarUrl = (name: string) => `https://avatars.dicebear.com/4.5/api/human/${name}.svg`;
+
+export const viewApis = {
+  tag: {
+    detail: (id: string): string => `/tag/view-detail/${id}`,
+  },
+  category: {
+    detail: (id: string): string => `/category/view-detail/${id}`,
+  },
+  article: {
+    detail: (id: string): string => `/article/view-detail/${id}`,
+    list: (page: number) =>  `/article/view-list?page=${page}&pageSize=10`
+  },
+  comment: {
+    reply: '/comment/reply-comment'
+  }
 };

@@ -1,6 +1,6 @@
 import { Injectable, Inject, BadRequestException } from '@nestjs/common';
 
-import * as dayjs from 'dayjs';
+import * as moment from 'moment';
 
 import { nanoid } from 'nanoid';
 

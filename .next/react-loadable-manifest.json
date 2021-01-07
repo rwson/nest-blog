@@ -12691,10 +12691,6 @@
       "file": "static/chunks/469.js"
     },
     {
-      "id": "./node_modules/dayjs/dayjs.min.js",
-      "file": "static/chunks/469.js"
-    },
-    {
       "id": "./node_modules/extend/index.js",
       "file": "static/chunks/469.js"
     },
@@ -13463,6 +13459,10 @@
       "file": "static/chunks/469.js"
     },
     {
+      "id": "./src/client/admin/components/upload.tsx",
+      "file": "static/chunks/469.js"
+    },
+    {
       "id": "./src/client/admin/pages/console/index.tsx",
       "file": "static/chunks/469.js"
     },
@@ -13479,7 +13479,15 @@
       "file": "static/chunks/469.js"
     },
     {
+      "id": "./src/client/admin/pages/console/views/article/edit/style.ts",
+      "file": "static/chunks/469.js"
+    },
+    {
       "id": "./src/client/admin/pages/console/views/article/list/index.tsx",
+      "file": "static/chunks/469.js"
+    },
+    {
+      "id": "./src/client/admin/pages/console/views/article/list/style.ts",
       "file": "static/chunks/469.js"
     },
     {
@@ -13500,6 +13508,14 @@
     },
     {
       "id": "./src/client/admin/pages/console/views/comment/list/index.tsx",
+      "file": "static/chunks/469.js"
+    },
+    {
+      "id": "./src/client/admin/pages/console/views/comment/list/render-comment.tsx",
+      "file": "static/chunks/469.js"
+    },
+    {
+      "id": "./src/client/admin/pages/console/views/comment/list/style.ts",
       "file": "static/chunks/469.js"
     },
     {
@@ -13524,6 +13540,10 @@
     },
     {
       "id": "./src/client/components/tag/index.tsx",
+      "file": "static/chunks/469.js"
+    },
+    {
+      "id": "./src/client/hooks/use-query.ts",
       "file": "static/chunks/469.js"
     },
     {
