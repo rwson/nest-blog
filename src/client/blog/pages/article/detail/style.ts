@@ -18,9 +18,9 @@ export const BlogInfo = styled.div({
   margin: '15px 0',
   display: 'flex',
   padding: '10px 0',
-  borderTop: 'thin dashed #eee',
-  borderBottom: 'thin dashed #eee',
-  '.tags, .category-info, .publish-date': {
+  borderTop: 'thin dashed #f2f2f2',
+  borderBottom: 'thin dashed #f2f2f2',
+  '.tags, .category-info, .publish-date, .view-count': {
     display: 'flex',
     alignItems: 'center',
     margin: '0 10px 0 0',
@@ -33,6 +33,9 @@ export const BlogInfo = styled.div({
     },
     '&.category-info .iconfont': {
       fontSize: '12px'
+    },
+    '&.view-count .iconfont': {
+      fontSize: '18px'
     }
   },
   'a': {
@@ -46,8 +49,7 @@ export const BlogInfo = styled.div({
 
 export const BlogContent = styled.div({
   padding: '0 0 10px',
-  margin: '0 0 15px',
-  borderBottom: 'thin dashed #eee',
+  borderBottom: 'thin dashed #f2f2f2',
   '.wmde-markdown': {
     '> p, > pre, ul': {
       margin: '0 0 6px',

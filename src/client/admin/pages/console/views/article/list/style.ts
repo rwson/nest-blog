@@ -12,7 +12,7 @@ export const ImportModalContent = styled.div({
     overflow: 'auto'
   },
   '.wmde-markdown': {
-    border: '1px solid #ccc',
+    border: '1px solid #f2f2f2',
     padding: '10px',
     borderRadius: '4px',
     margin: '0 10px 0 0'

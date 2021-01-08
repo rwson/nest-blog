@@ -13,7 +13,7 @@ import { PageBaseProps } from '@/client/store';
 
 import { BlogDetailContainer, BlogTitle, BlogInfo, BlogContent, BlogComment } from './style';
 
-const ArticleDetail = observer((props: PageBaseProps) => {
+const ArticleDetail = (props: PageBaseProps) => {
   const { articleDetail } = props.store?.data ?? {};
   const showCategory = React.useMemo(
     () =>
@@ -22,8 +22,21 @@ const ArticleDetail = observer((props: PageBaseProps) => {
     [articleDetail],
   );
 
+  React.useEffect(() => {
+    console.log(1223);
+    setInterval(() => {
+      props.store?.addCount();
+    }, 1000)
+  }, [props.store?.count]);
+
+  const reloadDetail = React.useCallback(() => {
+    props.store?.reloadDetail(props.store?.pageInfo);
+  }, [props.store]);
+
   return (
+    
     <BlogDetailContainer>
+      {props.store.count}
       <BlogTitle>{articleDetail.title}</BlogTitle>
       <BlogInfo>
         {showCategory && (
@@ -56,15 +69,19 @@ const ArticleDetail = observer((props: PageBaseProps) => {
           <Icon type="time" />
           {articleDetail.publishDate}
         </div>
+        <div className="view-count">
+          <Icon type="eye" />
+          {articleDetail.viewsCount}
+        </div>
       </BlogInfo>
       <BlogContent>
         <MDEditor.Markdown source={articleDetail.source} />
       </BlogContent>
       <BlogComment>
-        <CommentTree comments={articleDetail.comments} />
+        <CommentTree comments={articleDetail.comments} article={articleDetail.id} reload={reloadDetail} />
       </BlogComment>
     </BlogDetailContainer>
   );
-});
+};
 
-export default inject('store')(ArticleDetail);
+export default ArticleDetail;

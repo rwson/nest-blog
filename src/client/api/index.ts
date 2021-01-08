@@ -44,6 +44,7 @@ export const file = {
 export const comment = {
   list: '/comment/list',
   reply: '/comment/reply-comment',
+  post: '/comment/post-comment',
 };
 
 export const avatarUrl = (name: string) => `https://avatars.dicebear.com/4.5/api/human/${name}.svg`;

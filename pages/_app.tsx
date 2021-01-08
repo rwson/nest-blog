@@ -81,28 +81,20 @@ class BlogApp extends App {
             name="viewport"
             content="initial-scale=1.0, width=device-width"
           />
+          <link
+            href="https://cdn.bootcdn.net/ajax/libs/antd/4.9.3/antd.min.css"
+            rel="stylesheet"
+          />
           {isAdmin ? (
-            <>
-              <link
-                href="https://cdn.bootcdn.net/ajax/libs/antd/4.9.3/antd.min.css"
-                rel="stylesheet"
-              />
-              <link
-                href="https://cdn.bootcdn.net/ajax/libs/KaTeX/0.12.0/katex.min.css"
-                rel="stylesheet"
-              />
-            </>
+            <link
+              href="https://cdn.bootcdn.net/ajax/libs/KaTeX/0.12.0/katex.min.css"
+              rel="stylesheet"
+            />
           ) : (
-            <>
-              <link
-                href="https://cdn.bootcdn.net/ajax/libs/KaTeX/0.12.0/katex.min.css"
-                rel="stylesheet"
-              />
-              <link
-                href="https://at.alicdn.com/t/font_1449908_cyl82tqht69.css"
-                rel="stylesheet"
-              />
-            </>
+            <link
+              href="https://at.alicdn.com/t/font_1449908_0p003a9e80sq.css"
+              rel="stylesheet"
+            />
           )}
         </Head>
         {isAdmin ? (

@@ -17,7 +17,7 @@ const StyledContainer = styled.div({
   position: 'relative',
   overflow: 'hidden',
   borderRadius: '3px',
-  border: '1px solid #ccc',
+  border: '1px solid #f2f2f2',
   '.img': {
     display: 'block',
     width: '100%',

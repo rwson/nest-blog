@@ -14,7 +14,7 @@ const UploadWrapper = styled.div({
   width: '80px',
   height: '80px',
   borderRadius: '3px',
-  border: '1px solid #ccc',
+  border: '1px solid #f2f2f2',
   position: 'relative',
   overflow: 'hidden',
   '.icon-container': {

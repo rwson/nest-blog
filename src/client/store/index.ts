@@ -1,6 +1,4 @@
-import Router from 'next/router';
-
-import { observable, action } from 'mobx';
+import { observable, action, configure, makeObservable, extendObservable } from 'mobx';
 import { enableStaticRendering } from 'mobx-react';
 
 import { viewApis } from '@/client/api';
@@ -15,8 +13,8 @@ type ActionType = 'updateArticleDetail' | 'updateArticleList' | 'updateTagDetail
 type MethodType = 'get' | 'post' | 'put' | 'delete';
 
 type FetchInitialStoreStateParams = {
-  pathname: string;
-  query: {
+  pathname?: string;
+  query?: {
     [key: string]: any;
   };
 };
@@ -30,6 +28,7 @@ type SerializedStore = {
   categoryList?: Array<CategoryListItem>;
   tagDetail?: TagListItem;
   tagList?: Array<TagListItem>;
+  pageInfo: FetchInitialStoreStateParams;
 };
 
 type StoreState = {
@@ -74,31 +73,8 @@ const apis: ApiObjects = {
   }
 };
 
+configure({enforceActions: 'observed'});
 enableStaticRendering(true);
-
-export class Store {
-  @observable
-  data: StoreState = {};
-
-  @action
-  hydrate(serializedStore: SerializedStore) {
-    const { actionType, data: storeData } = serializedStore;
-
-    let data = this.data;
-
-    switch (actionType) {
-      case 'updateArticleDetail':
-        this.data.articleDetail = storeData;
-      break;
-    }
-  }
-}
-
-const store = new Store();
-
-export type PageBaseProps = {
-  store?: typeof store;
-};
 
 export const fetchInitialStoreState = async ({ query, pathname }: FetchInitialStoreStateParams): Promise<SerializedStore> => {
   const apiItem: ApiItem = apis[pathname];
@@ -111,14 +87,67 @@ export const fetchInitialStoreState = async ({ query, pathname }: FetchInitialSt
     if (res.code === 1) {
       return {
         actionType,
-        data: res.data
+        data: res.data,
+        pageInfo: {
+          query, pathname
+        }
       };
-    } else {
-      return {};
     }
   }
 
-  return {};
+  return {
+    pageInfo: {
+      query, pathname
+    }
+  };
 }
+
+export class Store {
+  @observable
+  data: StoreState = {};
+
+  @observable
+  count = 1;
+
+  @observable
+  pageInfo: FetchInitialStoreStateParams = {};
+
+  constructor() {
+    makeObservable(this);
+    // this.data = {};
+    // this.pageInfo = {};
+    // this.count = 1;
+  }
+
+  @action
+  hydrate = (serializedStore: SerializedStore) => {
+    const { actionType, pageInfo, data: storeData } = serializedStore;
+
+    this.pageInfo = pageInfo;
+
+    switch (actionType) {
+      case 'updateArticleDetail':
+        this.data.articleDetail = storeData;
+      break;
+    }
+  }
+
+  @action
+  reloadDetail = async (pageInfo: FetchInitialStoreStateParams) => {
+    const serializedStore = await fetchInitialStoreState(pageInfo);
+    this.hydrate(serializedStore);
+  }
+
+  @action
+  addCount() {
+    this.count = this.count + 1;
+  }
+}
+
+const store = new Store();
+
+export type PageBaseProps = {
+  store?: typeof store;
+};
 
 export default store;

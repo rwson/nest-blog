@@ -37,7 +37,7 @@ export class ArticleDetailData {
   commentCount: number;
   viewsCount: number;
   tags: Array<ArticleDetailTag>;
-  comment: Array<ArticleDetailComment>;
+  comments: Array<ArticleDetailComment>;
   category: ArticleDetailCategory;
   creator: ArticleDetailCreator;
   id: string;

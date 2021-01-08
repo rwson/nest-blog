@@ -1,6 +1,10 @@
 import React from 'react';
 
+import Link from 'next/link';
+
 import classnames from 'classnames';
+
+import Logo from '@/client/components/logo';
 
 import { LayoutContainer, LayoutHeader } from './style';
 
@@ -22,6 +26,13 @@ const BlogLayout: React.FC<BlogLayoutProps> = ({ children, deviceInfo, isMobile 
         className={classnames([
           isMobile ? 'mobile-header' : 'desktop-header'
         ])}>
+          <Logo />
+          <div className="header-links">
+            <Link href="/blog">博客</Link>
+            <Link href="/category">分类</Link>
+            <Link href="/archives">归档</Link>
+            <Link href="https://github.com/rwson">GitHub</Link>
+          </div>
       </LayoutHeader>
       {children}
     </LayoutContainer>

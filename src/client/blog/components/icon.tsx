@@ -6,7 +6,7 @@ type IconProps = {
   type: string;
 };
 
-const Icon: React.FC = (props: IconProps) => {
+const Icon: React.FC<IconProps> = (props: IconProps) => {
   return (
     <i className={classnames([
       'iconfont',

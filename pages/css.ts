@@ -90,6 +90,8 @@ const cssString: string = `
   select,
   textarea {
     font-size: 100%;
+    resize: none;
+    outline: none;
   }
 `;
 
