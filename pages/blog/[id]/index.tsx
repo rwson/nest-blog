@@ -1,20 +1,18 @@
 import React from 'react';
+import { NextPage, NextPageContext } from 'next';
 
-import { inject, observer } from 'mobx-react';
-
+import { wrapper } from '@/client/redux/store';
 import ArticleDetail from '@/client/blog/pages/article/detail';
+import { fetchArticleDetail } from '@/client/redux/store/slices/article-detail';
 
-@inject('store')
-@observer
-class ArticleDetailPage extends React.Component<any> {
-  render() {
-    console.log(this.props.store.count);
-    return (
-      <>
-        <ArticleDetail store={this.props.store} />
-      </>
-    );
-  }
-}
+const ArticleDetailPage: NextPage = (props) => {
+  return <ArticleDetail {...props} />;
+};
+
+ArticleDetailPage.getInitialProps = wrapper.getInitialPageProps((store: any) => async(ctx: NextPageContext) => {
+  const id = ctx.query.id as string;
+  const res = await store.dispatch(fetchArticleDetail(id));
+  return {};
+});
 
 export default ArticleDetailPage;

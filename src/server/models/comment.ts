@@ -6,20 +6,14 @@ import formatId from '@/server/mongoose/format-id';
 import autoPopulateSubs from '@/server/mongoose/auto-populate-subs';
 
 import BaseDocument from './base-document';
+import { ArticleDocument } from './article';
+import { UnionDocument } from './union';
 
 const schema = new Schema(
   {
-    nickName: {
-      type: Schema.Types.String,
-      required: true,
-    },
-    email: {
-      type: Schema.Types.String,
-      required: true,
-    },
-    website: {
-      type: Schema.Types.String,
-      default: '',
+    commentor: {
+      type: Schema.Types.ObjectId,
+      ref: 'union'
     },
     content: {
       type: Schema.Types.String,
@@ -41,7 +35,18 @@ const schema = new Schema(
       ref: 'article',
       required: true,
     },
-    // 管理员身份为1，0为游客
+    likes: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'union'
+      }
+    ],
+    dislikes: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'union'
+      }
+    ],
     identity: {
       type: Schema.Types.Number,
       enum: [1, 0],
@@ -73,17 +78,15 @@ const CommentSchema = autoPopulateSubs<SchemaType>(
   formatId<SchemaType>(schema),
   ['find', 'findOne'],
   'reply',
-  'id nickName email website article content reply createdAt',
+  'id commentor likes dislikes article content reply createdAt',
 );
 
 export interface CommentDocument extends BaseDocument {
-  readonly nickName: string;
-  readonly email: string;
-  readonly website: string;
-  readonly content: string;
-  readonly reply: string;
+  readonly commentor: string;
+  readonly reply: Array<CommentDocument>;
   readonly article: string;
-  readonly location: string;
+  readonly likes: Array<UnionDocument>;
+  readonly dislikes: Array<UnionDocument>;
   readonly pass: boolean;
   readonly identity: 0 | 1;
 }

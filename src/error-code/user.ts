@@ -41,5 +41,5 @@ export default {
   unauthorized: {
     code: 200008,
     message: '请先登录!',
-  },
+  }
 };

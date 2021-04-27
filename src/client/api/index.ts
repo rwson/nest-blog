@@ -1,6 +1,11 @@
 import { isDev } from '@/server/config';
 
-export const baseUrl = isDev ? 'http://localhost:3001' : '';
+export const baseUrl = isDev ? 'http://localhost:3001' : 'http://blog.rwson.com';
+
+export const oauth = {
+  github: `${baseUrl}/oauth/github`,
+  userInfo: '/oauth/info'
+};
 
 export const user = {
   login: '/user/login',

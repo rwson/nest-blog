@@ -7,6 +7,7 @@ import CategorySchema, { CategoryDocument } from './category';
 import CommentSchema, { CommentDocument } from './comment';
 import FileSchema, { FileDocument } from './file';
 import TagSchema, { TagDocument } from './tag';
+import UnionSchema, { UnionDocument } from './union';
 import UserSchema, { UserDocument } from './user';
 
 export const ArticleModel = model<ArticleDocument, Model<ArticleDocument>>(
@@ -34,6 +35,11 @@ export const TagModel = model<TagDocument, Model<TagDocument>>(
   TagSchema,
   'tag',
 );
+export const UnionModel = model<UnionDocument, Model<UnionDocument>>(
+  'union',
+  UnionSchema,
+  'union',
+);
 export const UserModel = model<UserDocument, Model<UserDocument>>(
   'user',
   UserSchema,
@@ -45,6 +51,7 @@ export const CategoryModelToken = `${CategoryModel.modelName}${MONGODB.token}`;
 export const CommentModelToken = `${CommentModel.modelName}${MONGODB.token}`;
 export const FileModelToken = `${FileModel.modelName}${MONGODB.token}`;
 export const TagModelToken = `${TagModel.modelName}${MONGODB.token}`;
+export const UnionModelToken = `${UnionModel.modelName}${MONGODB.token}`;
 export const UserModelToken = `${UserModel.modelName}${MONGODB.token}`;
 
 export const ArticleModelProvider = {
@@ -67,6 +74,10 @@ export const TagModelProvider = {
   useValue: TagModel,
   provide: TagModelToken,
 };
+export const UnionModelProvider = {
+  useValue: UnionModel,
+  provide: UnionModelToken,
+};
 export const UserModelProvider = {
   useValue: UserModel,
   provide: UserModelToken,
@@ -77,4 +88,5 @@ export type CategoryInterface = typeof CategoryModel;
 export type CommentInterface = typeof CommentModel;
 export type FileInterface = typeof FileModel;
 export type TagInterface = typeof TagModel;
+export type UnionInterface = typeof UnionModel;
 export type UserInterface = typeof UserModel;

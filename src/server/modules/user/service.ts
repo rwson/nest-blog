@@ -33,11 +33,12 @@ export class UserService {
       ['userName', 'account', 'email', 'type'],
     );
 
-    if (user !== null) {
+    if (userDoc !== null) {
       const token: string = this.authService.signIn(
         userDoc.id,
         userDoc.account,
         userDoc.type,
+        null
       );
 
       const data: UserLoginData = new UserLoginData();
@@ -84,11 +85,12 @@ export class UserService {
       'type',
     ]);
 
-    if (user !== null) {
+    if (userDoc !== null) {
       const token: string = this.authService.signIn(
         userDoc.id,
         userDoc.account,
         userDoc.type,
+        authorization
       );
 
       const data: UserLoginData = new UserLoginData();

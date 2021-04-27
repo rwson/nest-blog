@@ -1,10 +1,8 @@
 import {
   Controller,
   Get,
-  Post,
   Put,
   Body,
-  Delete,
   UseGuards,
   Query,
   Param,
@@ -22,13 +20,35 @@ export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
   @Put('/post-comment')
-  async postComment(@Body() comment: PostCommentDto): Promise<BaseResponse> {
+  @UseGuards(AuthGuard())
+  async postComment(
+    @Headers('authorization') authorization: string,
+    @Body() comment: PostCommentDto,
+  ): Promise<BaseResponse> {
     return this.commentService.postComment(comment);
   }
 
   @Put('/reply-comment')
-  async replyComment(@Body() comment: ReplyCommentDto): Promise<BaseResponse> {
+  @UseGuards(AuthGuard())
+  async replyComment(
+    @Headers('authorization') authorization: string,
+    @Body() comment: ReplyCommentDto,
+  ): Promise<BaseResponse> {
     return this.commentService.replyComment(comment);
+  }
+
+  @Put('/like-comment/:id')
+  @UseGuards(AuthGuard())
+  async likeComment(
+    @Param('id') id: string,
+    @Headers('authorization') authorization: string,
+  ): Promise<void> {}
+
+  @Put('/dislike-comment/:id')
+  async dislikeComment(
+    @Param('id') id: string,
+    @Headers('authorization') authorization: string,
+  ): Promise<void> {
   }
 
   @Get('/list')

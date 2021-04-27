@@ -91,6 +91,7 @@ const Login: React.FC = () => {
     if (res.code === 1) {
       message.success('登录成功!');
       Router.push('/admin/console');
+      localStorage.setItem('blog_app_user-token', res.data.token);
     }
 
     toggleLoading();

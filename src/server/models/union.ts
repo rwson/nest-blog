@@ -8,31 +8,35 @@ import BaseDocument from './base-document';
 
 const schema = new Schema(
   {
-    type: {
+    loginType: {
       type: Schema.Types.String,
-      enum: ['admin'],
-      default: 'admin',
-      required: true,
+      enum: ['github', 'google', 'guest'],
+      default: 'guest'
+    },
+    nickName: {
+      type: Schema.Types.String,
+      required: true
     },
     avatar: {
       type: Schema.Types.String,
-      required: false,
+      required: true
     },
-    userName: {
+    uuid: {
       type: Schema.Types.String,
-      required: true,
+      required: true
     },
-    email: {
-      type: Schema.Types.String,
-      required: true,
+    lastLoginIp: {
+      type: Schema.Types.String
     },
-    account: {
-      type: Schema.Types.String,
-      required: true,
+    bio: {
+      type: Schema.Types.String
     },
-    password: {
-      type: Schema.Types.String,
-      required: true,
+    blog: {
+      type: Schema.Types.String
+    },
+    lastLoginTime: {
+      type: Schema.Types.Date,
+      default: Date.now()
     },
     createdAt: {
       type: Schema.Types.String,
@@ -54,17 +58,19 @@ const schema = new Schema(
   createdAt: -1,
 });
 
+const UnionSchema = formatId<SchemaType>(schema);
+
 type SchemaType = typeof schema;
 
-const UserSchema = formatId<SchemaType>(schema);
-
-export interface UserDocument extends BaseDocument {
-  readonly type: 'admin';
+export interface UnionDocument extends BaseDocument {
+  readonly loginType: string;
+  readonly nickName: string;
   readonly avatar: string;
-  readonly userName: string;
-  readonly email: string;
-  readonly account: string;
-  readonly password: string;
+  readonly uuid: string;
+  readonly lastLoginIp: string;
+  readonly bio: string;
+  readonly blog: string;
+  readonly lastLoginTime: number;
 }
 
-export default UserSchema;
+export default UnionSchema;

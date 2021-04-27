@@ -1,42 +1,39 @@
 import React from 'react';
-
 import Link from 'next/link';
-
-import { inject, observer } from 'mobx-react';
+import { useRouter } from 'next/router';
+import { useSelector, useDispatch } from 'react-redux';
 
 import MDEditor from '@uiw/react-md-editor';
+import { selectArticleDetail } from '@/client/redux/selector';
+import { fetchArticleDetail } from '@/client/redux/store/slices/article-detail';
 
 import Icon from '@/client/blog/components/icon';
 import CommentTree from '@/client/components/comment-tree';
 
-import { PageBaseProps } from '@/client/store';
-
 import { BlogDetailContainer, BlogTitle, BlogInfo, BlogContent, BlogComment } from './style';
 
-const ArticleDetail = (props: PageBaseProps) => {
-  const { articleDetail } = props.store?.data ?? {};
+const ArticleDetail: React.FC<any> = ({ pageData, store }: any) => {
+
+  const articleDetail = useSelector(selectArticleDetail);
+  const dispatch = useDispatch();
+  const router = useRouter();
+
   const showCategory = React.useMemo(
-    () =>
-      articleDetail.category !== null &&
-      Object.keys(articleDetail.category).length,
+    () => Boolean(Object.keys(articleDetail.category ?? {}).length),
     [articleDetail],
   );
 
-  React.useEffect(() => {
-    console.log(1223);
-    setInterval(() => {
-      props.store?.addCount();
-    }, 1000)
-  }, [props.store?.count]);
+  const showTags = React.useMemo(
+    () => Boolean(Object.keys(articleDetail.tags ?? {}).length),
+    [articleDetail],
+  );
 
   const reloadDetail = React.useCallback(() => {
-    props.store?.reloadDetail(props.store?.pageInfo);
-  }, [props.store]);
+    dispatch(fetchArticleDetail(router.query.id as string));
+  }, [router]);
 
-  return (
-    
+  return ( 
     <BlogDetailContainer>
-      {props.store.count}
       <BlogTitle>{articleDetail.title}</BlogTitle>
       <BlogInfo>
         {showCategory && (
@@ -47,7 +44,7 @@ const ArticleDetail = (props: PageBaseProps) => {
             </Link>
           </div>
         )}
-        {articleDetail.tags.length && (
+        {showTags && (
           <div className="tags">
             <Icon type="tag" />
             {articleDetail.tags.map((tag) => {
@@ -75,7 +72,7 @@ const ArticleDetail = (props: PageBaseProps) => {
         </div>
       </BlogInfo>
       <BlogContent>
-        <MDEditor.Markdown source={articleDetail.source} />
+        {/* <MDEditor.Markdown source={articleDetail.source} /> */}
       </BlogContent>
       <BlogComment>
         <CommentTree comments={articleDetail.comments} article={articleDetail.id} reload={reloadDetail} />
@@ -84,4 +81,5 @@ const ArticleDetail = (props: PageBaseProps) => {
   );
 };
 
-export default ArticleDetail;
+export default React.memo(ArticleDetail);
+

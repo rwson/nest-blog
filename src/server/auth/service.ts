@@ -8,13 +8,24 @@ type AdminTokenParsed = {
   readonly account?: string;
   readonly role?: string;
   readonly random?: string;
+  readonly exp?: number;
 };
 
 @Injectable()
 export class AuthService {
   constructor(private readonly jwtService: JwtService) {}
 
-  signIn(id: string, account: string, role: string): string {
+  signIn(id: string, account: string, role: string, originToken: string | null): string {
+
+    if (originToken !== null) {
+      const tokenInfo = this.parse(originToken);
+
+      //  有效期仅剩余半小时刷新
+      if (tokenInfo.exp * 1000 - Date.now() > 1.8E6) {
+        return originToken;
+      }
+    }
+
     const random: string = Math.random().toString(16).slice(2);
     const token: string = this.jwtService.sign(
       {

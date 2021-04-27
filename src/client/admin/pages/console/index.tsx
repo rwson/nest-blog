@@ -1,15 +1,11 @@
 import React from 'react';
 import {
-  BrowserRouter,
   HashRouter,
   Switch,
   Route,
-  Redirect,
   Link,
   useHistory
 } from 'react-router-dom';
-
-import { observer, inject } from 'mobx-react';
 
 import { Layout, Menu, ConfigProvider } from 'antd';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
@@ -18,8 +14,6 @@ import zhCN from 'antd/lib/locale/zh_CN';
 
 import Logo from '@/client/components/logo';
 import Iconfont from '@/client/components/iconfont';
-
-import appStore, { Store } from '@/client/store';
 
 import ArticleList from './views/article/list';
 import ArticlePublish from './views/article/publish';

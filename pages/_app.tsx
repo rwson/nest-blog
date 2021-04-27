@@ -1,18 +1,14 @@
 import React from 'react';
-
 import { Global, css } from '@emotion/react';
-
-import Router from 'next/router';
+import { IncomingHttpHeaders } from 'http';
 import Head from 'next/head';
 import App, { AppContext, AppInitialProps } from 'next/app';
-
-import { Provider } from 'mobx-react';
 
 import detector from 'detector';
 
 import BlogLayout from '@/client/blog/layout';
-
-import AppStore, { fetchInitialStoreState, Store } from '@/client/store';
+import { wrapper } from '@/client/redux/store';
+import { fetchUserInfo } from '@/client/redux/store/slices/user';
 
 import cssStr from './css';
 
@@ -20,58 +16,29 @@ type AppProps = {
   [key: string]: any;
 } & AppInitialProps;
 
-type AppState = {
-  store: Store;
-};
-
-class BlogApp extends App {
-  state = {
-    store: AppStore,
-  };
-
-  static async getInitialProps(appContext: AppContext): Promise<AppProps> {
-    const appProps: AppInitialProps = await App.getInitialProps(appContext);
-    const isAdmin: boolean = appContext.ctx.pathname.includes('/admin/console');
-
-    let initialStoreState: {
-      [key: string]: any;
-    } = {};
-
-    const { pathname, query } = appContext.router;
-    const userAgent: string = appContext.ctx.req.headers['user-agent'];
-    const deviceInfo = detector.parse(userAgent);
-    const osName: string = deviceInfo.os.name;
-
-    const isMobile: boolean = osName === 'ios' || osName === 'android';
-
+class BlogApp extends App<AppProps> {
+  componentDidMount() {
+    const { props: {
+      tokenInfo: {
+        token
+      }, isAdmin
+    } } = this;
+    
     if (!isAdmin) {
-      initialStoreState = await fetchInitialStoreState({
-        pathname,
-        query,
-      });
+      if (token) {
+        localStorage.setItem('blog_app_user-token', token);
+      } else {
+        localStorage.removeItem('blog_app_user-token');
+      }
     }
-
-    return {
-      ...appProps,
-      deviceInfo: deviceInfo,
-      initialStoreState,
-      isAdmin,
-      isMobile,
-    };
-  }
-
-  static getDerivedStateFromProps(props: AppProps, state: AppState) {
-    state.store.hydrate(props.initialStoreState);
-    return state;
   }
 
   render() {
     const {
       Component,
-      pageProps,
       isAdmin,
       isMobile,
-      deviceInfo,
+      deviceInfo
     }: any = this.props;
 
     return (
@@ -91,10 +58,13 @@ class BlogApp extends App {
               rel="stylesheet"
             />
           ) : (
-            <link
-              href="https://at.alicdn.com/t/font_1449908_0p003a9e80sq.css"
-              rel="stylesheet"
-            />
+            <>
+              <link
+                href="https://at.alicdn.com/t/font_1449908_kdwhnxbkbl.css"
+                rel="stylesheet"
+              />
+              <script src="https://at.alicdn.com/t/font_1449908_kdwhnxbkbl.js"></script>
+            </>
           )}
         </Head>
         {isAdmin ? (
@@ -102,9 +72,7 @@ class BlogApp extends App {
         ) : (
           <BlogLayout isMobile={isMobile} deviceInfo={deviceInfo}>
             <Global styles={css(cssStr)} />
-            <Provider store={this.state.store}>
-              <Component {...pageProps} />
-            </Provider>
+            <Component />
           </BlogLayout>
         )}
       </>
@@ -112,4 +80,31 @@ class BlogApp extends App {
   }
 }
 
-export default BlogApp;
+BlogApp.getInitialProps = wrapper.getInitialAppProps((store: any) => async(appContext: AppContext) => {
+  const appProps: AppInitialProps = await App.getInitialProps(appContext);
+  const headers: Partial<IncomingHttpHeaders> = appContext.ctx.req?.headers ?? {};
+  const { pathname, query } = appContext.router;
+  const isAdmin: boolean = pathname.includes('/admin/console') || pathname.includes('/admin/login');
+  const userAgent: string = headers['user-agent'];
+  const deviceInfo = detector.parse(userAgent);
+  const osName: string = deviceInfo.os.name;
+  const isMobile: boolean = osName === 'ios' || osName === 'android';
+  const props = {
+    ...appProps,
+    deviceInfo,
+    isAdmin,
+    isMobile,
+    tokenInfo: {}
+  };
+
+  if (!isAdmin && query.token) {
+    const res = await store.dispatch(fetchUserInfo({
+      authorization: query.token as string
+    }));
+    props.tokenInfo = res.payload;
+  }
+
+  return props;
+});
+
+export default wrapper.withRedux(BlogApp);

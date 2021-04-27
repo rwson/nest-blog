@@ -10,10 +10,10 @@ import { LayoutContainer, LayoutHeader } from './style';
 
 type BlogLayoutProps = {
   children: any;
-  deviceInfo: {
+  deviceInfo?: {
     [key: string]: any;
   };
-  isMobile: boolean;
+  isMobile?: boolean;
 };
 
 const BlogLayout: React.FC<BlogLayoutProps> = ({ children, deviceInfo, isMobile }: BlogLayoutProps) => {

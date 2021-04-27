@@ -12,21 +12,6 @@ app.prepare().then(() => {
     handle(req, res);
   });
 
-  // server.use(
-  //   '/api',
-  //   createProxyMiddleware({
-  //     target: 'http://127.0.0.1:8080',
-  //     changeOrigin: true,
-  //   }),
-  // );
-  // server.get(
-  //   /^\/static\//,
-  //   createProxyMiddleware({
-  //     target: 'http://127.0.0.1:8080',
-  //     changeOrigin: true,
-  //   }),
-  // );
-
   server.get('/', (req, res) => res.redirect('/blog'));
 
   server.all('*', (req, res) => {

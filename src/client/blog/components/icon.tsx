@@ -4,14 +4,24 @@ import classnames from 'classnames';
 
 type IconProps = {
   type: string;
+  useSvg?: boolean;
 };
 
-const Icon: React.FC<IconProps> = (props: IconProps) => {
+const Icon: React.FC<IconProps> = ({ type, useSvg }: IconProps) => {
   return (
-    <i className={classnames([
-      'iconfont',
-      props.type
-    ])}></i>
+    <>
+      {
+        useSvg ?
+        <svg className="icon" aria-hidden="true">
+          <use xlinkHref={`#${type}`}></use>
+        </svg>
+        :
+        <i className={classnames([
+          'iconfont',
+          type
+        ])}></i>
+      }
+    </>
   );
 };
 
