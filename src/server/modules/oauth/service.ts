@@ -82,7 +82,7 @@ export class OAuthService {
   async getInfo(authorization: string): Promise<OAuthLoginResponse> {
     const user = this.authService.parse(authorization);
     const id: string = user.id ?? '';
-    const userDoc: UnionDocument | null = await UnionModel.findById(id);
+    const userDoc: UnionDocument | null = await this.unionModel.findById(id);
 
     if (userDoc !== null) {
       const oAuthData = new OAuthLoginData();

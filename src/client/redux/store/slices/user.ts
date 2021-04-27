@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk, ActionReducerMapBuilder } from '@reduxjs/toolkit';
 
 import oauthService, { GetUserInfoHeader } from '@/client/services/oauth';
-import { ArticleDetailData } from '@/dto/article/response';
+import { OAuthLoginData } from '@/dto/oauth/response';
 import hydrate from '@/client/redux/hydrate';
 
 const initialState = {
@@ -9,7 +9,7 @@ const initialState = {
 };
 
 export const fetchUserInfo = createAsyncThunk<
-  ArticleDetailData,
+  OAuthLoginData,
   GetUserInfoHeader
 >('FETCH_USER_INFO', async (header: GetUserInfoHeader) => {
   const res = await oauthService.getUserInfo(header);

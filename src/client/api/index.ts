@@ -48,8 +48,10 @@ export const file = {
 
 export const comment = {
   list: '/comment/list',
-  reply: '/comment/reply-comment',
-  post: '/comment/post-comment',
+  reply: '/comment/reply',
+  post: '/comment/post',
+  like: (id: string, type: 'add' | 'cancel') => `/comment/like/${id}/${type}`,
+  dislike: (id: string, type: 'add' | 'cancel') => `/comment/dislike/${id}/${type}`
 };
 
 export const avatarUrl = (name: string) => `https://avatars.dicebear.com/4.5/api/human/${name}.svg`;

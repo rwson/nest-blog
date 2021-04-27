@@ -2,6 +2,7 @@ import {
   Injectable,
   Inject,
   InternalServerErrorException,
+  BadRequestException,
 } from '@nestjs/common';
 
 import * as mongoose from 'mongoose';
@@ -38,16 +39,15 @@ export class CommentService {
     private readonly authService: AuthService,
   ) {}
 
-  async postComment(comment: PostCommentDto): Promise<BaseResponse> {
+  async postComment(authorization: string, comment: PostCommentDto): Promise<BaseResponse> {
     const transaction: Transaction = new Transaction();
+    const user = this.authService.parse(authorization);
 
     try {
       const commentId: mongoose.Types.ObjectId = await transaction.insert(
         commentName,
         {
-          nickName: comment.nickName,
-          email: comment.email,
-          website: comment.website,
+          commentor: user.id,
           content: comment.content,
           article: comment.article,
           identity: comment.identity,
@@ -73,24 +73,22 @@ export class CommentService {
     }
   }
 
-  async replyComment(comment: ReplyCommentDto): Promise<BaseResponse> {
+  async replyComment(authorization: string, comment: ReplyCommentDto): Promise<BaseResponse> {
     const transaction: Transaction = new Transaction();
+    const user = this.authService.parse(authorization);
 
     try {
       const commentId: mongoose.Types.ObjectId = await transaction.insert(
         commentName,
         {
-          nickName: comment.nickName,
-          email: comment.email,
-          website: comment.website,
+          commentor: user.id,
           content: comment.content,
-          article: comment.article,
           identity: comment.identity,
           isReply: true,
         },
       );
 
-      await transaction.update(commentName, comment.comment, {
+      await transaction.update(commentName, comment.commentId, {
         $set: {
           reply: commentId,
         },
@@ -103,6 +101,42 @@ export class CommentService {
       transaction.rollback();
       throw new InternalServerErrorException(e);
     }
+  }
+
+  async likeComment(id: string, type: string, authorization: string) {
+    const comment = await this.commentModel.findById(id);
+    const user = this.authService.parse(authorization);
+
+    if (type !== 'cancel' && comment.likes.includes(user.id)) {
+      throw new BadRequestException(errorCode.likeCommentExist);
+    }
+
+    const update = {
+      [type === 'cancel' ? '$pull' : '$push']: {
+        likes: user.id
+      }
+    };
+    await this.commentModel.findByIdAndUpdate(id, update);
+
+    return errorCode.success;
+  }
+
+  async dislikeComment(id: string, type: string, authorization: string) {
+    const comment = await this.commentModel.findById(id);
+    const user = this.authService.parse(authorization);
+
+    if (type !== 'cancel' && comment.dislikes.includes(user.id)) {
+      throw new BadRequestException(errorCode.dislikeCommentExist);
+    }
+
+    const update = {
+      [type === 'cancel' ? '$pull' : '$push']: {
+        dislikes: user.id
+      }
+    };
+    await this.commentModel.findByIdAndUpdate(id, update);
+
+    return errorCode.success;
   }
 
   async list(page: string, pageSize: string): Promise<CommentListResponse> {
@@ -124,7 +158,11 @@ export class CommentService {
       .limit(limit)
       .populate({
         path: 'reply',
-        select: 'id nickName email content article reply createdAt',
+        select: 'id commentor article reply createdAt',
+      })
+      .populate({
+        path: 'commentor',
+        select: 'id nickName loginType avatar',
       })
       .populate({
         path: 'article',

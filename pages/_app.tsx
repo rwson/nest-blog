@@ -7,7 +7,7 @@ import App, { AppContext, AppInitialProps } from 'next/app';
 import detector from 'detector';
 
 import BlogLayout from '@/client/blog/layout';
-import { wrapper } from '@/client/redux/store';
+import { wrapper, getStoreInstance } from '@/client/redux/store';
 import { fetchUserInfo } from '@/client/redux/store/slices/user';
 
 import cssStr from './css';
@@ -17,17 +17,34 @@ type AppProps = {
 } & AppInitialProps;
 
 class BlogApp extends App<AppProps> {
-  componentDidMount() {
+  async componentDidMount() {
     const { props: {
       tokenInfo: {
         token
       }, isAdmin
     } } = this;
-    
+    const store = getStoreInstance();
+    const storeState = store.getState();
+    const { userInfo: {
+      info
+    } } = storeState;
+    const logined: Boolean = Boolean(Object.keys(info).length);
+    const localToken: string | null = localStorage.getItem('blog_app_user-token');
+
     if (!isAdmin) {
       if (token) {
         localStorage.setItem('blog_app_user-token', token);
       } else {
+        if (!logined && localToken) {
+          const { payload } = await store.dispatch(fetchUserInfo({
+            authorization:localToken
+          }));
+
+          if (Boolean(Object.keys(payload).length)) {
+            localStorage.setItem('blog_app_user-token', payload.token);
+          }
+          return;
+        }
         localStorage.removeItem('blog_app_user-token');
       }
     }

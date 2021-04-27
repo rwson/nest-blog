@@ -78,7 +78,7 @@ export class UserService {
   async checkLogin(authorization: string): Promise<UserLoginResponse> {
     const user = this.authService.parse(authorization);
     const id: string = user.id ?? '';
-    const userDoc: UserDocument | null = await UserModel.findById(id, [
+    const userDoc: UserDocument | null = await this.userModel.findById(id, [
       'userName',
       'account',
       'email',

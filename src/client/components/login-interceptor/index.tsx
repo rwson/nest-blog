@@ -33,7 +33,7 @@ const LoginInterceptor: React.FC<LoginInterceptorProps> = ({ children, onClick, 
     if (typeof onClick === 'function') {
       onClick(e, ...argus);
     } else {
-       noop();
+      noop();
     }
   }, [onClick]);
 

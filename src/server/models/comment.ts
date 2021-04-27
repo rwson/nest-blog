@@ -6,8 +6,6 @@ import formatId from '@/server/mongoose/format-id';
 import autoPopulateSubs from '@/server/mongoose/auto-populate-subs';
 
 import BaseDocument from './base-document';
-import { ArticleDocument } from './article';
-import { UnionDocument } from './union';
 
 const schema = new Schema(
   {
@@ -85,8 +83,8 @@ export interface CommentDocument extends BaseDocument {
   readonly commentor: string;
   readonly reply: Array<CommentDocument>;
   readonly article: string;
-  readonly likes: Array<UnionDocument>;
-  readonly dislikes: Array<UnionDocument>;
+  readonly likes: Array<String>;
+  readonly dislikes: Array<String>;
   readonly pass: boolean;
   readonly identity: 0 | 1;
 }

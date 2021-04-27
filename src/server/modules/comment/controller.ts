@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   Put,
+  Post,
   Body,
   UseGuards,
   Query,
@@ -19,40 +20,45 @@ import { CommentService } from './service';
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
-  @Put('/post-comment')
+  @Post('/post')
   @UseGuards(AuthGuard())
   async postComment(
     @Headers('authorization') authorization: string,
     @Body() comment: PostCommentDto,
   ): Promise<BaseResponse> {
-    return this.commentService.postComment(comment);
+    return this.commentService.postComment(authorization, comment);
   }
 
-  @Put('/reply-comment')
+  @Put('/reply')
   @UseGuards(AuthGuard())
   async replyComment(
     @Headers('authorization') authorization: string,
     @Body() comment: ReplyCommentDto,
   ): Promise<BaseResponse> {
-    return this.commentService.replyComment(comment);
+    return this.commentService.replyComment(authorization, comment);
   }
 
-  @Put('/like-comment/:id')
+  @Put('/like/:id/:type')
   @UseGuards(AuthGuard())
   async likeComment(
     @Param('id') id: string,
+    @Param('type') type: string,
     @Headers('authorization') authorization: string,
-  ): Promise<void> {}
+  ): Promise<BaseResponse> {
+    console.log(id);
+    return this.commentService.likeComment(id, type, authorization);
+  }
 
-  @Put('/dislike-comment/:id')
+  @Put('/dislike/:id/:type')
   async dislikeComment(
     @Param('id') id: string,
+    @Param('type') type: string,
     @Headers('authorization') authorization: string,
-  ): Promise<void> {
+  ): Promise<BaseResponse> {
+    return this.commentService.dislikeComment(id, type, authorization);
   }
 
   @Get('/list')
-  @UseGuards(AuthGuard())
   async list(
     @Query('page') page: string = '1',
     @Query('pageSize') pageSize: string = '10',

@@ -2,16 +2,6 @@ import { IsNotEmpty, IsMongoId } from 'class-validator';
 
 export class PostCommentDto {
   @IsNotEmpty({
-    message: 'postCommentArticleError',
-  })
-  nickName: string;
-
-  @IsNotEmpty({
-    message: 'postCommentEmailNotEmpty',
-  })
-  email: string;
-
-  @IsNotEmpty({
     message: 'postCommentContentNotEmpty',
   })
   content: string;
@@ -21,26 +11,14 @@ export class PostCommentDto {
   })
   article: string;
 
-  website: string;
-
   identity: number;
 }
 
 export class ReplyCommentDto {
-  @IsNotEmpty({
-    message: 'replyCommentArticleError',
+  @IsMongoId({
+    message: 'replyCommentIdError',
   })
-  nickName: string;
-
-  @IsNotEmpty({
-    message: 'replyCommentEmailNotEmpty',
-  })
-  email: string;
-
-  @IsNotEmpty({
-    message: 'replyCommentContentNotEmpty',
-  })
-  content: string;
+  commentId: string;
 
   @IsMongoId({
     message: 'replyCommentArticleError',
@@ -48,11 +26,9 @@ export class ReplyCommentDto {
   article: string;
 
   @IsMongoId({
-    message: 'replyCommentArticleError',
+    message: 'replyCommentContentNotEmpty',
   })
-  comment: string;
-
-  website: string;
+  content: string;
 
   identity: number;
 }
