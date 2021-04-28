@@ -45,7 +45,6 @@ export class OAuthController {
   googleAuth(@Query('redirect') redirect: string, @Response() res: express.Response): void {
     this.cacheManager.set(OAUTH_REQUEST_CACHE_KEY, redirect);
     const url: string = this.oAuthService.googleAuth();
-    console.log(url);
     res.status(HttpStatus.PERMANENT_REDIRECT).redirect(url);
   }
 
@@ -70,18 +69,17 @@ export class OAuthController {
   async googleCallback(@Query('code') code: string, @Request() req: express.Request, @Response() res: express.Response): Promise<void> {
     const redirect: string = await this.cacheManager.get(OAUTH_REQUEST_CACHE_KEY);
     const ip: string = userIp(req);
-    console.log(code, ip, 1111);
     const result = await this.oAuthService.googleCallback(code, ip);
 
-    // if (result.success) {
-    //   res.status(HttpStatus.PERMANENT_REDIRECT).redirect(stringifyUrl({
-    //     url: redirect,
-    //     query: {
-    //       uuid: result.uuid,
-    //       token: result.token
-    //     }
-    //   }));
-    // }
+    if (result.success) {
+      res.status(HttpStatus.PERMANENT_REDIRECT).redirect(stringifyUrl({
+        url: redirect,
+        query: {
+          uuid: result.uuid,
+          token: result.token
+        }
+      }));
+    }
   }
 
   @Get('/info')

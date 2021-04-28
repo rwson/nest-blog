@@ -1,6 +1,7 @@
 import { Module, CacheModule } from '@nestjs/common';
 import { UnionModelProvider } from '@/server/models';
 import { AuthService, JwtStrategy, injectModules } from '@/server/auth';
+import ProxyRequest from '@/server/utils/proxy-request';
 
 import { OAuthController } from './controller';
 import { OAuthService } from './service';
@@ -11,6 +12,6 @@ import { OAuthService } from './service';
     max: 50
   }), ...injectModules],
   controllers: [OAuthController],
-  providers: [UnionModelProvider, OAuthService, AuthService, JwtStrategy],
+  providers: [UnionModelProvider, OAuthService, AuthService, ProxyRequest, JwtStrategy],
 })
 export class OAuthModule {}

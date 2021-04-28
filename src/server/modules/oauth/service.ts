@@ -1,11 +1,11 @@
 import { Injectable, CACHE_MANAGER, Inject, UnauthorizedException } from '@nestjs/common';
 import axios, { AxiosResponse } from 'axios';
-import { OAuth2Client } from 'google-auth-library';
 import { stringifyUrl, stringify } from 'query-string';
 import { Cache } from 'cache-manager';
 import { v4 } from 'uuid';
 
 import { AuthService } from '@/server/auth';
+import ProxyRequest from '@/server/utils/proxy-request';
 import { UnionModelToken, UnionModel, UnionInterface } from '@/server/models';
 import { UnionDocument } from '@/server/models/union';
 
@@ -19,18 +19,14 @@ import errorCode from '@/error-code';
 export class OAuthService {
   constructor(
     private readonly authService: AuthService,
+    private readonly proxyRequest: ProxyRequest,
     @Inject(UnionModelToken) private readonly unionModel: UnionInterface,
     @Inject(CACHE_MANAGER) private cacheManager: Cache
-  ) {}
-
-  private readonly oAuth2Client: OAuth2Client = new OAuth2Client({
-    clientId: GOOGLE_INFO.id,
-    clientSecret: GOOGLE_INFO.secret,
-    redirectUri: GOOGLE_INFO.redirect,
-  });
+  ) {
+  }
 
   async githubCallback(code: string, state: string, ip: string): Promise<UnionLoginResponse> {
-    const tokenRes: AxiosResponse<GitHubTokenResponse> = await axios({
+    const tokenRes = await this.proxyRequest.requestApi<GitHubTokenResponse>({
       url: stringifyUrl({
         url: GITHUB_INFO.tokenApi,
         query: {
@@ -46,9 +42,9 @@ export class OAuthService {
       }
     });
 
-    if (tokenRes.data.access_token) {
-      const { access_token: accessToken } = tokenRes.data;
-      const infoRes: AxiosResponse<GitHubUserInfoResponse> = await axios({
+    if (tokenRes.access_token) {
+      const { access_token: accessToken } = tokenRes;
+      const infoRes = await this.proxyRequest.requestApi<GitHubUserInfoResponse>({
         url: GITHUB_INFO.userApi,
         method: 'GET',
         headers: {
@@ -57,8 +53,8 @@ export class OAuthService {
         }
       });
 
-      if (infoRes.data) {
-        const { name, avatar_url, bio, blog } = infoRes.data;
+      if (infoRes) {
+        const { name, avatar_url, bio, blog } = infoRes;
         const uuid: string = v4();
         const unionUserInst: UnionDocument = new UnionModel({
           loginType: 'github',
@@ -87,42 +83,56 @@ export class OAuthService {
   }
 
   async googleCallback(code: string, ip: string): Promise<UnionLoginResponse> {
-    const tokenBody = {
-      code,
-      client_id: GOOGLE_INFO.id,
-      client_secret: GOOGLE_INFO.secret,
-      redirect_uri: GOOGLE_INFO.redirect,
-      grant_type: 'authorization_code'
-    };
-    const tokenRes: AxiosResponse<GoogleTokenResponse> = await axios({
+    const tokenRes = await this.proxyRequest.requestApi<GoogleTokenResponse>({
       method: 'POST',
       url: GOOGLE_INFO.tokenUrl,
-      data: stringify(tokenBody),
+      body: stringify({
+        code,
+        client_id: GOOGLE_INFO.id,
+        client_secret: GOOGLE_INFO.secret,
+        redirect_uri: GOOGLE_INFO.redirect,
+        grant_type: 'authorization_code'
+      }),
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       }
     });
 
-    if (tokenRes.data.error) {
+    if (tokenRes.error) {
       return {
         success: false
       };
     }
 
-    console.log(tokenRes.data.access_token);
+    const infoRes = await this.proxyRequest.requestApi({
+      method: 'GET',
+      url: GOOGLE_INFO.userInfoUrl,
+      headers: {
+        authorization: `Bearer ${tokenRes.access_token}`
+      }
+    });
 
-    try {
-      const tokenInfoRes = await axios({
-        method: 'GET',
-        url: GOOGLE_INFO.userInfoUrl,
-        headers: {
-          authorization: `Bearer ${tokenRes.data.access_token}`
-        }
+    if (infoRes) {
+      const { given_name, picture, bio = '', blog = '' } = infoRes;
+      const uuid: string = v4();
+      const unionUserInst: UnionDocument = new UnionModel({
+        loginType: 'google',
+        nickName: given_name,
+        avatar: picture,
+        lastLoginIp: ip,
+        lastLoginTime: Date.now(),
+        bio,
+        blog,
+        uuid
       });
 
-      console.log(tokenInfoRes.data);
-    } catch(e) {
-      console.log(e)
+      await unionUserInst.save();
+      const token = this.authService.signIn(unionUserInst.id, uuid, 'github', null);
+      return {
+        success: true,
+        token,
+        uuid
+      };
     }
   }
 
@@ -164,5 +174,4 @@ export class OAuthService {
     throw new UnauthorizedException(errorCode.oAuthTokenNotExist);
   }
 
-  
 }
