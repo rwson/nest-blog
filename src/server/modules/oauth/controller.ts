@@ -41,6 +41,14 @@ export class OAuthController {
       }));
   }
 
+  @Get('/google')
+  googleAuth(@Query('redirect') redirect: string, @Response() res: express.Response): void {
+    this.cacheManager.set(OAUTH_REQUEST_CACHE_KEY, redirect);
+    const url: string = this.oAuthService.googleAuth();
+    console.log(url);
+    res.status(HttpStatus.PERMANENT_REDIRECT).redirect(url);
+  }
+
   @Get('/github-callback')
   async githubCallback(@Query('code') code: string, @Query('state') state: string, @Request() req: express.Request, @Response() res: express.Response): Promise<void> {
     const redirect: string = await this.cacheManager.get(OAUTH_REQUEST_CACHE_KEY);
@@ -58,9 +66,30 @@ export class OAuthController {
     }
   }
 
+  @Get('/google-callback')
+  async googleCallback(@Query('code') code: string, @Request() req: express.Request, @Response() res: express.Response): Promise<void> {
+    const redirect: string = await this.cacheManager.get(OAUTH_REQUEST_CACHE_KEY);
+    const ip: string = userIp(req);
+    console.log(code, ip, 1111);
+    const result = await this.oAuthService.googleCallback(code, ip);
+
+    // if (result.success) {
+    //   res.status(HttpStatus.PERMANENT_REDIRECT).redirect(stringifyUrl({
+    //     url: redirect,
+    //     query: {
+    //       uuid: result.uuid,
+    //       token: result.token
+    //     }
+    //   }));
+    // }
+  }
+
   @Get('/info')
   @UseGuards(AuthGuard())
   async getInfo(@Headers('authorization') authorization: string): Promise<OAuthLoginResponse> {
     return this.oAuthService.getInfo(authorization);
   }
 }
+
+
+// http://localhost:3001/oauth/google?redirect=http%3A%2F%2Flocalhost%3A3002%2Fblog%2F607416ed0f09ac97bd3683d7

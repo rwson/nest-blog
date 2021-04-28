@@ -23,7 +23,7 @@ class BlogApp extends App<AppProps> {
         token
       }, isAdmin
     } } = this;
-    const store = getStoreInstance();
+    const store: any = getStoreInstance();
     const storeState = store.getState();
     const { userInfo: {
       info

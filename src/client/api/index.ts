@@ -4,6 +4,7 @@ export const baseUrl = isDev ? 'http://localhost:3001' : 'http://blog.rwson.com'
 
 export const oauth = {
   github: `${baseUrl}/oauth/github`,
+  google: `${baseUrl}/oauth/google`,
   userInfo: '/oauth/info'
 };
 

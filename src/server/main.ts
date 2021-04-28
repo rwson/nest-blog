@@ -1,7 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
-
 import * as log4js from 'log4js';
 
 import { AppModule } from './app.module';

@@ -16,7 +16,16 @@ export type GitHubUserInfoResponse = {
   blog: string;
 };
 
-export class GitHubUnionLoginResponse {
+export type GoogleTokenResponse = Partial<{
+  access_token: string;
+  expires_in: number;
+  scope: string;
+  token_type: string;
+  id_token: string;
+  error: string;
+}>;
+
+export class UnionLoginResponse {
   token?: string;
   uuid?: string;
   success: boolean;

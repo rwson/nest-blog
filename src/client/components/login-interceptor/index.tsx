@@ -61,12 +61,12 @@ const LoginInterceptor: React.FC<LoginInterceptorProps> = ({ children, onClick, 
 
   const toGoogle = React.useCallback(() => {
     const redirect: string = window.location.href;
-    window.location.href = stringifyUrl({
-      url: oauth.github,
+    console.log(stringifyUrl({
+      url: oauth.google,
       query: {
         redirect: decodeURIComponent(redirect)
       }
-    });
+    }));
   }, []);
 
   const useGuest = React.useCallback(() => {

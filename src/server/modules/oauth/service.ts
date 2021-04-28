@@ -1,6 +1,7 @@
 import { Injectable, CACHE_MANAGER, Inject, UnauthorizedException } from '@nestjs/common';
 import axios, { AxiosResponse } from 'axios';
-import { stringifyUrl } from 'query-string';
+import { OAuth2Client } from 'google-auth-library';
+import { stringifyUrl, stringify } from 'query-string';
 import { Cache } from 'cache-manager';
 import { v4 } from 'uuid';
 
@@ -8,9 +9,9 @@ import { AuthService } from '@/server/auth';
 import { UnionModelToken, UnionModel, UnionInterface } from '@/server/models';
 import { UnionDocument } from '@/server/models/union';
 
-import { GitHubTokenResponse, GitHubUserInfoResponse, GitHubUnionLoginResponse, OAuthLoginResponse, OAuthLoginData } from '@/dto/oauth/response';
+import { GitHubTokenResponse, GitHubUserInfoResponse, UnionLoginResponse, OAuthLoginResponse, OAuthLoginData, GoogleTokenResponse } from '@/dto/oauth/response';
 
-import { GITHUB_INFO } from '@/server/config';
+import { GITHUB_INFO, GOOGLE_INFO } from '@/server/config';
 
 import errorCode from '@/error-code';
 
@@ -22,7 +23,13 @@ export class OAuthService {
     @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) {}
 
-  async githubCallback(code: string, state: string, ip: string): Promise<GitHubUnionLoginResponse> {
+  private readonly oAuth2Client: OAuth2Client = new OAuth2Client({
+    clientId: GOOGLE_INFO.id,
+    clientSecret: GOOGLE_INFO.secret,
+    redirectUri: GOOGLE_INFO.redirect,
+  });
+
+  async githubCallback(code: string, state: string, ip: string): Promise<UnionLoginResponse> {
     const tokenRes: AxiosResponse<GitHubTokenResponse> = await axios({
       url: stringifyUrl({
         url: GITHUB_INFO.tokenApi,
@@ -77,6 +84,60 @@ export class OAuthService {
     return {
       success: false
     };
+  }
+
+  async googleCallback(code: string, ip: string): Promise<UnionLoginResponse> {
+    const tokenBody = {
+      code,
+      client_id: GOOGLE_INFO.id,
+      client_secret: GOOGLE_INFO.secret,
+      redirect_uri: GOOGLE_INFO.redirect,
+      grant_type: 'authorization_code'
+    };
+    const tokenRes: AxiosResponse<GoogleTokenResponse> = await axios({
+      method: 'POST',
+      url: GOOGLE_INFO.tokenUrl,
+      data: stringify(tokenBody),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    });
+
+    if (tokenRes.data.error) {
+      return {
+        success: false
+      };
+    }
+
+    console.log(tokenRes.data.access_token);
+
+    try {
+      const tokenInfoRes = await axios({
+        method: 'GET',
+        url: GOOGLE_INFO.userInfoUrl,
+        headers: {
+          authorization: `Bearer ${tokenRes.data.access_token}`
+        }
+      });
+
+      console.log(tokenInfoRes.data);
+    } catch(e) {
+      console.log(e)
+    }
+  }
+
+  googleAuth(): string {
+    const query = {
+      response_type: 'code',
+      client_id: GOOGLE_INFO.id,
+      redirect_uri: GOOGLE_INFO.redirect,
+      scope: GOOGLE_INFO.scope
+    };
+
+    return stringifyUrl({
+      url: GOOGLE_INFO.authBase,
+      query
+    });
   }
 
   async getInfo(authorization: string): Promise<OAuthLoginResponse> {
